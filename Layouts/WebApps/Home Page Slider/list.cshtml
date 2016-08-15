@@ -1,0 +1,32 @@
+@{
+    //no limit on list, but pref 5; maybe logged, they could recieve news/events
+    //front page sliders dont need to request?...
+    //var SearchQuery = Request.QueryString["SearchQuery"]; //Or Request.Form[]
+    var db = Database.Open("ColonielHeights");
+    var slider = db.Query("SELECT * FROM tag_menuitemlabel");
+    //var searchresults = db.Query("SELECT * FROM tag_menuitemlabel WHERE tag_menugroup = @0", SearchQuery);
+    //This fetches based on event date, and can display the most current information
+    var poll = db.Query("Select * FROM Survey ");//WHERE DATEPART(m, PollDate) = DATEPART(m, getdate() )" +
+    //"AND DATEPART(yyyy, PollDate) = DATEPART(yyyy, getdate() )");
+    //Make a new event date, and use "expiration" timer, any date less than 'expiratin-date' should be displayed.
+    //SQL: TOP(5) can be written for both.
+    
+    int tag_counter = 0;
+}
+@for(var i = tag_counter; i < 5; i++){
+<li>
+                    <a href="@slider.url_pagelocationpath">
+                        <img alt="@slider.image_description" src="@slider.url_imagelocationpath" /> 
+                        <span>@slider.sub_caption-header <strong>@slider.name_title-header</strong></span>
+                    </a>
+                </li>
+    //if(i == 5){break;}
+}
+@*
+@foreach(var item in searchresults){ tag_counter += 1;
+<li>
+                    <a href="@url_pagelocationpath">
+                        <img alt="@image_description" src="@url_imagelocationpath" /> 
+                        <span>@Sub_caption-header <strong>@Name_title-header</strong></span>
+                    </a>
+                </li>}*@

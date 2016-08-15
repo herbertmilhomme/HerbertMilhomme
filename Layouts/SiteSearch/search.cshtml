@@ -1,0 +1,154 @@
+﻿@{
+    /*search: 
+	Advanced Search
+    Sitemap
+		Pages
+			title
+			description
+		Forum
+			Discussion
+			Thread
+			SubThread
+			//Post
+		blogs
+			title
+			sentences
+		projects
+			title
+			task
+			description
+		news
+			title
+			announcement
+		profile
+			Username
+			First/Last Name
+			Alias
+			Affliate/UserId/MemberId
+
+    search like
+    join right as alias
+    if null dont include
+
+    SELECT column_name(s)
+    FROM table_name
+    WHERE column_name LIKE '@0' AS alias_name; "%"+ search_field +"%"
+
+    var topnav = db.Query("SELECT * FROM website_pages WHERE parentD = 0 AND header = 'true'");
+
+    //var loguser=Database.Open("ColonielHeights").QuerySingle("SELECT * FROM UserProfile INNER JOIN Orders ON Customers.CustomerID=Orders.CustomerID WHERE userid=@0",WebSecurity.CurrentUserId);
+	var loguser = Database.Open("ColonielHeights").QuerySingle(
+		"SELECT users.UserId, users.Alias, users.MemberID, cus.FirstName, cus.LastName, cus.Gender "+
+			//"emp.StartDate, emp.PayRate, emp.Position, emp.department, emp.Title, emp.EndDate, emp.TerminationReason "+
+		"FROM dbo.UserProfile AS users "+
+			//"INNER JOIN dbo.business_Employees AS emp ON cus.Email = emp.Email AND cus.MemberID = emp.MemberID "+
+			"FULL OUTER JOIN dbo.business_Customer AS cus ON cus.Email = users.Email "+
+		"WHERE (users.userid=@0)",WebSecurity.CurrentUserId);//(cus.MemberID = users.MemberID) AND 
+
+    
+	if (UrlData[0].IsEmpty() || !UrlData[0].IsInt()) {
+        Response.SetStatus(HttpStatusCode.BadRequest);
+        Response.End();
+    }
+    var db = Database.Open("Northwind");
+    var sql = @"SELECT ProductId, ProductName, ContactTitle, ContactName, 
+                CompanyName, QuantityPerUnit, UnitPrice, UnitsInStock
+                FROM Products INNER JOIN Suppliers
+                ON Products.SupplierID = Suppliers.SupplierID
+                WHERE ProductId = @0";
+    var data = db.Query(sql, UrlData[0]);
+    if(data.Count() == 0){
+        Response.SetStatus(HttpStatusCode.BadRequest);
+        Response.End();
+    }
+    Response.ContentType = "application/json";
+    Json.Write(data, Response.Output);*/
+
+	
+	if(QueryStr != ""){
+		PageData["title"] = QueryStr + " - " + TNB_SITE_NAME + " Search";
+	}else{
+		PageData["title"] = TNB_SITE_NAME + " Search";
+	}
+}
+
+					<!--<div class="search">-->
+						<input id="SearchText" type="text" onclick="javascript: this.value = '';" value="Search by keyword..." onfocus="if(this.value==&#39;Search by keyword...&#39;) this.value=&#39;&#39;;" onblur="if(this.value==&#39;&#39;) this.value=&#39;Search by keyword...&#39;;" x-webkit-speech="x-webkit-speech" autocomplete="off" spellcheck="false" type="search" onspeechchange="processspeech();" onwebkitspeechchange="processspeech();" />
+					<!--</div>-->
+
+
+	<script>
+		$("#SearchText").keypress(function (event) {
+			if (event.which == 13) {
+				event.preventDefault();
+				document.location.href = 'Href("~/Layouts/SiteSearch/Search")?Keyword=' + encodeURIComponent($('#SearchText').val());
+			}
+		});
+
+	    function processspeech() {
+	        $("#SearchText").val($("#SearchText").val().replace("Search by keyword...", ""));
+	    }
+
+	function SubmitOnEnter() {
+		document.getElementById("SendMsg").addEventListener("keydown", function (e) {
+			if (!e) { var e = window.event; }
+			e.preventDefault(); // sometimes useful
+
+			// Enter is pressed
+			if (e.keyCode == 13) { document.getElementById("PostMsg").submit(); }
+		}, false);
+	}
+	//-----------------------------------------------------------------
+	function submitForm(oFormElement)//
+			{
+				//var oFormElement = this.$chatInput.val();
+				var xhr = new XMLHttpRequest();
+				//xhr.onload = function(){ alert (xhr.responseText); }
+				if (oFormElement != "") {
+					xhr.open(oFormElement.method, oFormElement.action, true);
+					xhr.send(new FormData(oFormElement));
+				}else{ alert ("Oops... You forgot to enter your chat message"); }
+				return false;
+				document.getElementById("SendMsg").value = "";
+			} 
+	//-----------------------------------------------------------------
+	//while mouse is up, feed msgs into div
+	function showLiveMsgs() {//(str)
+		var msgTAGcount = document.getElementsByClassName('conversation-list li').length;
+		var msgTAG = document.getElementsByClassName('conversation-list li')[msgTAGcount-1].id;//getAttribute('id');
+		var msgSer = document.getElementById('servername').val();//.attr('value');
+		var xhttp; /*
+	            if (str == "") {
+	                document.getElementById("display-text").innerHTML = "";
+	                return;
+	            }*/
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function () {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				//document.getElementById("display-text").innerHTML = xhttp.responseText;
+				document.getElementById("display-text").appendChild(xhttp.responseText);
+			}
+		}
+		xhttp.open("GET", "/Layouts/LiveChat/LC2/msgs?server="+msgSer+"&tag="+msgTAG, true);
+		xhttp.send();/*
+			this.$chatList.scrollTo('100%', '100%', {
+				easing: 'swing'
+			});*/
+	}
+	</script>
+
+
+@*
+if(QueryString[""] != null /*|| any other from the same VIEW_TABLE){ //Also add "QueryString[""]??''" (to check null)
+	sqlQueryString += /*FROM VIEW_NAME*/ @"'@"+QueryString.Count+@"'";//QueryString[""]
+}
+sqlQueryString += " WHERE ";
+if(QueryString[""] != null /*|| any other from the same VIEW_TABLE){ //Also add "QueryString[""]??''" (to check null)
+	sqlQueryString += /*WHERE*/ "%"+QueryString[""]+"% OR";
+}
+//sqlQueryString = sqlQueryString.substring(-2)
+db.Query()
+
+OR....
+One Major VIEW TABLE, with all Search Results, and Queue Results are like facebook
+*@

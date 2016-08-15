@@ -1,0 +1,140 @@
+﻿@{
+	var db = Database.Open("ColonielHeights");
+	var sql = db.Query("SELECT * FROM social_friendslist WHERE userid=@0 AND friends='true'", WebSecurity.CurrentUserId);
+	//int userid = WebSecurity.IsAuthenticated ? WebSecurity.CurrentUserId : 0;
+	var username = WebSecurity.IsAuthenticated ? db.QueryValue("SELECT Username FROM UserProfile WHERE userid=@0",WebSecurity.CurrentUserId) : "Guest";
+	
+	//MembershipUserCollection muc = Membership.GetAllUsers();
+}
+
+<ul class="nav nav-tabs">
+	<li class="active"><a data-toggle="tab" href="#home">Users(@db.QueryValue("SELECT COUNT(*) FROM website_whoisonline WHERE isOnline='true'AND getdate()>=DATEADD(n,20,TimeVisitPage) AND PageUrl LIKE '%/features/livechat%'")/@AppState["TotalOnlineUsers"].ToString()@*Membership.GetNumberOfUsersOnline()*@)</a></li>
+	@if(WebSecurity.IsAuthenticated){
+		<li><a data-toggle="tab" href="#menu1">Friends List</a></li>
+		<li><a data-toggle="tab" href="#menu2">Block List</a></li>
+		if(User.IsInRole("Admin")){//admin
+			<li><a data-toggle="tab" href="#menu3">All Users(@AppState["TotalOnlineUsers"].ToString()@*Membership.GetNumberOfUsersOnline()*@)</a></li>
+		}
+	}
+</ul>
+
+<div class="tab-content">
+	<div id="home" class="tab-pane fade in active">
+		<!--<h3>Users Online</h3>-->
+		<div id="chatusers" class="users guest">
+			@*<ul>
+				foreach(var mu in db.Query("SELECT * FROM Userprofile")){
+					//if userid lastactivity>now-5mins "online" else "offline"
+					if(Membership.GetUser().IsOnline){<text>
+						<li>
+							@db.QueryValue("SELECT Username FROM UserProfile WHERE userid=0",WebSecurity.GetUserId(Membership.GetUser().Email))
+		<ul class="dropdown-menu">
+			<li>
+				<form id="userForm" @if(WebSecurity.IsAuthenticated){<text>action="~/Account/Logout"</text>} method="post">
+					<a href="javascript:document.getElementById('logoutForm').submit()">Add to friends/Unfriend</a>
+				</form>
+			</li>
+			<li>Private Msg</li>
+			<li>Block</li>
+		</ul>
+						</li>
+					</text>}else{continue;}
+				}
+			</ul>*@
+
+            <!-- COLLAPSE MENU GROUP OF ALL USERS -->
+            <div class="panel-group" id="accordian-chatusers" role="tablist" aria-multiselectable="true">
+@foreach(var mu in db.Query("SELECT DISTINCT SessionID,* FROM website_whoisonline WHERE isOnline='true' AND PageUrl LIKE '%/features/livechat%'"/*, userid,Request.Url.LocalPath,Session["SESSION_KEY"]*/)){//("SELECT * FROM Userprofile")
+    //if userid lastactivity>now-5mins "online" else "offline"
+    if(mu.isonline){/*Membership.GetUser().IsOnline*/<text>
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordian-chatusers" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    @*db.QueryValue("SELECT Username FROM UserProfile WHERE userid=@0",WebSecurity.GetUserId(Membership.GetUser().Email))*@
+                    @if(mu.userid!=0){@db.QueryValue("SELECT FirstName FROM business_customer WHERE customernumber=@0",mu.userid)}else{<text>Guest_@mu.LogID</text>}
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+		        <ul class="dropdown-menu">
+			        <li>@if(WebSecurity.IsAuthenticated){
+				        <form id="userForm" @if(WebSecurity.IsAuthenticated){/*<text>action="~/Account/Logout"</text>*/} method="post">
+					        <a href="javascript:document.getElementById('logout_Form').submit()">Add to friends/Unfriend</a>
+				        </form>}
+						else{<a href="/Account/Login">Add to Friends</a>}
+			        </li>
+			        <li>@if(WebSecurity.IsAuthenticated){
+				        <form id="userForm" @if(WebSecurity.IsAuthenticated){/*<text>action="~/Account/Logout"</text>*/} method="post">
+					        <a href="javascript:document.getElementById('logout_Form').submit()">Private Msg</a>
+				        </form>}
+						else{<a href="/Account/Login">Private Msg</a>}
+					</li>
+			        <li>@if(WebSecurity.IsAuthenticated){
+				        <form id="userForm" @if(WebSecurity.IsAuthenticated){/*<text>action="~/Account/Logout"</text>*/} method="post">
+					        <a href="javascript:document.getElementById('logout_Form').submit()">Block</a>
+				        </form>}
+						else{<a href="/Account/Login">Block</a>}
+					</li>
+			        <li>
+				        <a href="#">Visit Page</a>
+					</li>
+		        </ul>
+            </div>
+        </div>
+    </div>
+    </text>}else{continue;}//end foreach
+}</div>
+            <!-- // COLLAPSE MENU GROUP OF ALL USERS //-->
+		</div>
+	</div>
+@if(WebSecurity.IsAuthenticated){
+	<div id="menu1" class="tab-pane fade">
+		<h3>Friends List</h3>
+		@*<p>Some content in menu 1.</p>
+		RenderPage("~/Layouts/LiveChat/friends_logged.cshtml")*@
+	</div>
+	<div id="menu2" class="tab-pane fade">
+		<h3>Block List</h3>
+		@*<p>Some content in menu 2.</p>*@
+	</div>
+	
+	<div id="menu3" class="tab-pane fade">
+		@*<h3>All User</h3>
+		<p>Some content in menu 2.</p>
+		RenderPage("~/Layouts/LiveChat/chat_msgs.cshtml")*@
+      
+<div class="panel-group" id="accordian-allusers" role="tablist" aria-multiselectable="true">
+@foreach(var mu in db.Query("SELECT DISTINCT SessionID,* FROM website_whoisonline WHERE isOnline='true'"/*, userid,Request.Url.LocalPath,Session["SESSION_KEY"]*/)){//("SELECT * FROM Userprofile")
+    //if userid lastactivity>now-5mins "online" else "offline"
+    if(mu.isonline){/*Membership.GetUser().IsOnline*/<text>
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordian-allusers" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    @*db.QueryValue("SELECT Username FROM UserProfile WHERE userid=@0",WebSecurity.GetUserId(Membership.GetUser().Email))*@
+                    @if(mu.userid!=0){@db.QueryValue("SELECT FirstName FROM business_customer WHERE customernumber=@0",mu.userid)}else{<text>Guest_@mu.LogID</text>}
+                </a>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+		        <ul class="dropdown-menu">
+			        <li>
+				        <form id="userForm" @*if(WebSecurity.IsAuthenticated){<text>action="~/Account/Logout"</text>}*@ method="post">
+					        <a href="javascript:document.getElementById('logoutForm').submit()">Add to friends/Unfriend</a>
+				        </form>
+			        </li>
+			        <li>Private Msg</li>
+			        <li>Block</li>
+		        </ul>
+            </div>
+        </div>
+    </div>
+    </text>}else{continue;}//end foreach
+}</div>
+
+        
+	</div>}
+</div>

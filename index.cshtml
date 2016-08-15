@@ -1,0 +1,174 @@
+﻿@using WebMatrix.Data
+@*
+main page - www.main.com
+    if backslash is null
+        if the user is logged in, display member page
+        if the user is not logged in, display front page
+
+user profile - www.main.com/user
+    connects to user page
+        if user is logged in, display member tabs, at top
+        if user is not logged in, do not display member tabs at top
+<meta name="robots" content="NOINDEX">
+
+*Default.html will change layout/content based on if logged
+
+*Layout will control shell (basic, bronze, silver, gold...) |Layout=
+*Page will control content |RenderPage
+*Html will control link between shell and content, and establish a url identity |RenderBody
+
+*@@{
+    /*var Keyword1 = UrlData[0]; //Retrieves passed variable from the database search page
+    var NewVisit = Request.Cookies["NewVisit"];
+    if (NewVisit == null){//NewVisit.IsEmpty || 
+        Response.Cookies["NewVisit"].Expires = DateTime.Now.AddDays(7);
+        Response.Cookies["NewVisit"].Value = "1";
+        Response.Redirect("Welcome");
+    }else{Response.Cookies["NewVisit"].Expires.AddDays(7);}*/
+
+    //Checks if user is logged
+    if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Home/Velonic - Home.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+        //Checks if there is a backslash
+        if(UrlData.Count == 0){//(Keyword1 == null)
+            //If none, render member front-page
+            Page.Title = Request.Form["UserFirstName"]+" "+Request.Form["UserLastName"];
+            //Will have to be a layout, and not page
+            @RenderPage("~/Layouts/Profile/internal.cshtml")
+        }else if(UrlData.Count == 1){
+            //Page.Title = "Member Home Page";
+			@RenderPage("~/Layouts/Home/Member-Public.cshtml")
+		}
+	}else{
+        //Check if there is a backslash
+        //if(Keyword1 == null){
+        //If none, render member front-page
+        Page.Title = "Welcome Page";
+        //Will have to be a layout, and not page            
+        Layout = "~/Layouts/Home/Uguru - Home.cshtml";
+        //RenderPage("~/Layouts/Home/_layout-nonmembers.cshtml");
+        //Layout = "~/_SiteLayout.cshtml";
+		//Checks if there is a backslash
+		if(UrlData.Count == 0){//(Keyword1 == null)
+			//If none, render member front-page
+			Page.Title = "Home Page";
+			//Will have to be a layout, and not page
+			//RenderPage("~/Layouts/Home/Member.cshtml")
+
+			// Initialize general page variables
+			var email = "";
+			var password = "";
+			var rememberMe = false;
+			
+		<!-- Welcome section -->
+		<div id="home-carousel" class="carousel row fill" data-ride="carousel" style="display:block; height: auto; background-image:url('http://placehold.it/1900x1080/0070bf/6f5499&amp;text=Background+Banner');">
+			<!--<div class="container" style="background-image:url('http://placehold.it/1900x1080/0070bf/6f5499&amp;text=Background+Banner');">
+				<div class="row">-->
+					<div class="col-sm-8 carousel-inner">
+						<div class="carousel-caption" style="left: auto;right: auto;position: relative;bottom: initial;">
+						<!--<h2>A happy little product to make life better</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris quis elit nec sem laoreet tempor sit amet.</p>
+						<p>Maecenas commodo lorem ac turpis ornare lacinia.</p>-->
+						<h2>Welcome!</h2>
+						<p>This is a website made to showcase my skills as a web-developer, by displaying <!--one-by-one the potential and--> features I could create and offer.</p>
+						<p>For now, while the site is still being developed, I do not intend to focus or prioritize on content-text.</p>
+						<p>Register and Sign-in to experience even more of what this website can do.</p>
+						<a class="btn btn-lg btn-primary" href="/Account/MemberSignUp">Sign-up</a><br>
+						or <a href="/Account/Login">Log in</a></div>
+					</div>
+	<div id="loginForm" class="col-sm-3 col-xs-12 carousel-inner">
+		<div class="carousel-caption" style="left: auto;right: auto;position: relative; bottom: initial;">
+    <!--<h2>Use a local account to log in.</h2>-->
+    <form method="post" action="/Account/Login">
+        @AntiForgery.GetHtml()
+        @* If one or more validation errors exist, show an error *@
+        @Html.ValidationSummary("Log in was unsuccessful. Please correct the errors and try again.", excludeFieldErrors: true, htmlAttributes: null)
+
+        <fieldset>
+            <!--<legend>Log in to Your Account</legend>-->
+            <ol style="text-align: left; list-style: none; padding-left: 0;">
+                <li class="email form-group @if(!ModelState.IsValidField("email")){<text>has-error</text>}else if(ModelState.IsValidField("email") && Request.Form["email"] != null){<text>has-success</text>}">
+                    <label for="email" @if (!ModelState.IsValidField("email"))
+                                       {<text>class="error-label"</text>}>Email address Or Member Id</label>
+                    <input type="text" class="form-control" id="email" name="email" value="@email" @Validation.For("email")/>
+                    @* Write any user name validation errors to the page *@
+                    @Html.ValidationMessage("email")
+                </li>
+                <li class="password form-group @if(!ModelState.IsValidField("password")){<text>has-error</text>}else if(ModelState.IsValidField("password") && Request.Form["password"] != null){<text>has-success</text>}">
+                    <label for="password" @if (!ModelState.IsValidField("password")) {<text>class="error-label"</text>}>Password</label>
+                    <input type="password" class="form-control" id="password" name="password" @Validation.For("password")/>
+                    @* Write any password validation errors to the page *@
+                    @Html.ValidationMessage("password")
+                </li>
+                <li class="remember-me form-group">
+                    <label class="checkbox control-label" for="rememberMe" style="float: left; left: 1.5em;">
+                        <input type="checkbox" id="rememberMe" name="rememberMe" value="true" checked="@rememberMe" />Remember me?
+                    </label>
+            <button type="submit" class="btn btn-default" style="float: right;">Log in</button>
+                </li>
+            </ol>
+        </fieldset>
+    </form>
+    <p style="margin-left: 2em;">
+        <a href="~/Account/MemberSignUp">Don't have a Account?</a><br/>
+        <a href="~/Account/ForgotPassword">Did you forget your password?</a>
+    </p>
+	</div>
+		<!-- </div>
+				</div>
+				/.row -->
+			</div>
+			<!-- /.container -->
+		</div>
+		<!-- /.section -->
+<div class="section text-center welcome">
+<div class="container">
+<div class="row">
+<div class="col-lg-12">
+<h2>Complete a questionaire and recieve 25% off any quoted services!</h2>
+<p>By filling out and completing one of my provided questionaire survey form.</p>
+<p>You're eligible to recieve a 25% off discount towards any quote.</p>
+<a class="btn btn-lg btn-primary" href="/shop/analog-course">Take It Now</a><br>
+<!--or <a href="/features">Learn More</a>-->
+</div>
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container -->
+</div>
+		}else if(UrlData.Count == 1){
+			//Page.Title = "Member Home Page";
+			@RenderPage("~/Layouts/Home/Member-Public.cshtml")
+		}
+	}//Else not logged in
+	@*section JSFooter{
+	<script type="application/ld+json">
+    {//Logo Identifier
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "url": "http://www.herbertmilhomme.com",
+      "logo": "http://www.herbertmilhomme.com/images/logo.png"
+    }
+    </script>
+<script type="application/ld+json">
+{//Searchbox for site
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "https://www.herbertmilhomme.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://query.example.com/search?q={search_term_string}",
+	/*"target": [
+      "https://query.example.com/search?q={search_term_string}",
+      "android-app://com.example/https/www.example.com/search/?q={search_term}" //if i have app
+    ],*/
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+	}*@
+}

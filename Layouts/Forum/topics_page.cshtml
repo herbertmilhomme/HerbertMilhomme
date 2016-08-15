@@ -1,0 +1,155 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    IEnumerable<dynamic> threads=null;
+    int discussion=0; //= UrlData[0];
+    string forumname = "Forum Name";
+	bool subscribe = false;
+    if(UrlData[0] != null && UrlData[0] != ""){
+        if(int.TryParse(UrlData[0], out discussion)){
+            if(discussion < 1){
+                discussion = 1;
+            }
+            //tag_counter = discussion * numperpg;
+            threads = db.Query("SELECT * FROM website_forumthread WHERE discussionid=@0 AND remove='false'", discussion);
+            forumname = db.QueryValue("SELECT name FROM website_forumdiscussion WHERE forumid=@0",discussion);
+        }else{
+            //Response.Redirect("?SearchQuery=" + SearchQuery + "/" + discussion);
+            /*threads = db.Query("SELECT * FROM website_forumdiscussion as d, website_forumthread as t WHERE d.name=@0 AND t.Forumid=d.forumid AND t.[remove]='false'",UrlData[0]);
+            forumname = db.QueryValue("SELECT name FROM website_forumdiscussion WHERE name=@0",UrlData[0]);*/
+
+			discussion = db.QueryValue("SELECT coalesce(forumid, 0) as forumid FROM website_forumdiscussion WHERE LOWER(name)=LOWER(@0)",(string)UrlData[0].Replace("-"," "));
+            forumname = UrlData[0].Replace("-"," ");//db.QueryValue("SELECT name FROM website_forumdiscussion WHERE forumid=@0",discussion);//UrllData[0] or ForumID
+			if(discussion==0){threads = db.Query("SELECT * FROM website_forumthread WHERE remove='false'"); forumname = "All Discussions";}
+			else{threads = db.Query("SELECT * FROM website_forumthread WHERE discussionid=@0 AND remove='false'", discussion);}            
+        }
+		if(WebSecurity.IsAuthenticated){
+			// Check if subscribe
+			subscribe = db.QueryValue("SELECT subscribe FROM website_forumdiscussionview WHERE forumid=@0 AND userid=@1", discussion, WebSecurity.CurrentUserId);
+			if (subscribe == null) {
+				// Insert into view table
+				db.Execute("INSERT INTO website_forumdiscussionview (lastview, forumid, userid, viewed) VALUES (@0, @1, @2, @3)", DateTime.Now,discussion,WebSecurity.CurrentUserId, true);
+			}else{db.Execute("UPDATE website_forumdiscussionview SET lastview=@0 WHERE forumid=@1 AND userid=@2",DateTime.Now, discussion, WebSecurity.CurrentUserId);}
+		}
+    }else{threads = db.Query("SELECT * FROM website_forumthread WHERE remove='false'"); forumname = "All Discussions";}
+
+    int numperpg = 10;
+    int currentpage = threads.Count() / numperpg;//1;
+    int tag_counter = currentpage * numperpg;/*0;
+    if(Request.QueryString["page"] != null){
+        if(int.TryParse(Request.QueryString["page"], out currentpage)){
+            currentpage = (int)Request.QueryString["page"].AsInt();
+            if(currentpage >= (threads.Count() / numperpg)){
+                currentpage = threads.Count() / numperpg;
+            }
+            if(currentpage < 1){
+                currentpage = 1;
+            }
+            tag_counter = currentpage * numperpg;
+        }else{
+            Response.Redirect("?page=" + currentpage);
+        }
+    }*/
+}
+	<div class="forum-container">
+	<h1>@forumname</h1>
+	<div class="error">
+        <!--{module_error}
+        @* If at least one validation error exists, notify the user *@
+        @Html.ValidationSummary("Account creation was unsuccessful. Please correct the errors and try again.", excludeFieldErrors: true, htmlAttributes: null)
+		You have been (un)subscribed successfully.-->
+    </div>
+	<div class="editor">
+        <!--{tag_editor}-->
+        <iframe style="display:none;" id="editorf" width="440" height="540" frameborder="0" src="about:blank"></iframe>
+    </div>
+	<ul class="cap-top">
+		<li class="user">
+            <!--{module_whosloggedin}
+            System.Web.Security.Membership.GetNumberOfUsersOnline()
+            RenderPage("~/ModuleTemplates/Forum/LoggedIn.cshtml")-->
+        </li>
+		<li class="actions">@if(WebSecurity.IsAuthenticated && discussion>0){<form id="subscribeForm" action="~/Layouts/Forum/forumsubscribe?forumid=@discussion" method="post">
+            @if(subscribe){
+                <a href="javascript:document.getElementById('subscribeForm').submit()" title=""><img alt="Forum Unsubscribe" src="~/_assets/images/forum/Forum_NewTopics_Unsubscribe.png" /></a>
+            }else{
+			    <a href="javascript:document.getElementById('subscribeForm').submit()" title=""><img alt="Forum Subscribe" src="~/_assets/images/forum/Forum_NewTopics_Subscribe.png" /></a>}
+			</form>
+            <a href="" title=""><img alt="New Topic" src="~/_assets/images/forum/Forum_NewTopic.png" /></a>}else if(WebSecurity.IsAuthenticated && discussion==0){}else{
+                <a href="~/Account/Login" title=""><img alt="Forum Subscribe" src="~/_assets/images/forum/Forum_NewTopics_Subscribe.png" /></a>
+                <a href="~/Account/Login" title=""><img alt="New Topic" src="~/_assets/images/forum/Forum_NewTopic.png" /></a>}
+		</li>
+	</ul>
+	<table id="datatable" class="table table-striped table-bordered topic-list" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr class="header">
+				<th class="name">Topic Name</th>
+				<th class="replies">Replies</th>
+				<th class="views">Views</th>
+				<th class="date">Last Post</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+        		<td colspan="4">@if(threads!=null || threads.Count()>0){
+					<!--{tag_topiclist}-->
+                    @RenderPage("~/Layouts/Forum/topic.cshtml", numperpg)}
+                    else{<text>Forum has no topics.</text>}
+    			</td>
+			</tr>
+		</tbody>
+    </table>
+	<ul class="cap-bottom">
+		<li class="nav-page">@RenderPage("~/ModuleTemplates/WebApps/Pagination/pager.cshtml", numperpg, threads.Count())
+		@if((tag_counter + numperpg) % numperpg==1){ //page arrow only displayed when needed, rather than being displayed and disabled.
+            //{tag_previouspage,<img src="/CatalystImages/Module_Previous.png" />} 
+            //{tag_nextpage,<img src="/CatalystImages/Module_Next.png" />}
+            if(tag_counter > numperpg){<a href="@Href("?page=" + currentpage--)" title="Previous Page"><img src="~/_assets/images/forum/Module_Previous.png" alt="Previous"/></a>}
+            if(tag_counter + numperpg < threads.Count()){<a href="@Href("?page=" + currentpage++)" title="Next Page"><img src="~/_assets/images/forum/Module_Next.png" alt="Next"/></a>}
+        }</li> 
+
+		<li class="actions">@if(WebSecurity.IsAuthenticated && discussion>0){<form id="subscribeForm" action="~/Layouts/Forum/forumsubscribe?forumid=@discussion" method="post">
+            @if(subscribe){
+                <a href="javascript:document.getElementById('subscribeForm').submit()" title=""><img alt="Forum Unsubscribe" src="~/_assets/images/forum/Forum_NewTopics_Unsubscribe.png" /></a>
+            }else{
+			    <a href="javascript:document.getElementById('subscribeForm').submit()" title=""><img alt="Forum Subscribe" src="~/_assets/images/forum/Forum_NewTopics_Subscribe.png" /></a>}
+			</form>
+            <a href="" title=""><img alt="New Topic" src="~/_assets/images/forum/Forum_NewTopic.png" /></a>}else if(WebSecurity.IsAuthenticated && discussion==0){}else{
+                <a href="~/Account/Login" title=""><img alt="Forum Subscribe" src="~/_assets/images/forum/Forum_NewTopics_Subscribe.png" /></a>
+                <a href="~/Account/Login" title=""><img alt="New Topic" src="~/_assets/images/forum/Forum_NewTopic.png" /></a>}
+		</li>
+	</ul>
+	  </div>
+
+	@*else{
+                for(int i = tag_counter; i < threads.Count(); i++){
+    <table class="topic-list" cellspacing="0" cellpadding="0">
+			<tr class="header">
+				<th class="name">Topic Name</th>
+				<th class="replies">Replies</th>
+				<th class="views">Views</th>
+				<th class="date">Last Post</th>
+			</tr>@foreach(var topic in threads){
+            Replies = (int)db.QueryValue("SELECT count(*) FROM website_forumpost WHERE threadid=@0", topic.threadid)-1;
+            //var lastpost = db.QuerySingle("SELECT *, Max(LastEdit AND PostDate) AS MaxDate FROM website_forumpost WHERE threadID=@0 ORDER BY date desc", topic.threadid);//(SELECT Max(v) FROM (VALUES (LastEdit), (PostDate)) AS value(v)) as [MaxDate]
+            var lastpost = db.QuerySingle("SELECT *, CASE WHEN DatePost < COALESCE(LastEdit,'') THEN LastEdit ELSE DatePost END AS MostRecent FROM website_forumpost WHERE threadID=@0 ORDER BY MostRecent desc", topic.threadid);
+            <tr>
+				<td class="name"><a href="forum/topics/@topic.threadid" @*topicname.Replace(" ", "-")@>@topic.topicName</a></td>
+				<td class="replies">@Replies</td>
+				<td class="views">@topic.Views</td>
+				<td class="date">@lastpost.MostRecent</td>
+            </tr>i++;if(i == (numperpg+tag_counter)){break;}}
+	</table>
+	<ul class="cap-bottom">
+		<li class="nav-page">@if((i % numperpg)==1){
+            //{tag_previouspage,<img src="/CatalystImages/Module_Previous.png" />} 
+            //{tag_nextpage,<img src="/CatalystImages/Module_Next.png" />}
+            if(i>numperpg){<a href="@Href("?page=" + currentpage--)" title="Previous Page"><img src="~/_assets/images/forum/Module_Previous.png" alt="Previous"/></a>}
+            if(i < threads.Count()){<a href="@Href("?page=" + currentpage++)" title="Next Page"><img src="~/_assets/images/forum/Module_Next.png" alt="Next"/></a>}
+        }</li> 
+        
+		<li class="actions">
+            {tag_forumsubscribe,<img alt="" src="~/_assets/images/forum/Forum_NewTopics_Subscribe.png" />,<img alt="" src="~/_assets/images/forum/Forum_NewTopics_Unsubscribe.png" />}
+            {tag_newtopiclink,<img src="~/_assets/images/forum/Forum_NewTopic.png" />}
+        </li>
+	</ul>break;}
+	}*@

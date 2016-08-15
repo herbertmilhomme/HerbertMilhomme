@@ -1,0 +1,30 @@
+﻿@{
+    var db = Database.Open("Location");
+    var countries = db.Query("SELECT * FROM locations_countries");
+    var CountryItems = countries.Select(i => new SelectListItem {
+        Value = i.code, 
+        Text = i.country,
+        Selected = i.code == "US" ? true : false
+    });
+    //DateTime now = DateTime.Now;
+}
+@Html.DropDownList("Country","-- Select Country --",CountryItems,"US",new Dictionary<string, object>(){{ "id", "country"}, {"name","country"},{"class","form-control mySelectBoxClass"}})
+
+<script>
+function showCountry(str) {
+  var xhttp;    
+  if (str == "") {
+    //document.getElementById("country").innerHTML = "";Toggle Display and fill
+    document.getElementById("placeholder").innerHTML = "";
+    return;
+  }//else toggle display
+  xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("country").innerHTML = xhttp.responseText;
+    }
+  }
+  xhttp.open("GET", "/Layouts/Location/State?country="+str, true);//if "US"
+  xhttp.send();
+}
+</script>

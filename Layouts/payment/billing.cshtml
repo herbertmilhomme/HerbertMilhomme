@@ -1,0 +1,164 @@
+@{
+    Layout = "~/Layouts/Template/pay-now.cshtml";
+    Page.Title = "Billing";
+    
+    var db = Database.Open("Location");
+    var countries = db.Query("SELECT * FROM locations_countries");
+    var CountryItems = countries.Select(i => new SelectListItem {
+        Value = i.code, 
+        Text = i.country,
+        Selected = i.code == "US" ? true : false
+    });
+    DateTime now = DateTime.Now;
+}
+<!-- InstanceBeginEditable name="ContentArea" --><h2>Purchase Your Tour</h2>
+<hr />
+<form name="catwebformform24576" method="post" onsubmit="return checkWholeForm24576(this)" enctype="multipart/form-data" action="/FormProcessv2.aspx?WebFormID=45132&amp;OID={module_oid}&amp;OTYPE={module_otype}&amp;EID={module_eid}&amp;CID={module_cid}&amp;CC={module_urlcountrycode}&amp;Referrer={module_siteurl,true,true}">
+    <div class="container payment-forms offset-0">
+    <div class="col-md-12">
+    <h4>Personal Information</h4>
+    </div>
+    <div class="col-md-6">
+    <input type="text" name="FirstName" id="FirstName" class="form-control" placeholder="First Name" />
+    </div>
+    <div class="col-md-6">
+    <input type="text" name="LastName" id="LastName" class="form-control" placeholder="Last Name" />
+    </div>
+    <div class="col-md-6">
+    <input type="email" name="EmailAddress" id="EmailAddress" class="form-control" placeholder="Email Address" />
+    </div>
+    <div class="col-md-6">
+    <input type="tel" name="HomePhone" id="HomePhone" class="form-control" placeholder="Phone Number" />
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-12">
+    <h4>Billing Information</h4>
+    </div>
+    <div class="col-md-6">
+    <input type="text" name="BillingAddress" id="BillingAddress" class="form-control" placeholder="Billing Address" />
+    </div>
+    <div class="col-md-4">
+    <input type="text" name="BillingCity" id="BillingCity" class="form-control" placeholder="City" />
+    </div>
+    <div class="col-md-2">
+    <input type="text" name="BillingState" id="BillingState" class="form-control" placeholder="State" />
+    </div>
+    <div class="col-md-6">
+    <input type="text" name="BillingZip" id="BillingZip" class="form-control" placeholder="Zipcode/Postcode" />
+    </div>
+    <div class="col-md-6">
+        @Html.DropDownList("BillingCountry","-- Select Country --",CountryItems,"US",new Dictionary<string, object>(){{ "id", "BillingCountry"}, {"class","form-control mySelectBoxClass" }})
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-12">
+    <h4 class="pay-hdr">Payment Information</h4>
+    </div>
+    <div class="col-md-6">
+    <input type="text" name="CardName" id="CardName" class="form-control" placeholder="Name on Card" autocomplete="off" />
+    </div>
+    <div class="col-md-6">
+    <input type="text" name="CardNumber" id="CardNumber" class="form-control" placeholder="Card Number" autocomplete="off" />
+    </div>
+    <div class="col-md-3">
+        @*Html.DropDownList("CardExpiryMonth","Exp. Month",,new Dictionary<string, object>(){{ "class", "special" }})*@
+    <select name="CardExpiryMonth" id="CardExpiryMonth" class="form-control mySelectBoxClass">
+    <option>Exp. Month</option>
+    <option value="01">01</option>
+    <option value="02">02</option>
+    <option value="03">03</option>
+    <option value="04">04</option>
+    <option value="05">05</option>
+    <option value="06">06</option>
+    <option value="07">07</option>
+    <option value="08">08</option>
+    <option value="09">09</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    </select>
+    </div>
+    <div class="col-md-3">
+    <select name="CardExpiryYear" id="CardExpiryYear" class="form-control mySelectBoxClass">
+    <option>Exp. Year</option>
+        @for (int i = 0; i < 9; i++)
+	{
+	    <option value="@now.ToString("yyyy")">@now.ToString("yyyy")</option>
+	    now = now.AddYears(1);
+	}
+    </select>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-12">
+    <h4>Payment Amount</h4>
+    </div>
+    <div class="col-md-6">
+    <p>Number of Adults Traveling: <input type="text" name="Qty" id="Qty" class="form-control qty" value="1" /></p>
+    </div>
+    <div class="col-md-6">
+    <p>Total Charges: <span>$</span><input type="text" name="Amount" id="Amount" class="form-control amount-total" value="{module_url,amt}" readonly="readonly" /></p>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-12">
+    <h4>Review and Book Your Trip</h4>
+    <div class="alert alert-warning">
+    <p class="bold">Important Information About your Booking:</p>
+    <p class="size12">&bull; This reservation is non-refundable and cannot be changed or canceled.</p>
+    </div>
+    <p>By selecting to complete this booking I acknowledge that I have read and accept the <a href="#">rules &amp; restrictions</a> <a href="#">terms &amp; conditions</a>, and <a href="#">privacy policy</a>.</p>
+    </div>
+    <div class="col-md-12">
+    <input class="btn greenbtn" type="submit" value="Submit Payment" id="catwebformbutton" />
+    </div>
+    </div>
+    <script type="text/javascript" src="/CatalystScripts/ValidationFunctions.js"></script>
+    <script type="text/javascript">
+	//<![CDATA[
+	var submitcount24576 = 0;function checkWholeForm24576(theForm){var why = "";if (theForm.FirstName) why += isEmpty(theForm.FirstName.value, "First Name"); if (theForm.LastName) why += isEmpty(theForm.LastName.value, "Last Name"); if (theForm.HomePhone) why += isEmpty(theForm.HomePhone.value, "Home Phone Number"); if (theForm.EmailAddress) why += checkEmail(theForm.EmailAddress.value); if (!theForm.PaymentMethodType || getRadioSelected(theForm.PaymentMethodType) == 1) { if (theForm.CardName) why += isEmpty(theForm.CardName.value, "Name on Card"); if (theForm.CardNumber) why += isNumeric(theForm.CardNumber.value, "Card Number"); if (theForm.Amount) why += isCurrency(theForm.Amount.value, "Amount"); } if(why != ""){alert(why);return false;}if(submitcount24576 == 0){submitcount24576++;theForm.submit();return false;}else{alert("Form submission is in progress.");return false;}}
+	//]]>
+	</script>
+</form>
+<script type="text/javascript">
+	
+	var amount = $('#Amount').val();
+	
+	$('#Qty').on('keyup change', function () {
+		var qty = $('#Qty').val();
+		var newAmount = amount * qty;
+		$('#Amount').val( newAmount.toFixed(2) );
+	});
+	
+</script>
+<!-- InstanceEndEditable -->@*
+				
+		</div>
+		<!-- /MAIN Content -->
+		
+		<!-- Sidebar Content -->
+		<div class="col-md-4 sidebar">
+		
+			<!-- Payment Sidebar -->	
+			{module_contentholder, name="_Template - Payment Sidebar"}
+			<!-- /Payment Sidebar -->
+			
+			<!-- Testimonials -->	
+			{module_contentholder, name="_Sidebar - Testimonials"}
+			<!-- /Testimonials -->
+			
+			<!-- Help -->	
+			{module_contentholder, name="_Sidebar - Help"}
+			<!-- /Help -->
+			
+		</div>
+		<!-- /Sidebar Content -->
+			
+	</div>
+	<!-- /Content -->
+				
+	<!-- FOOTER -->
+	{module_contentholder, name="_Template - Footer"}
+	<!-- /FOOTER -->
+			
+	{module_contentholder, name="_Template - Footer Scripts"}
+	
+  </body>
+<!-- InstanceEnd --></html>*@

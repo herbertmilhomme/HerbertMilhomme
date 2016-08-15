@@ -1,0 +1,73 @@
+﻿@{
+                    // i = 0; i++; //PageData[0]
+                    // PageData[1] PageData[1]
+					// info.firstname PageData[2]
+					// info.lastname PageData[3]
+					// PageData[4] PageData[4]
+}                       
+                <tr @{if (PageData[0] % 2 == 0) {<text>class= "even"</text>;} else {<text> class= "odd"</text>;}}>                    
+                    <th class="first_column" name="@PageData[1]" id="@PageData[1]" style="text-transform: uppercase">
+						@PageData[2]<br />@PageData[3]<br />@PageData[1]
+					</th>
+                    <td  class="@if(day1.Date==DateTime.Today){<text>today</text>} day1">
+                        <div style="float: left;">
+                            <input name="@PageData[1]-punchin1" type="time" value="@PageData[4]" onchange="" placeholder="00:00:00" size="6"
+                                   @{/*if(.Minutes > 0){
+				                        pIn = dItem.punchin.AddHours(1);
+			                        }else{pIn = dItem.punchin;}*/
+			
+                                    if(PageData[4] >= TimeSpan.FromDays(0/24) && PageData[4] < TimeSpan.FromDays(6/24)){
+                                        //onight.Add(PageData[4]);
+                                        DayOne[PageData[1]] = DayOne[PageData[1]] + "onight,";
+				                        <text>class="onight"</text>;
+                                    }
+		                            if(PageData[4] >= TimeSpan.FromDays(6/24) && PageData[4] < TimeSpan.FromDays(12/24)){
+                                        //open.Add(PageData[4]);
+                                        DayOne[PageData[1]] = DayOne[PageData[1]] + "open,";
+				                        <text>class="open"</text>;
+			                        }
+			                        if(PageData[4] >= TimeSpan.FromDays(12/24) && PageData[4] < TimeSpan.FromDays(20/24)){ 
+			                            //mid.Add(PageData[4]);
+                                        DayOne[PageData[1]] = DayOne[PageData[1]] + "mid,";
+				                        <text>class="mid"</text>;
+			                        }
+			                        if(PageData[4] >= TimeSpan.FromDays(20/24) && PageData[4] < TimeSpan.FromDays(24/24)){ 
+			                            //close.Add(PageData[4]);
+                                        DayOne[PageData[1]] = DayOne[PageData[1]] + "close,";
+				                        <text>class="close"</text>;
+                                    }
+			                    }/><br />
+                            <input name="@PageData[1]-punchout1" type="time" value="@x1.punchout" onchange="" placeholder="00:00:00" size="6"
+                                   @{/*if(dItem.punchout.Minutes > 0){
+				                        pOut = dItem.punchout.AddHours(1);
+			                        }else{pOut = dItem.punchout;}*/
+			
+                                    if(x1.punchout >= TimeSpan.FromDays(0/24) && x1.punchout < TimeSpan.FromDays(6/24)){ 
+			                            //onight.Add(x1.punchout);
+				                        <text>class="onight"</text>
+			                        }
+		                            if(x1.punchout >= TimeSpan.FromDays(6/24) && x1.punchout < TimeSpan.FromDays(12/24)){
+                                        //open.Add(x1.punchout);
+				                        <text>class="open"</text>
+			                        }
+			                        if(x1.punchout >= TimeSpan.FromDays(12/24) && x1.punchout < TimeSpan.FromDays(20/24)){ 
+			                            //mid.Add(x1.punchout);
+				                        <text>class="mid"</text>
+			                        }
+			                        if(x1.punchout >= TimeSpan.FromDays(20/24) && x1.punchout <= TimeSpan.FromDays(24/24)){ 
+			                            //close.Add(x1.punchout);
+				                        <text>class="close"</text>
+                                    }
+			                    }/>
+                                    @if(DayOne[PageData[1]].Contains("close") && DayOne[PageData[1]].Contains("open") ){DayOne[PageData[1]] = DayOne[PageData[1]] + "mid,";}
+                            </div>}
+                        else{
+                            @*TimeSpan.ParseExact(Item.punchin, "hh:mm:ss", null), Convert.ToDateTime(Item.punchin).TimeOfDay TimeSpan.Parse(Item.punchin) @Item.punchin, @PageData[4].Hours*@
+                        <div style="float: left;">
+                            <input name="@PageData[1]-punchin1" type="time" value="00:00:00" onchange="" placeholder="00:00:00" size="5"/><br />
+                            <input name="@PageData[1]-punchout1" type="time" value="00:00:00" onchange="" placeholder="00:00:00" size="5"/>
+                        </div>}
+                        <div class="hours" style="float: right;">
+                            <input name="@PageData[1]-day1hrs" value="@dbhours1.ToString("h'.'mm")" onchange="" type="text" size="4" readonly="" /><br />Hrs
+                        </div>
+                    </td>

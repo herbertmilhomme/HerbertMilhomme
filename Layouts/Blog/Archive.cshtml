@@ -1,0 +1,102 @@
+﻿@{  
+  var db = Database.Open("PetCare");
+  //var news = db.Query("SELECT * FROM NewsUpdate ORDER BY NewsDate DESC"); 
+  var years = db.Query("SELECT DISTINCT DATEPART(yyyy, NewsDate) AS nYears FROM NewsUpdate ORDER BY nYears DESC");
+  
+  //SELECT EXTRACT(YEAR FROM NewsDate) AS nYears,
+  //SELECT DISTINCT EXTRACT(YEAR FROM NewsDate) AS nYear, FROM NewsUpdate WHERE nYear=@0;
+  //EXTRACT(MONTH FROM NewsDate) AS nMonth, EXTRACT(DAY FROM NewsDate) AS nDay, 
+
+
+@*section archive {*@
+<aside>
+    <div>
+        <ul class="year">
+        @foreach(var nyears in years){
+            DateTime dYear = new DateTime(Convert.ToInt32(nyears.nYears), 1, 1);
+            var months = db.Query("SELECT DISTINCT DATEPART(mm, NewsDate) AS nMonth, DATEPART(yyyy, NewsDate) AS nYears FROM NewsUpdate WHERE DATEDIFF(year, NewsDate, @0)=0 ORDER BY nYears DESC, nMonth DESC", dYear); //DATEPART(@0, NewsDate) // strftime('%m', dateField) // SET DATEFORMAT DMY GO // DATEDIFF(day, val, '01-22-2012')=0
+            string sMonth = "";
+            //WHERE nYears=nYears
+            <li class="year" style="background-image: none;">@nyears.nYears
+                <ul class="month">
+                @foreach(var nmonth in months){
+                    DateTime dMonth = new DateTime(Convert.ToInt32(nyears.nYears), Convert.ToInt32(nmonth.nMonth), 1);
+                    var archive = db.Query("SELECT * FROM NewsUpdate WHERE DATEDIFF(year, NewsDate, @0)=0 AND DATEDIFF(month, NewsDate, @1)=0 ORDER BY NewsDate DESC",dYear, dMonth);
+                    if(nmonth.nMonth == 1){
+                            sMonth = "January";
+                            }
+                    if(nmonth.nMonth ==  2){
+                            sMonth = "Febuary" ;
+                            }
+                    if(nmonth.nMonth == 3){
+                            sMonth = "March" ;
+                            }
+                    if(nmonth.nMonth == 4){
+                            sMonth = "April" ;
+                            }
+                    if(nmonth.nMonth == 5){
+                            sMonth = "May" ;
+                            }
+                    if(nmonth.nMonth == 6){
+                            sMonth = "June" ;
+                            }
+                    if(nmonth.nMonth == 7){
+                            sMonth = "July" ;
+                            }
+                    if(nmonth.nMonth == 8){
+                            sMonth = "August" ;
+                            }
+                    if(nmonth.nMonth == 9){
+                            sMonth = "September" ;
+                            }
+                    if(nmonth.nMonth == 10){
+                            sMonth = "October" ;
+                            }
+                    if(nmonth.nMonth == 11){
+                            sMonth = "November" ;
+                            }
+                    if(nmonth.nMonth == 12){
+                            sMonth = "December" ;
+                            }
+                    <li class="month" style="background-image: none;">@sMonth (@archive.Count())
+                        <ul class="articles">
+                        @foreach(var item in archive){
+                            <li class="archive"><a href="" 
+                                style="content:string();">@item.NewsTitle</a></li>
+                            <!--<style>
+                                a.archive{
+                                    content:string(filler)
+                                }
+                                a.archive:hover{
+                                    content:string(item.NewsDate.Date.ToString("m"));
+                                }
+                            </style>-->
+                        }</ul>
+                    </li>
+                }</ul>
+            </li>            
+        }</ul>
+    </div>
+</aside>
+}
+
+@*section archive {
+<aside>
+    <div>
+        <ul class="year">
+        @foreach(var record in news){
+            <li class="year">@year.NewsDate.Date.Year
+                <ul class="month">
+                @foreach(var month in year){
+                    <li class="month">@month.NewsDate.Date.Month(@month.Count)
+                        <ul class="articles">
+                        @foreach(var item in month){
+                            <li class="archive"><a href="" style="onhover{content:"@item.NewsDate.Date.ToString("m")"}">@item.NewsTitle</a></li>
+                        }</ul>
+                    </li>
+                }</ul>
+            </li>            
+        }</ul>
+    </div>
+</aside>
+}*@

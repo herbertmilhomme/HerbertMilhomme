@@ -1,0 +1,143 @@
+﻿@{
+    Layout = "~/Layouts/Template/pay-now.cshtml";
+    Page.Title = "Billing";
+
+    var db = Database.Open("Location");
+    var countries = db.Query("SELECT * FROM locations_countries");
+    var CountryItems = countries.Select(i => new SelectListItem {
+        Value = i.code, 
+        Text = i.country,
+        //Selected = i.code == "US" ? true : false
+    });
+    var us_zipcodes = db.Query("SELECT DISTINCT state FROM locations_zipcodes WHERE country='US'"); //OR Type==@0, Request.Form["ShippingType"]
+    var us_states = us_zipcodes.Select(i => new SelectListItem {
+        Value = i.state, 
+        Text = i.state,
+        //Selected = i.code == "US" ? true : false
+    });
+    var addresstype = db.Query("SELECT DISTINCT type FROM locations_zipcodes").Select(i => new SelectListItem {
+        Value = i.type, 
+        Text = i.type,
+        //Selected = i.code == "US" ? true : false
+    });
+    DateTime now = DateTime.Now;
+}
+
+<div class="col-md-12">
+    <h4>Shipping Information</h4>
+</div>
+<div class="col-md-6">
+    <input type="text" name="RecipientName" id="RecipientName" class="form-control" placeholder="Recipient Name" />
+</div>
+<div class="col-md-6">
+    <input type="tel" name="HomePhone" id="HomePhone" class="form-control" placeholder="Phone Number" />
+</div>
+<div class="col-md-4">
+    @Html.DropDownList("ShippingType","-- Address Type --",addresstype,new Dictionary<string, object>(){{ "id", "ShippingType"}, {"class","form-control"}, {"onchange", "showType(this.value)"}})
+    <!--<input type="text" name="ShippingType" id="ShippingType" class="form-control" placeholder="Type" />-->
+</div><!-- Standard, PO BOX, MILLITARY, hide "unique" --> <!-- check the country, then un/acceptable city-->@*
+<div class="col-md-6">
+        @Html.DropDownList("ShippingCountry","Country",CountryItems,"US",new Dictionary<string, object>(){{ "id", "ShippingCountry"}, {"class","form-control"}})
+</div>@if(Request.Form["ShippingCountry"]=="US"){<text>
+<div class="col-md-2">
+    @*Html.DropDownList("ShippingState","State",us_states,new Dictionary<string, object>(){{ "id", "ShippingState"}, {"class","form-control"}})@
+    <input type="text" name="ShippingState" id="ShippingState" class="form-control" placeholder="State" />-->
+</div></text>}
+<div class="col-md-4">
+    <input type="text" name="ShippingCity" id="ShippingCity" class="form-control" placeholder="City" />
+    @if(!Request.Form["ShippingState"].IsEmpty()){<datalist>
+        @foreach(var city in db.Query("SELECT DISTINCT primary_city FROM locations_zipcodes WHERE decommissioned='false' AND state=@0",Request.Form["ShippingState"])){
+            <option value="@city.primary_city"></option>}
+    </datalist>}
+</div>
+<div class="col-md-6">
+    <input type="text" name="ShippingZip" id="ShippingZip" class="form-control" placeholder="Zipcode/Postcode" 
+           @if(!Request.Form["ShippingCity"].IsEmpty()){<text>value="@db.QueryValue("SELECT * locations_zipcodes WHERE (primary_city=@0 OR acceptable_cities=@0) and decommissioned='false'",Request.Form["ShippingCity"])"</text>} />
+</div>*@
+<div class="col-md-6">
+    <input type="text" name="ShippingOrganization" id="ShippingOrganization" class="form-control" placeholder="Organization Name" />
+</div>
+<div class="col-md-6">
+    <input type="text" name="ShippingAddress" id="ShippingAddress" class="form-control" placeholder="Shipping Address" />
+</div>
+<div class="col-md-6"><!-- if not organization then add address 2 -->
+    <input type="text" name="ShippingAddress2" id="ShippingAddress2" class="form-control" placeholder="Shipping Address (Optional)" />
+</div>
+
+<script>
+function showType(str) {
+  var xhttp;    
+  if (str == "") {
+    document.getElementById("countryS").innerHTML = "";
+    return;
+  }
+  xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("countryS").innerHTML = xhttp.responseText;
+    }
+  }
+  xhttp.open("GET", "locations.cshtml?type="+str, true);
+  xhttp.send();
+}
+function showCountry(str) {
+  var xhttp1;    
+  if (str == "") {
+    document.getElementById("stateS").innerHTML = "";
+    return;
+  }
+  xhttp1 = new XMLHttpRequest();
+  xhttp1.onreadystatechange = function() {
+    if (xhttp1.readyState == 4 && xhttp1.status == 200) {
+      document.getElementById("stateS").innerHTML = xhttp1.responseText;
+    }
+  }
+  xhttp1.open("GET", "locations.cshtml?type="+"&country="+str, true);
+  xhttp1.send();
+}
+function showState(str) {
+  var xhttp2;    
+  if (str == "") {
+    document.getElementById("cityS").innerHTML = "";
+    return;
+  }
+  xhttp2 = new XMLHttpRequest();
+  xhttp2.onreadystatechange = function() {
+    if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+      document.getElementById("cityS").innerHTML = xhttp2.responseText;
+    }
+  }
+  xhttp2.open("GET", "locations.cshtml?type="+str, true);
+  xhttp2.send();
+}
+function showCity(str) {
+  var xhttp3;    
+  if (str == "") {
+    document.getElementById("zipS").innerHTML = "";
+    return;
+  }
+  xhttp3 = new XMLHttpRequest();
+  xhttp3.onreadystatechange = function() {
+    if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+      document.getElementById("zipS").innerHTML = xhttp3.responseText;
+    }
+  }
+  xhttp3.open("GET", "locations.cshtml?type="+str, true);
+  xhttp3.send();
+}
+function showZip(str) {
+  var xhttp4;/*
+  if (str == "") {
+    document.getElementById("cityS").innerHTML = "";
+    return;
+  }*/
+  xhttp4 = new XMLHttpRequest();
+  xhttp4.onreadystatechange = function() {
+    if (xhttp4.readyState == 4 && xhttp4.status == 200) {
+      document.getElementById("cityS").innerHTML = xhttp4.responseText;
+    }
+  }
+  xhttp4.open("GET", "locations.cshtml?type="+str, true);
+  xhttp4.send();
+}
+</script>

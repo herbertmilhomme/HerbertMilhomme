@@ -1,0 +1,110 @@
+@{
+	/*
+	CREATE TABLE [dbo].[MailBox](
+	[MailID] [bigint] IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	[MailTo] [int] NULL,
+	[MailFrom] [int] NULL,
+	[MailSub] [varchar](25) NULL,
+	[MailMsg] [varchar](4000) NULL,
+	[MailPostDate] [datetime] DEFAULT (getdate()) NULL,
+	[Report] [bit] NULL,
+	[ReportReason] [int] NULL,
+	[Read] [bit] DEFAULT ((0)) NULL,
+	[Attachment][bit] DEFAULT ((0))  NULL,
+	[Draft] [bit] DEFAULT ((1)) NULL
+	//Starred
+	//Delete
+	)
+	*
+	var db = Database.Open("ServerDB");
+	var inbox = db.Query("SELECT * FROM MailBox WHERE DRAFT='false' AND MailTo=@0 ORDER BY MailPostDate", WebSecurity.CurrentUserId);
+
+	if(IsPost){
+		//foreach checked
+		//if <dropdown for option: delete/read>
+	}*/
+
+	//Reading from a WebAPI will limit what i recieve and how i recieve it.
+	//Must be able to store values accurately and read from variable (Dictionary/Array) with no problem.
+}
+						<div class="panel panel-default m-t-20">
+                            <div class="panel-body">
+                            
+                                <table class="table table-hover mails">
+									<thead>
+										<tr>
+                                            <th class="mail-select">
+                                                <label class="cr-styled">
+                                                    <input type="checkbox"><i class="fa"></i>
+                                                </label>
+                                            </th>
+                                            <th>
+                                                <i class="fa fa-star text-warning"></i>@*Star is a sorting button
+                                                <label class="cr-styled">
+                                                    <input type="checkbox"><i class="fa"></i>
+                                                </label>*@
+                                            </th>
+											<th>Sender</th>
+											<th>Subject</th>
+                                            <th>
+                                                <i class="fa fa-paperclip"></i>
+                                            </th>
+                                            <th>Date</th>
+										</tr>
+									</thead><!--
+									<tfoot>
+										<tr>
+											<td colspan="5" class="col-xs-7">
+												Showing 1 - 20 of 289
+											</td>
+											<td class="col-xs-5">
+												<div class="btn-group pull-right">
+													<button type="button" class="btn btn-default"><i class="fa fa-chevron-left"></i></button>
+													<button type="button" class="btn btn-default"><i class="fa fa-chevron-right"></i></button>
+												</div>
+											</td>
+										</tr>
+									</tfoot>-->
+                                    <tbody>@foreach(var mail in inbox){
+                                        <tr class="active">
+                                            <td class="mail-select">
+                                                <label class="cr-styled">
+                                                    <input type="checkbox" id="@mail.mailid" name="@mail.mailid" value="@mail.mailid" form="mailAction" /><i class="fa"></i>
+                                                </label>
+                                            </td>
+                                            <td class="mail-rateing"><!--
+                                                <i class="fa fa-star text-warning"></i>-->
+                                                <label class="cr-styled">
+                                                    <input type="checkbox"><i class="fa fa-star"></i>@*if checked class=" text-warning", unless star is done thru form*@
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <a href="email-read.html">@mail.mailFrom</a>
+                                            </td>
+                                            <td>
+                                                <a href="email-read.html">@*If labeled*@<i class="fa fa-circle text-info m-r-15"></i>@mail.mailSub</a>
+                                            </td>
+                                            <td>
+                                                <i class="fa fa-paperclip"></i>@*if attachment*@
+                                            </td>
+                                            <td class="text-right"><time datetime="@mail.mailpostDate">@mail.mailpostDate@*Too much time passes, change string format*@</time></td>
+                                        </tr>}
+                                    </tbody>
+                                </table>
+                                
+                                <hr>
+                                
+                                <div class="row">
+                                    <div class="col-xs-7">
+                                        Showing 1 - 20 of 289
+                                    </div>
+                                    <div class="col-xs-5">
+                                        <div class="btn-group pull-right">
+                                          <button type="button" class="btn btn-default"><i class="fa fa-chevron-left"></i></button>
+                                          <button type="button" class="btn btn-default"><i class="fa fa-chevron-right"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div> <!-- panel body -->
+                        </div> <!-- panel -->

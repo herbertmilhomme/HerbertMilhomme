@@ -1,0 +1,40 @@
+﻿@*using WebMatrix.Data;
+@using WebMatrix.WebData;
+@{
+	var db = Database.Open("ColonielHeights");
+	int userid = WebSecurity.IsAuthenticated ? WebSecurity.CurrentUserId : 0;
+	string sql = @"UPDATE website_whoisonline SET UserID=@0, TimeVisitPage=getdate(), PageUrl='@1' WHERE SessionID='@2'";
+	//var username = WebSecurity.IsAuthenticated ? db.QueryValue("SELECT Username FROM UserProfile WHERE userid=@0",WebSecurity.CurrentUserId) : "Guest";
+	/*if(){//new
+		sql = @"INSERT INTO website_livechat (userid, userName, ipaddress, postmsg) VALUES (@0, @1, @2, @3)";
+	}else{
+		sql = @"UPDATE website_whoisonline SET UserID=@0,TimeVisitPage=@1,PageUrl=@2 WHERE SessionID=@3";
+	}*/
+	//db.Execute(sql, userid,Request.Url.LocalPath,Session["SESSION_KEY"]);
+	//HttpContext.Current.Session["yourSessionKey"] = value;
+	//AppState["TotalOnlineChatters"] = (int)AppState["TotalOnlineChatters"] + 1; 
+	//Request.Url.LocalPath on this page
+
+	db.Execute(sql, userid, Request.Url.LocalPath, Session["ASP.NET_SessionId"]);
+}
+@*{
+    WebMatrix.WebData.SimpleRoleProvider;
+    System.Web.Security.MembershipUser;
+    Membership.GetNumberOfUsersOnline();
+    //Label the roles with "Forum_" and use .Replace() to remove
+    var ForumRoles = Roles.GetAllRoles();
+    //Count the number of online per each role, rather than displaying user tags/id
+}
+
+@foreach(var ForumRole in ForumRoles){
+    if(!ForumRole.Contains("Forum_")){
+        continue;
+    }
+    var ForumUsers = Roles.GetUsersInRole(ForumRole);
+    foreach(var ForumUser in ForumUsers){
+        //SimpleMembershipProvider;
+        if(UserIsOnline){
+            <text>Username</text>
+        }
+    }
+}*@

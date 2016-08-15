@@ -1,0 +1,275 @@
+﻿@{
+    
+}
+
+<div class="col-xs-12 main-content">
+
+
+    <link rel="stylesheet" type="text/css" href="templates/orderforms/verticalsteps/style.css">
+
+    <div id="order-verticalsteps">
+
+        <div class="stepsbar">
+
+            <div class="step "><strong>Step 1</strong><br><a href="cart.php">Choose Product</a></div>
+
+            <div class="step "><strong>Step 2</strong><br>Domain Options</div>
+
+            <div class="step active"><strong>Step 3</strong><br>Configure</div>
+
+            <div class="step "><strong>Step 4</strong><br><a href="cart.php?a=view">Confirm Order</a></div>
+
+            <div class="step "><strong>Step 5</strong><br><a href="cart.php?a=checkout">Checkout</a></div>
+
+        </div>
+
+        <div class="maincontent">
+
+            <h1>Product Configuration</h1>
+
+            <p>The product/service you have chosen has the following configuration options for you to choose from.</p>
+
+            <form method="post" action="/cart.php?a=confproduct&amp;i=1">
+                <input type="hidden" name="token" value="d112dab85b37c95cfbb302a1b88287e307d2af23">
+                <input type="hidden" name="configure" value="true">
+
+
+
+                <div class="orderbox">
+                    <b class="orderboxrtop"><b class="r1"></b><b class="r2"></b><b class="r3"></b><b class="r4"></b></b>
+                    <div class="orderboxpadding">
+                        <b>Clustered Cloud Servers - Clustered Cloud Server - Express</b><br>vCPU: 1
+                        Memory: 1GB
+                        SAN Storage: 50GB
+                        Transfer: 3000MB
+                    </div>
+                    <b class="orderboxrbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
+                </div>
+
+                <input type="hidden" name="previousbillingcycle" value="monthly">
+                <p>
+                    Billing Cycle: <select name="billingcycle" onchange="submit()">
+                        <option value="monthly" selected="selected">1 Month Price - $69.95</option>
+                        <option value="quarterly">3 Month Price - $69.95</option>
+                        <option value="annually">12 Month Price - $62.96</option>
+                    </select>
+                </p>
+
+
+                <p><strong>Configure Server</strong></p>
+                <div class="orderbox">
+                    <table>
+                        <tbody>
+                            <tr><td>Hostname:</td><td><input type="text" name="hostname" size="15" value=""> eg. server1(.yourdomain.com)</td></tr>
+                            <tr><td>NS1 Prefix:</td><td><input type="text" name="ns1prefix" size="10" value=""> eg. ns1(.yourdomain.com)</td></tr>
+                            <tr><td>NS2 Prefix:</td><td><input type="text" name="ns2prefix" size="10" value=""> eg. ns2(.yourdomain.com)</td></tr>
+                            <tr><td>Root Password:</td><td><input type="password" name="rootpw" size="20" value=""></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p><strong>Configurable Options</strong></p>
+                <p>This product/service has some options which you can choose from below to customise your order.</p>
+                <div class="orderbox">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>CPU:</td>
+                                <td>
+                                    <select name="configoption[143]">
+                                        <option value="828" selected="selected">1 vCPUs (included)</option>
+                                        <option value="829">2 vCPUs $50.00</option>
+                                        <option value="830">3 vCPUs $100.00</option>
+                                        <option value="832">4 vCPUs $150.00</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Memory:</td>
+                                <td>
+                                    <select name="configoption[141]">
+                                        <option value="803" selected="selected">1 GB (included)</option>
+                                        <option value="804">2 GB  $25.00</option>
+                                        <option value="805">3 GB $50.00</option>
+                                        <option value="806">4 GB $75.00</option>
+                                        <option value="807">5 GB $100.00</option>
+                                        <option value="808">6 GB $125.00</option>
+                                        <option value="809">7 GB $150.00</option>
+                                        <option value="810">8 GB $175.00</option>
+                                        <option value="1264">9 GB $200.00</option>
+                                        <option value="1265">10 GB $225.00</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Disk Storage:</td>
+                                <td>
+                                    <select name="configoption[142]">
+                                        <option value="811" selected="selected">50 GB</option>
+                                        <option value="815">60 GB $10.00</option>
+                                        <option value="816">70 GB $20.00</option>
+                                        <option value="817">80 GB $30.00</option>
+                                        <option value="818">90 GB $40.00</option>
+                                        <option value="812">100 GB $50.00</option>
+                                        <option value="819">110 GB $60.00</option>
+                                        <option value="820">120 GB $70.00</option>
+                                        <option value="821">130 GB $80.00</option>
+                                        <option value="822">140 GB $90.00</option>
+                                        <option value="813">150 GB $100.00</option>
+                                        <option value="1620">160 GB $110.00</option>
+                                        <option value="1271">170 GB  $120.00</option>
+                                        <option value="1734">180 GB $130.00</option>
+                                        <option value="1735">190 GB $140.00</option>
+                                        <option value="814">200 GB $150.00</option>
+                                        <option value="823">210 GB $160.00</option>
+                                        <option value="824">220 GB $170.00</option>
+                                        <option value="825">230 GB $180.00</option>
+                                        <option value="826">240 GB $190.00</option>
+                                        <option value="827">250 GB $200.00</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Operating System:</td>
+                                <td>
+                                    <select name="configoption[244]">
+                                        <option value="1495" selected="selected">MS Windows 2012 R2 $10.00</option>
+                                        <option value="1496">MS Windows 2012 $10.00</option>
+                                        <option value="1497">MS Windows 2008 R2  $10.00</option>
+                                        <option value="1498">MS Windows 2008 $10.00</option>
+                                        <option value="1524">Other Windows</option>
+                                        <option value="1521">CentOS</option>
+                                        <option value="1522">CloudLinux $15.00</option>
+                                        <option value="1523">Other Linux</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>SQL Edition:</td>
+                                <td>
+                                    <select name="configoption[247]">
+                                        <option value="1532" selected="selected">None/Shared/Express/Other</option>
+                                        <option value="1529">MS SQL 2014 Web Edition (4 Cores) $40.00</option>
+                                        <option value="1530">MS SQL 2014 Standard Edition (4 Cores) $330.00</option>
+                                        <option value="1531">MS SQL 2014 Enterprise Edition (4 Cores) $1250.00</option>
+                                        <option value="1526">MS SQL 2012 Web Edition (4 Cores) $40.00</option>
+                                        <option value="1527">MS SQL 2012 Standard Edition (4 Cores) $330.00</option>
+                                        <option value="1528">MS SQL 2012 Enterprise Edition (4 Cores) $1250.00</option>
+                                        <option value="1512">MS SQL 2008 Web Edition (4 Cores) $40.00</option>
+                                        <option value="1525">MS SQL 2008 Standard Edition (4 Cores) $330.00</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Management:</td>
+                                <td>
+                                    <select name="configoption[243]">
+                                        <option value="1492" selected="selected">Client Managed (included)</option>
+                                        <option value="1493">Fully Managed (ServerConcierge) $150.00</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Public Network (NIC):</td>
+                                <td>
+                                    <select name="configoption[144]">
+                                        <option value="831" selected="selected">1Gbps (included)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>IPs:</td>
+                                <td>
+                                    <select name="configoption[245]">
+                                        <option value="1500" selected="selected">1 (included)</option>
+                                        <option value="1501">2 $5.00</option>
+                                        <option value="1502">3 $10.00</option>
+                                        <option value="1503">4 $15.00</option>
+                                        <option value="1504">5 $20.00</option>
+                                        <option value="1658">6 $25.00</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>RDP Connections:</td>
+                                <td>
+                                    <select name="configoption[248]">
+                                        <option value="1517" selected="selected">2 (included)</option>
+                                        <option value="1518">3 $8.00</option>
+                                        <option value="1519">4 $16.00</option>
+                                        <option value="1520">5 $24.00</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>R1Soft Backup Storage:</td>
+                                <td>
+                                    <select name="configoption[246]">
+                                        <option value="1505" selected="selected">30 GB (included)</option>
+                                        <option value="1619">No Backup / Client Performs Backup</option>
+                                        <option value="1506">50 GB $20.00</option>
+                                        <option value="1507">70 GB $40.00</option>
+                                        <option value="1508">90 GB $60.00</option>
+                                        <option value="1509">110 GB $80.00</option>
+                                        <option value="1510">130 GB $100.00</option>
+                                        <option value="1511">150 GB $120.00</option>
+                                        <option value="1618">170 GB $140.00</option>
+                                        <option value="1738">190 GB $160.00</option>
+                                        <option value="1739">210 GB $180.00</option>
+                                        <option value="1740">230 GB $200.00</option>
+                                        <option value="1587">250 GB $220.00</option>
+                                        <option value="1745">270 GB $240.00</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Control Panel:</td>
+                                <td>
+                                    <select name="configoption[263]">
+                                        <option value="1676" selected="selected">None</option>
+                                        <option value="1672">Plesk 12 - Web App Edition $5.00</option>
+                                        <option value="1671">Plesk 12 - Web Pro Edition $10.00</option>
+                                        <option value="1670">Plesk 12 - Web Host Edition  $15.00</option>
+                                        <option value="1674">Plesk 12 - Web Pro Edition &amp; CloudLinux Bundle $20.00</option>
+                                        <option value="1673">Plesk 12 - Web Host Edition &amp; CloudLinux Bundle $25.00</option>
+                                        <option value="1675">WebsitePanel</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p><strong>Choose Product Addons</strong></p>
+                <p>The following addons are available for this product. Choose the addons you wish to order below.</p>
+                <div class="orderbox">
+                    <table>
+                        <tbody>
+                            <tr><td><input type="checkbox" name="addons[5]" id="a5"></td><td><label for="a5"><strong>FREE SmarterTools Bundle</strong> - Free Bundle of SmarterMail, SmarterStats and SmarterTrack for all VPS, Dedicated Server and Cloud Server Customers ($0.00 Free Account)</label></td></tr>
+                            <tr><td><input type="checkbox" name="addons[9]" id="a9"></td><td><label for="a9"><strong>InstantSSL Pro Promotion</strong> - Online Signup Special: 1 Year InstantSSL Pro SSL Certificate Discounted Price, ($249.00 value) ($149.95 One Time)</label></td></tr>
+                            <tr>
+                                <td><input type="checkbox" name="addons[6]" id="a6"></td>
+                                <td>
+                                    <label for="a6">
+                                        <strong>WebsitePanel Integration*</strong> - Integrate your new server with our distributed WebsitePanel Install at WebPanel.appliedi.net. Includes use of our DNS servers for your domains.
+                                        * This feature is included as part of ServerConcierge managed services.
+                                        * WebsitePanel is NOT compatible with: Windows Server 2012 R2 or SQL Server 2014 ($0.00 One Time + $39.95 Setup Fee)
+                                    </label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+                <p align="center"><input type="submit" value="Add to Cart"></p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+</div>

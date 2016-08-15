@@ -1,0 +1,20 @@
+﻿@{
+    //Layout = "~/Layouts/Template/index.cshtml";
+    Page.Title = "Shop";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+
+	//display best sellers of each catagory as they move along
+	//as well as sale items
+
+	//if page doesnt load, back button takes them to urldata[i-1] (same value as breadcrumb)
+}
+    @RenderPage("~/Layouts/OnlineShop/page_content.cshtml")
+<!--Best Sellers--> <!--Sale/Discount Items-->

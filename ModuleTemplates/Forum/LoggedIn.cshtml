@@ -1,0 +1,21 @@
+﻿@{
+    WebMatrix.WebData.SimpleRoleProvider;
+    System.Web.Security.MembershipUser;
+    Membership.GetNumberOfUsersOnline();
+    //Label the roles with "Forum_" and use .Replace() to remove
+    var ForumRoles = Roles.GetAllRoles();
+    //Count the number of online per each role, rather than displaying user tags/id
+}
+
+@foreach(var ForumRole in ForumRoles){
+    if(!ForumRole.Contains("Forum_")){
+        continue;
+    }
+    var ForumUsers = Roles.GetUsersInRole(ForumRole);
+    foreach(var ForumUser in ForumUsers){
+        //SimpleMembershipProvider;
+        if(UserIsOnline){
+            <text>Username</text>
+        }
+    }
+}

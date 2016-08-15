@@ -1,0 +1,70 @@
+@{
+    var SearchQuery = Request.Form["SearchQuery"] ?? Request.QueryString["SearchQuery"]; //Or Request.Form[]
+    var db = Database.Open("ColonielHeights");
+    //var search = db.Query("SELECT * FROM tag_menuitemlabel");
+    var searchresults = db.Query("SELECT * FROM tag_menuitemlabel WHERE tag_menugroup = @0", "%" + SearchQuery + "%");
+    int numperpg = 10;
+
+    int currentpage = 1;
+    int tag_counter = 0;
+    /*if(UrlData[0].IsInt){
+        currentpage = UrlData[0];
+    }*/
+    if (string.IsNullOrWhiteSpace(keyword) /*&& string.IsNullOrWhiteSpace(tag)*/){Response.Redirect("Default.aspx");}
+    if(!UrlData[0].IsEmpty){
+        int.TryParse(UrlData[0], out currentpage);
+        //if(UrlData[0].IsInt){
+            //currentpage = UrlData[0];
+            if(currentpage >= (searchresults.Count / numperpg)){
+                currentpage = searchresults.Count / numperpg;
+            }
+            if(currentpage < 1){
+                currentpage = 1;
+            }
+            tag_counter = currentpage * numperpg;
+        //}
+    }if(!UrlData[0].IsInt){
+        Response.Redirect("?SearchQuery=" + SearchQuery + "/" + currentpage);
+    }
+    //searchresults.Count / numperpg;
+
+		/*int totalResults = 0;
+        int pageNumber = 0;
+        int.TryParse(Request["Page"], out pageNumber);
+       
+        string keyword = Request["Keyword"];
+        string tag = Request["Tag"];
+        if (string.IsNullOrWhiteSpace(keyword) && string.IsNullOrWhiteSpace(tag)){Response.Redirect("Default.aspx");}
+
+        ProductsGrid.PageNumber = pageNumber;
+        ProductsGrid.PageSize = 18;
+        if (!string.IsNullOrWhiteSpace(keyword))
+            ProductsGrid.DataSource = Products.SearchProducts(keyword, pageNumber, ProductsGrid.PageSize, out totalResults);
+        else if (!string.IsNullOrWhiteSpace(tag))
+            ProductsGrid.DataSource = Products.GetProductsByTags(tag, pageNumber, ProductsGrid.PageSize, out totalResults);
+        ProductsGrid.TotalRecords = totalResults;
+        ProductsGrid.DataBind();*/
+}
+@for(var i = tag_counter; i < searchresults.Count; i++){
+    
+    <div class="search-result"><!--Use CSS to insert a "." after counter-->
+        <h3><span class="tag_counter">@i</span>&nbsp;@searchresults[i].tag_image&nbsp;@searchresults[i].tag_name</h3>
+        <p>@Html.Raw(Html.Encode(searchresults[i].tag_description).Replace(SearchQuery,  "<strong>" + SearchQuery + "</strong>"))</p>@*Might need to use "IndexOf" to grab snippet of just that one area*@
+    </div>
+    if((i % numperpg)==1){@*<a id="searchprev" href="@Href("~/?SearchQuery=" + SearchQuery + "/" + i)">Previous</a>*@
+        if(i>numperpg){
+            <a id="searchprev" href="@Href("?SearchQuery=" + SearchQuery + "/" + currentpage--)">Previous</a>
+        }
+        if(i < searchresults.Count){
+            <a id="searchnext" href="@Href("?SearchQuery=" + SearchQuery + "/" + currentpage++)">Next</a>
+        }        
+        break;
+    }
+}
+@*I wonder if you can 'break' a foreach loop. If FOR doesnt work, use on FOREACH
+@foreach(var item in searchresults){
+    tag_counter += 1;
+    <div class="search-result">@*Use CSS to insert a "." after counter@
+        <h3>@tag_counter&nbsp;@tag_image&nbsp;@tag_name</h3>
+        <p>@Html.Raw(Html.Encode(tag_description).Replace(SearchQuery,  "<strong>" + SearchQuery + "</strong>"))</p>@*Might need to use "IndexOf" to grab snippet of just that one area@
+    </div>}*@

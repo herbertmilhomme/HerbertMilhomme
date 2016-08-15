@@ -1,0 +1,76 @@
+﻿@{
+    var db = Database.Open("ColonielHeights");
+    var mainnav = db.Query("SELECT * FROM website_pages WHERE parentD = 0 AND header = 'true'");
+    //var botnav = db.Query("SELECT * FROM website_pages WHERE parentD = 0 AND footer = 'true'");
+}
+<!-- Main Navigation -->
+        <nav id="nav" class="hidden-xs">			
+            <div id="nav-arrow" class="arrow"><span id="bottom-arrow" class="shape"></span></div>
+			<h2 class="offset">Navigation</h2>
+			<ul>@foreach(var item in mainnav){
+                var navmenu = (int)db.QueryValue("SELECT count(*) FROM website_pages WHERE parentD = @0 AND header = 'true'", item.pageID);
+                <li id="main-nav-@item.name" class="@item.cssCLASS">
+                    <div class="arrow"><span id="top-arrow" class="shape" style="display: none;"></span></div>
+                    <a href="@Href("~/" + item.UrlPath + item.FileName)">@item.Name</a>@if(navmenu != null && navmenu > 0){
+                    <ul>@foreach(var dropdown in db.Query("SELECT * FROM website_pages WHERE parentD = @0 AND header = 'true'", item.pageID)){
+                        <li id="@dropdown.IDname" class="@dropdown.cssCLASS">
+                            <a href="@Href("~/" + dropdown.UrlPath + dropdown.filename)">@dropdown.Name</a>
+                        </li>}
+                    </ul>}
+                </li>}
+            </ul>
+        </nav>
+@*section collapsenav{
+<!-- Collapse Navigation Menu -->
+        <nav id="nav-collapse">			
+			<h2 class="offset">Navigation</h2>
+			<ul>@foreach(var item in topnav){
+                <li id="main-nav-@item.name" class="@item.cssCLASS @if(item.pageID == navmenu.parentD){<text>dropdown</text>}">
+                    <!--<div class="arrow"><span id="top-arrow" class="shape" style="display: none;"></span></div>-->
+                    <a href="@Href("~/" + item.UrlPath + item.filename)">@item.Name</a>@if(item.pageID == navmenu.parentD){
+                    <ul>@foreach(var dropdown in db.Query("SELECT * FROM website_pages WHERE parentD = @0 AND header = 'true'",item.pageID)){
+                        <li id="@dropdown.IDname" class="@dropdown.cssCLASS">
+                            <a href="@Href("~/" + dropdown.UrlPath + item.filename)">@dropdown.Name</a>
+                        </li>}
+                    </ul>}
+                </li>}
+            </ul>
+        </nav>
+}
+@*<nav id="nav">			
+			<h2 class="offset">Navigation</h2>
+			<ul>
+                <li  >
+                    <a href="/">Home</a>
+                </li>
+                <li id="main-nav-about" >
+                    <a href="/about">About</a>
+                    <ul>
+                        <li  >
+                            <a href="/about/awards">Awards</a>
+                        </li>
+                        <li  >
+                            <a href="/about/people">People</a>
+                        </li>
+                        <li  >
+                            <a href="/about/testimonials">Testimonials</a>
+                        </li>
+                        <li  >
+                            <a href="/about/events">Events</a>
+                        </li>
+                    </ul>
+                </li>
+                <li id="main-nav-projects" >
+                    <a href="/projects">Projects</a>
+                </li>
+                <li id="main-nav-services" >
+                    <a href="/services">Services</a>
+                </li>
+                <li id="main-nav-news" >
+                    <a href="/news">News</a>
+                </li>
+                <li id="main-nav-blog" >
+                    <a href="/_blog/Blog">Blog</a>
+                </li>
+            </ul>
+		</nav>*@

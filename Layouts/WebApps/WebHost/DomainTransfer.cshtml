@@ -1,0 +1,56 @@
+﻿@{
+    
+}
+
+<div class="col-xs-12 main-content">
+
+
+    <link rel="stylesheet" type="text/css" href="templates/orderforms/verticalsteps/style.css">
+
+    <div id="order-verticalsteps">
+
+        <div class="stepsbar">
+
+            <div class="step "><strong>Step 1</strong><br><a href="cart.php">Choose Product</a></div>
+
+            <div class="step "><strong>Step 2</strong><br>Domain Options</div>
+
+            <div class="step active"><strong>Step 3</strong><br>Configure</div>
+
+            <div class="step "><strong>Step 4</strong><br><a href="cart.php?a=view">Confirm Order</a></div>
+
+            <div class="step "><strong>Step 5</strong><br><a href="cart.php?a=checkout">Checkout</a></div>
+
+        </div>
+
+        <div class="maincontent">
+
+            <h1>Domains Configuration</h1>
+
+            <p>Below you can configure the domain names in your shopping cart selecting the addon services you would like, providing required information for them and defining the nameservers that they will use.</p>
+
+
+            <form method="post" action="/cart.php?a=confdomains">
+                <input type="hidden" name="token" value="d112dab85b37c95cfbb302a1b88287e307d2af23">
+                <input type="hidden" name="update" value="true">
+
+                <p><strong>herbertmilhomme.us</strong> - 1 Year/s <span style="color:#009900;">[Has Hosting]</span></p>
+                <div class="orderbox">
+                    <b class="orderboxrtop"><b class="r1"></b><b class="r2"></b><b class="r3"></b><b class="r4"></b></b>
+                    <div class="orderboxpadding">
+                        EPP Code <input type="text" name="epp[0]" size="20" value=""> This needs to be obtained from the current registrar for authorisation<br><label><input type="checkbox" name="dnsmanagement[0]"> DNS Management (FREE!)</label><br><label><input type="checkbox" name="emailforwarding[0]"> Email Forwarding (FREE!)</label><br><label><input type="checkbox" name="idprotection[0]"> ID Protection ($10.00)</label><br>
+                    </div>
+                    <b class="orderboxrbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
+                </div>
+
+
+                <p align="center"><input type="submit" value="Update Cart"></p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+</div>

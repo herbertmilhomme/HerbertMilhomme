@@ -1,0 +1,50 @@
+﻿@using WebMatrix.Data;
+@using WebMatrix.WebData;
+@{
+    /*DateTime date = DateTime.Now;
+	if(Request.QueryString[null] == "date" || Request.QueryString["date"] == ""){
+        date = DateTime.Now;}
+    if(Request.QueryString["date"] != null){
+        date = DateTime.Parse(Request.QueryString["date"]);}*/
+
+    //Response.Cache.SetCacheability(HttpCacheability.NoCache);
+    Response.CacheControl = "no-cache";
+
+    var db = Database.Open("ColonielHeights");
+    var messages = db.Query("SELECT * FROM website_livechat WHERE Server=@0 AND MsgID>@1 ORDER BY PostDate ASC", String.IsNullOrEmpty(Request.QueryString["server"]) ? db.QueryValue("SELECT ServerID FROM website_livechatServer WHERE LOWER(servername) = LOWER(@0)", UrlData[0]) : int.Parse(Request.QueryString["server"]), String.IsNullOrEmpty(Request.QueryString["tag"]) ? 0 : int.Parse(Request.QueryString["tag"]));  //UrlData[0]
+    //var messages = db.Query("SELECT * FROM website_livechat WHERE PostDate>@0 ORDER BY PostDate ASC", date);	//date.ToString("d")
+    //Database.Open("ColonielHeights").QueryValue("SELECT ServerID FROM website_livechatServer WHERE LOWER(servername) = LOWER(@0)", UrlData[1])
+
+    //if(PageData[0]==null){}
+
+    //||db.QueryValue("SELECT SessionID FROM website_whoisonline WHERE UserID=@0", userid,Request.Url.LocalPath,Session["SESSION_KEY"]);
+    /*
+	SELECT CASE WHEN EXISTS (
+    SELECT *
+    FROM [User]
+    WHERE UserID = 20070022
+)
+THEN CAST(1 AS BIT)
+ELSE CAST(0 AS BIT) END
+*/
+}@foreach(var msg in messages){
+	 //if(msg.ipaddress==ipAddress && (bool)msg.sent==false){hide}//change class; on submit, remove hide class
+											<li id="msg_@msg.msgID" name="@msg.msgID" class="clearfix @if(msg.userid==WebSecurity.CurrentUserId || msg.ipaddress==PageData["ipAddress"]){<text>odd</text>} conversation-msg @if((bool)msg.sent==false){<text>typing</text>}" onload="@if(msg.ipaddress!=PageData["ipAddress"] && (bool)msg.sent==true){<text>javascript:newMsgAlert()</text>}">
+                                                <div class="chat-avatar">
+													@if(msg.userid==0){<img src="/_assets/images/users/avatar-guest.jpg" alt="Anonymous Guest" />}
+                                                    else{
+														if(File.Exists(Href("/_assets/images/users/avatar-"+Request.Form["UserMemberID"]+".jpg"))){<text><img src="@Href("/_assets/images/users/avatar-"+Request.Form["UserMemberID"]+".jpg")" alt="@Request.Form["UserAlias"].ToString()'s avatar image - @Request.Form["UserGender"].ToString()" /></text>}
+														else{<img src="/_assets/images/users/avatar-guest.jpg" alt="No avatar image set" />}
+													}
+                                                    <i><time datetime="@DateTime.SpecifyKind(msg.postdate,DateTimeKind.Utc).ToLocalTime().ToString()">@DateTime.SpecifyKind(msg.postdate, DateTimeKind.Utc).ToLocalTime().ToString("h':'mmt")</time></i>
+                                                </div>
+                                                <div class="conversation-text">
+                                                    <div class="ctext-wrap">
+                                                        <i>@msg.alias</i>
+														@if((bool)msg.removemsg){<p class="removed">This message has been removed.</p>}
+														else{<p>@msg.postmsg</p>}
+                                                    </div>
+													<!--<time datetime="@DateTime.SpecifyKind(msg.postdate, DateTimeKind.Utc).ToLocalTime().ToString()">@DateTime.SpecifyKind(msg.postdate, DateTimeKind.Utc).ToLocalTime().ToString("dddd', 'MMMM d', 'yyyy")</time>-->
+                                                </div>
+                                            </li>
+}

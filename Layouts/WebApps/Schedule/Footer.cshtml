@@ -1,0 +1,46 @@
+﻿@{
+    
+}
+
+<tfoot>
+                <tr>
+                    <th class="first_column">Total <br />Employees: <br />@employeehrs.Count</th>
+                    <td class="total">
+                        <div class="open total">Open:<br /><input name="day1open" type="text" size="2" value="@DayOne.Where(x => x.Value.Contains("open")).Count()" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" value="@DayOne.Where(x => x.Value.Contains("mid")).Count()" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" value="@DayOne.Where(x => x.Value.Contains("close")).Count()" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" value="@total1.ToString("h'.'mm")" readonly="" /></div>
+                    </td>
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>
+                    <th class="last_column total">Total:<br /><input name="totalhours" type="text" size="3" readonly="" value="@wkhrsvar.ToString("h'.'mm")" /></th>
+                </tr>
+            </tfoot>

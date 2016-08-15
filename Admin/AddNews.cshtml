@@ -1,0 +1,64 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Add News";
+    
+    var db = Database.Open("PetCare");
+    var news = db.Query("SELECT * FROM NewsUpdate ORDER BY NewsDate DESC"); 
+
+    if(IsPost){
+        //var db = Database.Open("PetCare");
+        var sql = @"INSERT INTO NewsUpdate (NewsTitle, NewsText, NewsLinkUrl, NewsPictureUrl) 
+                    VALUES (@0, @1, @2, @3)";
+        /*var title = Request["title"];
+        var isbn = Request["isbn"];
+        var description = Request["description"];
+        var authorId = Request["authorId"];
+        var categoryId = Request["categoryId"];
+        var datePublished = Request["datePublished"];*/
+        
+        //var NewsKey;
+        var NewsTitle = Request["NewsTitle"];
+        var NewsText = Request["NewsText"];
+        var NewsDay = Request["NewsDay"];
+        var NewsTime = Request["NewsTime"];
+        var NewsLinkUrl = Request["NewsLinkUrl"];
+        var NewsPictureUrl = Request["NewsPictureUrl"];
+
+        //if(NewsDay.ToString("d") == null || NewsTime.ToString("T") == null){
+        
+
+        var NewsDate = NewsDay + " " + NewsTime;
+        
+        db.Execute(sql, NewsTitle, NewsText, NewsLinkUrl, NewsPictureUrl);
+    }
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <form method="post">
+        <ul class="form">
+            <li><label>Article Title Name</label>
+                <input type="text" id="NewsTitle" name="NewsTitle" spellcheck="true" /></li>
+            <li><label>Message Text</th></label>
+                <!--<input type="text" id="NewsText" name="NewsText" spellcheck="true" />-->
+                <textarea form="" name="NewsText" id="NewsText" role="textbox" placeholder="Enter Comment Here..." spellcheck="true"></textarea></li>
+            <li><label>Date</th></label>
+                <input type="date" id="NewsDay" name="NewsDay" spellcheck="true" /></li>
+            <li><label>Time</th></label>
+                <input type="time" id="NewsTime" name="NewsTime" spellcheck="false" /></li>
+            <li><label>Url Link</th></label>
+                <input type="text" id="NewsLinkUrl" name="NewsLinkUrl" spellcheck="false" /></li>
+            <li><label>Picture Url</th></label>
+                <input type="text" id="NewsPictureUrl" name="NewsPictureUrl" spellcheck="false" /></li>
+        </ul>
+            <input type="submit" value="submit" />
+</form>
+    </body>
+</html>
+

@@ -1,0 +1,63 @@
+@{
+    //action="/Default.aspx?SiteSearchID=252&PageID=679714"
+    //request form field from last page, and forward the information to the page render
+    
+    //var db = Database.Open("ColonielHeights");
+
+    var SearchedQuery = Request.QueryString["SearchQuery"];
+
+    if (IsPost) {
+        // Redirect back to the return URL or homepage
+        var searchquery = Request.Form["CAT_Search"];
+        Context.RedirectLocal("~/search-results?SearchQuery=" + searchquery);
+    }/* else {
+        Response.Redirect("~/search-results");
+    }*/
+}
+<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" ><!-- InstanceBegin @*template="/Templates/Default.dwt"*@ codeOutsideHTMLIsLocked="false" --> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" >
+<!--<![endif]-->
+    <head>
+  	    @RenderPage("~/_System/ContentHolders/_Template - Head Metatags.cshtml")
+	
+        <!--{module_contentholder, name="_Template - Head Scripts"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Head Scripts.cshtml")
+	
+    </head>
+    <body id="top" class="thebg">
+    
+        <!-- Header -->	
+	    <!--{module_contentholder, name="_Template - Header"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Header.cshtml")
+	    <!-- /Header -->
+	
+	    <div class="clearfix"></div>		
+
+	    <!-- Content -->
+	    <div class="container page-top">
+		    <div class="container pagecontainer">
+		        <h1>Searh Results</h1>
+			    <div class="row">
+				    <div class="col-md-12 hpadding20">
+					    <!-- InstanceBeginEditable name="ContentArea" --><!--{module_searchresults}-->
+                        @RenderPage("~/Layouts/SiteSearch/site_search.html")
+<!-- InstanceEndEditable -->
+				    </div>
+			    </div>
+			<p><strong>@SearchedQuery</strong>&nbsp;Results</p>
+		    </div>
+	    </div>
+	    <!-- /Content -->
+				
+	    <!-- FOOTER -->
+	    <!--{module_contentholder, name="_Template - Footer"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer.cshtml")
+	    <!-- /FOOTER -->
+			
+	    <!--{module_contentholder, name="_Template - Footer Scripts"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer Scripts.cshtml")
+	
+    </body>
+<!-- InstanceEnd --></html>

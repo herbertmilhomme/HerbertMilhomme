@@ -1,0 +1,48 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    //var blogs = db.Query("SELECT * FROM website_blogs WHERE dateposted<='now()' ORDER BY dateposted desc");
+	IEnumerable<dynamic> blogs=null;
+    DateTime dateposted; //= UrlData[0];
+	//DateTime lastviewed = new DateTime();
+    if(UrlData[0] != null && UrlData[0] != ""){
+        if(DateTime.TryParse(UrlData[0], out dateposted)){
+            blogs = db.Query("SELECT * FROM website_blogs WHERE dateposted<='@0' ORDER BY dateposted desc", dateposted);
+        }else{
+            blogs = db.Query("SELECT * FROM website_blogs WHERE dateposted<='@0' ORDER BY dateposted desc", dateposted);
+        }/*
+		if(WebSecurity.IsAuthenticated){
+			// Check if subscribe
+			lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND userid=@1", discussion, WebSecurity.CurrentUserId);
+		}*/
+    }else{blogs = db.Query("SELECT * FROM website_blogs WHERE dateposted<=getdate() ORDER BY dateposted desc");}
+
+    int numperpg = PageData[0];
+    int currentpage = blogs.Count() / numperpg;//1;
+    int tag_counter = currentpage * numperpg;
+	int length = 200;
+}@if(blogs == null){
+ 	<article class="blog-list">
+	    <h1>No Blogs Posted</h1>
+	    <p>Nothing new to mention here, sorry.</p> 
+    </article>
+ }else{for(int i = tag_counter; i < blogs.Count() && i < (numperpg+tag_counter); i++){<hr />
+@*string noHTML = System.Text.RegularExpressions.Regex.Replace(blogs.ElementAt(i).body, @"<[^>]+>|&nbsp;", "").Trim();
+string body = System.Text.RegularExpressions.Regex.Replace(noHTML, @"\s{2,}", " ");
+<article class="blog-post">
+  <h2><a href="@Href("/blog/"+blogs.ElementAt(i).title.Replace(" ", "-"))" title="@blogs.ElementAt(i).title">@blogs.ElementAt(i).title</a></h2>
+  <div class="post-details">@blogs.ElementAt(i).authorid - <time datetime="@blogs.ElementAt(i).dateposted">@blogs.ElementAt(i).dateposted</time></div>
+  <div class="post-body">@if (body == null || body.Length < length){
+            <text>@body</text>}else{
+        int iNextSpace = body.LastIndexOf(" ", length);
+        <text>@string.Format("{0}&#8230;", body.Substring(0, (iNextSpace > 0) ? iNextSpace : length).Trim())</text>}&nbsp;<a href="@Href("/blog/"+blogs.ElementAt(i).title.Replace(" ", "-"))">Read More</a><!--{tag_blogpostbodypreview,Read More}-->
+    <div class="links">
+      <a href="@blogs.ElementAt(i).permalink#comments">Comments ({tag_commentcount})</a> | <a href="@blogs.ElementAt(i).permalink#trackbacks">Trackbacks ({tag_trackbackcount})</a> | @blogs.ElementAt(i).permalink
+    </div>
+  </div>
+</article>*@
+<div class="blog-list">   
+    <h1><a href="@Href("/feature/blogs/"+blogs.ElementAt(i).title.Replace(" ", "-"))" title="@blogs.ElementAt(i).title">@blogs.ElementAt(i).title</a></h1>
+    <span class="label">Last Posted:</span> <time datetime="@blogs.lastpost" class="date">@blogs.lastpost</time> | <span class="label">Total Posts:</span> {tag_totalposts}  
+</div> }
+<hr />
+@RenderPage("~/ModuleTemplates/WebApps/Pagination/pagination.cshtml", numperpg, blogs.Count())}

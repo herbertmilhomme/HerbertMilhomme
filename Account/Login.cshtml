@@ -1,0 +1,165 @@
+﻿@section FooterJS{
+	<!-- Scripts // Member Templates --
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+	<!-- Scripts // Member Templates 
+    <script src="~/latest/jquery.validate.js"></script>-->
+    <script src="~/latest/jquery.validate.min.js"></script>
+    <script src="~/latest/jquery.validate.unobtrusive.min.js"></script>
+	<script>
+$('form#loginForm').on('submit',function(e){
+    var $form = $(this);
+
+    if ($form.data('submitted') === true) {
+      // Previously submitted - don't submit again
+      e.preventDefault();
+    } else {
+      // Mark it so that the next submit can be ignored
+      $form.data('submitted', true);
+    }
+});
+	</script>
+}
+@{
+    //Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Log in";
+	if (WebSecurity.IsAuthenticated) {
+        /*Layout = "~/Layouts/Template/velonic.cshtml";
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {}*/
+		Response.Redirect("~/");
+	}/*else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}*/
+
+    // Initialize general page variables
+    var email = "";
+    var password = "";
+    var rememberMe = false;
+
+    var returnUrl = Request.QueryString["ReturnUrl"];
+    if (returnUrl.IsEmpty()) {
+        // Some external login providers always require a return URL value
+        returnUrl = Href("~/");
+    }
+
+    // Setup validation
+    Validation.RequireField("email", "You must specify an email address.");
+    Validation.RequireField("password", "You must specify a password.");
+    Validation.Add("password",
+        Validator.StringLength(
+            maxLength: Int32.MaxValue,
+            minLength: 6,
+            errorMessage: "Password must be at least 6 characters"));
+
+    // If this is a POST request, validate and process data
+    if (IsPost) {
+		//Console.Write("console msg"); //Doesnt do anything for unity
+        //System.Diagnostics.Debug.WriteLine("debug msg"); //Doesnt do anything for unity
+        //AntiForgery.Validate();
+        // is this an external login request?
+        string provider = Request.Form["provider"];
+
+        //session id is assigned with a random string of char and numbers
+        //var session_id = Guid.NewGuid().ToString("n").Substring(0, 10);
+        
+        if (!provider.IsEmpty()) {//i can use this here to check session id by matching current user and sending rejection message
+            //if logging in from unity client
+            if(provider.Equals("Unity"))//this is my hash
+            {                
+                //Database.Open("Pokemon").Execute("UPDATE PlayerSetting SET SessionID=@0 WHERE TrainerId=@1", Session["ASP.NET_SessionId"], WebSecurity.GetUserId(email)); //UserID = UserProfileID
+                //int i = (playerdb != null) ?  1 : 0;
+                HttpContext.Current.Response.Write(/*i +*/ ":Success:" + Session["ASP.NET_SessionId"]);}//and this is my secret key
+                //Set LastLog in other DB
+            //HttpContext.Current.Response.Write("Provider");
+            //HttpContext.Current.Response.Write("0:Success");
+            else{OAuthWebSecurity.RequestAuthentication(provider, Href("~/Account/RegisterService", new { returnUrl }));}
+            //HttpContext.Current.Response.Write("0:Success");
+            return;
+        } else if (Validation.IsValid()) {
+            email = Request.Form["email"];
+            password = Request.Form["password"];
+            rememberMe = Request.Form["rememberMe"].AsBool();
+
+            //insert here
+            //Custom login
+            if(!email.Contains("@")){
+				if(email.IsInt()){
+					if (email.AsInt() >= 100000000 && email.AsInt() <= 999999999){               
+						email =  Database.Open("ColonielHeights").QueryValue("SELECT email FROM business_Customer WHERE memberid=@0",email);
+					}
+				}else{
+					email = Database.Open("ColonielHeights").QueryValue("Select Email FROM UserProfile WHERE LOWER(Username) = LOWER(@0)", email);
+				}
+            }
+            //
+
+            if (WebSecurity.UserExists(email) && WebSecurity.GetPasswordFailuresSinceLastSuccess(email) > 4 && WebSecurity.GetLastPasswordFailureDate(email).AddSeconds(60) > DateTime.UtcNow) {
+                Response.Redirect("~/Account/AccountLockedOut");
+                return;
+            }
+
+            // Attempt to log in using provided credentials
+            if (WebSecurity.Login(email, password, rememberMe)) {
+				var cookie = FormsAuthentication.GetAuthCookie(email, rememberMe);
+				if (rememberMe){cookie.Expires = DateTime.Now.AddDays(7);}
+				Response.Cookies.Add(cookie);
+				//returnUrl = FormsAuthentication.GetRedirectUrl(email, rememberMe);
+				AppState["TotalOnlineMembers"] = (int)AppState["TotalOnlineMembers"] + 1;  
+                Context.RedirectLocal(returnUrl);
+                return;
+            } else {
+                ModelState.AddFormError("The user name or password provided is incorrect.");
+            }
+        }
+    }
+}
+
+<!--<hgroup class="title">
+    <h1>@Page.Title.</h1>
+</hgroup>-->
+<div class="row">
+<section id="loginForm" class="col-sm-6">
+    <h2>Use a local account to log in.</h2>
+    <form method="post">
+        @AntiForgery.GetHtml()
+        @* If one or more validation errors exist, show an error *@
+        @Html.ValidationSummary("Log in was unsuccessful. Please correct the errors and try again.", excludeFieldErrors: true, htmlAttributes: null)
+
+        <fieldset>
+            <legend>Log in to Your Account</legend>
+            <ol>
+                <li class="email form-group @if(!ModelState.IsValidField("email")){<text>has-error</text>}else if(ModelState.IsValidField("email") && Request.Form["email"] != null){<text>has-success</text>}">
+                    <label for="email" @if (!ModelState.IsValidField("email"))
+                                       {<text>class="error-label"</text>}>Email address Or Member Id</label>
+                    <input type="text" class="form-control" id="email" name="email" value="@email" @Validation.For("email")/>
+                    @* Write any user name validation errors to the page *@
+                    @Html.ValidationMessage("email")
+                </li>
+                <li class="password form-group @if(!ModelState.IsValidField("password")){<text>has-error</text>}else if(ModelState.IsValidField("password") && Request.Form["password"] != null){<text>has-success</text>}">
+                    <label for="password" @if (!ModelState.IsValidField("password")) {<text>class="error-label"</text>}>Password</label>
+                    <input type="password" class="form-control" id="password" name="password" @Validation.For("password")/>
+                    @* Write any password validation errors to the page *@
+                    @Html.ValidationMessage("password")
+                </li>
+                <li class="remember-me form-group">
+                    <label class="checkbox control-label" for="rememberMe">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="rememberMe" name="rememberMe" value="true" checked="@rememberMe" />Remember me?
+                    </label>
+                </li>
+            </ol>
+            <button type="submit" class="btn btn-default">Log in</button>
+        </fieldset>
+    </form>
+    <p>
+        <a href="~/Account/MemberSignUp">Don't have a Account?</a>
+        <a href="~/Account/ForgotPassword">Did you forget your password?</a>
+    </p>
+</section>
+<section class="social exlogin col-sm-6" id="socialLoginForm">
+    <h2>Use another service to log in.</h2>
+    @RenderPage("~/Account/_ExternalLoginsList.cshtml")
+</section>
+</div>

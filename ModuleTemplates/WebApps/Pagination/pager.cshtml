@@ -1,0 +1,56 @@
+﻿@{
+	int numperpg = PageData[0];//10
+    int currentpage = 1;
+    int tag_counter = 0;
+	int total=PageData[1];// ? PageData[0] : Request.Form["TotalTagCount"];
+    if(Request.QueryString["page"] != null){
+        if(int.TryParse(Request.QueryString["page"], out currentpage)){
+            currentpage = (int)Request.QueryString["page"].AsInt();
+            if(currentpage >= (total / numperpg)){
+                currentpage = total / numperpg;
+            }
+            if(currentpage < 1){
+                currentpage = 1;
+            }
+            tag_counter = currentpage * numperpg;
+        }else{
+            Response.Redirect("?page=" + currentpage);
+        }
+    }
+}
+<nav>
+  <ul class="pagination pager">
+    <!--//FIRST-->
+	@if(tag_counter > numperpg){<li>
+      <a href="@Href("?page=1")" rel="first">First</a>
+    </li>}else{<li class="disabled">First</li>}
+	<!--//PREVIOUS-->
+	@if(tag_counter > numperpg){<li>
+      <a href="@Href("?page=" + currentpage--)" rel="prev">Previous</a>
+    </li>}else{<li class="disabled">Previous</li>}
+	@*<!--//MINUS-5?-->
+	@if(currentpage-5<tag_counter / numperpg){<li>
+      <span><a href="@Href("?page=" + ((total / numperpg)-5))">@((total / numperpg)-5)</a></span>
+    </li>}
+	<!--//PAGE COUNT-->
+@for(int i = currentpage-2;i>0 && (i<currentpage+2||i<total);i++){//foreach(int i in total)){
+    if(currentpage==i){<li class="active">
+      <span>@i <span class="sr-only">(current)</span></span>
+    </li>}else{<li>
+      <span><a href="@Href("?page=" + i)">@i</a></span>
+    </li>}
+	}
+	<!--//PLUS-5?-->
+	@if(currentpage+5<total / numperpg){<li>
+      <span><a href="@Href("?page=" + ((total / numperpg)+5))">@((total / numperpg)+5)</a></span>
+    </li>}*@
+	<!--//NEXT-->
+    @if(tag_counter + numperpg < total){<li>
+      <a href="@Href("?page=" + currentpage++)" rel="next">Next</a>
+    </li>}else{<li class="disabled">Next</li>}
+	<!--//LAST-->
+    @if(tag_counter + numperpg < total){<li>
+      <a href="@Href("?page=" + (total / numperpg))" rel="last">Last</a>
+    </li>}else{<li class="disabled">Last</li>}
+  </ul>
+</nav>

@@ -1,0 +1,170 @@
+﻿@{
+    //Layout = "~/Layouts/Template/velonic.cshtml";
+    Page.Title = "Live Chat";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+	//HttpApplication;
+	//HttpContext.Current.Session["yourSessionKey"] = value;
+	//AppState["TotalOnlineChatters"] = (int)AppState["TotalOnlineChatters"] + 1; 
+	//Request.Url.LocalPath on this page
+	
+	//if cookie copyright not true, redirect to serverselect
+}
+@if(UrlData.Count == 0){//<p>Total number of items in UrlData: @UrlData.Count</p>
+    @RenderPage("~/Layouts/LiveChat/LC2/ServerSelect2.cshtml")
+	@section HeadCSS{
+		<!-- Bootstrap core CSS --
+        <link href="/_assets/css/bootstrap-reset.css" rel="stylesheet">
+        <link href="/_assets/css/bootstrap.min.css" rel="stylesheet">
+
+        <!--Animation css--
+        <link href="/_assets/css/animate.css" rel="stylesheet">
+
+        <!--Icon-fonts css--
+        <link href="/_assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link href="/_assets/ionicon/css/ionicons.min.css" rel="stylesheet" />
+
+        <!--Form Wizard-->
+        <link href="/_assets/form-wizard/jquery.steps.css" rel="stylesheet" type="text/css" />
+
+        <!-- Custom styles for this template --
+        <link href="/_assets/css/style.css" rel="stylesheet">-->
+        <link href="/_assets/css/helper.css" rel="stylesheet">
+        
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+        <!--[if lt IE 9]>
+          <script src="js/html5shiv.js"></script>
+          <script src="js/respond.min.js"></script>
+        <![endif]-->
+	}
+	@section FooterJS{
+		<!-- js placed at the end of the document so the pages load faster --
+        <script src="/_assets/js/jquery.js"></script>
+        <script src="/_assets/js/bootstrap.min.js"></script>
+        <script src="/_assets/js/pace.min.js"></script>
+        <script src="/_assets/js/wow.min.js"></script>
+        <!--<script src="/_assets/js/jquery.nicescroll.js" type="text/javascript"></script>-->
+
+
+        <!--Form Validation-->
+        <script src="/_assets/form-wizard/bootstrap-validator.min.js" type="text/javascript"></script>
+
+        <!--Form Wizard-->
+        <script src="/_assets/form-wizard/jquery.steps.min.js" type="text/javascript"></script>
+        <script src="/_assets/jquery.validate/jquery.validate.min.js" type="text/javascript"></script>
+
+        <!--wizard initialization-->
+        <script src="/_assets/form-wizard/wizard-init.js" type="text/javascript"></script>
+
+
+        <script src="/_assets/js/jquery.app.js"></script>
+
+<script>
+    function submitForm(action)
+    {
+        document.getElementById('ServerSelect2').action = action;
+        document.getElementById('ServerSelect2').submit();
+    }
+</script>
+	}
+}else if(UrlData.Count == 1){
+	<div class="row" id="msgUnsupported">
+			<div class="large-12 columns">
+				<div data-alert class="alert-box alert round text-center">
+					<script>_("Your browser does not support all features of this demo")</script>.
+					<script>_("Download")</script> <a href="https://www.mozilla.org/firefox/" target="_blank"><script>_("here")</script></a> 
+					<script>_("the latest web browser version of Chrome, Firefox, or Safari")</script>
+				</div>
+			</div>
+		</div>
+    @RenderPage("~/Layouts/LiveChat/LC2/LC2.cshtml")//}else if(UrlData.Count == ){@RenderPage("~/Layouts/Forum/topic.cshtml")//is loaded inside the topics page  
+	//No Robot INDEX  
+	@section HeadCSS{
+		<!-- Google-Fonts --
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic' rel='stylesheet'>
+
+        <!-- Bootstrap core CSS --
+        <link href="/_assets/css/bootstrap.min.css" rel="stylesheet">-->
+        <link href="/_assets/css/bootstrap-reset.css" rel="stylesheet">
+
+        <!--Animation css-->
+        <link href="/_assets/css/animate.css" rel="stylesheet">
+
+        <!--Icon-fonts css-->
+        <link href="/_assets/css/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link href="/_assets/css/ionicon/css/ionicons.min.css" rel="stylesheet" />
+
+        <!--Morris Chart CSS --
+        <link href="/_assets/morris/morris.css" rel="stylesheet">
+
+        <!-- sweet alerts -->
+        <link href="/_assets/sweet-alert/sweet-alert.min.css" rel="stylesheet">
+
+        <!-- Plugins css--
+        <link href="assets/tagsinput/jquery.tagsinput.css" rel="stylesheet" />-->
+        <link href="/_assets/toggles/toggles.css" rel="stylesheet" />
+
+        <!-- Custom styles for this template -->
+        <link href="/_assets/css/style.css" rel="stylesheet">
+        <link href="/_assets/css/helper.css" rel="stylesheet">
+        <link href="/_assets/css/style-responsive.css" rel="stylesheet" />
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+        <!--[if lt IE 9]>
+          <script src="/_assets/js/html5shiv.js"></script>
+          <script src="/_assets/js/respond.min.js"></script>
+        <![endif]-->
+}
+@section FooterJS{
+		<!-- js placed at the end of the document so the pages load faster --
+        <script src="/_assets/js/jquery.js"></script>
+        <script src="/_assets/js/bootstrap.min.js"></script>
+        <script src="/_assets/js/modernizr.min.js"></script>
+        <script src="/_assets/js/pace.min.js"></script>
+        <script src="/_assets/js/wow.min.js"></script>
+        <script src="/_assets/js/jquery.scrollTo.min.js"></script>
+        <script src="/_assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="/_assets/chat/moment-2.2.1.js"></script>
+
+        <!-- sweet alerts -->
+        <script src="/_assets/sweet-alert/sweet-alert.min.js"></script>
+        <script src="/_assets/sweet-alert/sweet-alert.init.js"></script>
+
+        <script src="/_assets/toggles/toggles.min.js"></script>
+		<script>
+            jQuery(document).ready(function() {
+                // Form Toggles
+                jQuery('.toggle').toggles({on: true});
+            });
+        </script>
+<!--
+        <script src="/_assets/js/jquery.app.js"></script>
+        <!-- Chat --
+        <script src="/_assets/js/jquery.chat.js"></script>
+        <!-- Dashboard --
+        <script src="/_assets/js/jquery.dashboard.js"></script>-->
+        <!-- Chat -->
+		<script>
+			'use strict';
+			
+			var Notification = window.Notification || window.mozNotification || window.webkitNotification || window.msNotification,
+				FileReader = window.FileReader || window.mozFileReader || window.webkitFileReader || window.msFileReader;
+		</script>
+		<script src="/_assets/js/LiveChatScript.min.js"></script>
+		<script src="/_assets/js/LiveChatNotify.js"></script>
+}
+}@*else if(UrlData.Count == 2){
+    @RenderPage("~/Layouts/Forum/posts_page.cshtml") 
+}else if(UrlData.Count == 4){
+    @RenderPage("~/Layouts/Forum/post.cshtml") 
+}else{
+    <p>Problem loading page.</p>
+}*@

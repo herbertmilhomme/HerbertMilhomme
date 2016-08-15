@@ -1,0 +1,107 @@
+﻿@{
+	int numperpg = PageData[0];//10
+    int currentpage = 1;
+    int tag_counter = 0;
+	int total=PageData[1];// ? PageData[0] : Request.Form["TotalTagCount"];
+    if(Request.QueryString["page"] != null){
+        if(int.TryParse(Request.QueryString["page"], out currentpage)){
+            currentpage = (int)Request.QueryString["page"].AsInt();
+            if(currentpage >= (total / numperpg)){
+                currentpage = total / numperpg;
+            }
+            if(currentpage < 1){
+                currentpage = 1;
+            }
+            tag_counter = currentpage * numperpg;
+        }else{
+            Response.Redirect("?page=" + currentpage);
+        }
+    }
+	if(IsPost){
+		Response.Redirect(/*Request.Url.LocalPath +*/ "?page=" + Request.Form["page"]);
+	}
+}
+<nav>
+  <ul class="pagination">
+	<li><span class="pages">Pages (@(total/numperpg)):</span></li>
+    <!--//FIRST-->
+	@if(tag_counter > numperpg){<li>
+      <a href="@Href("?page=1")" rel="first" aria-label="First"><span aria-hidden="true">&laquo;</span></a>
+    </li>}else{<li class="disabled">
+      <span>
+        <span aria-hidden="true">&laquo;</span>
+      </span>
+    </li>}
+	<!--//PREVIOUS-->
+	@if(tag_counter > numperpg){<li>
+      <a href="@Href("?page=" + currentpage--)" rel="prev" aria-label="Previous"><span aria-hidden="true">&lt;</span></a>
+    </li>}else{<li class="disabled">
+      <span>
+        <span aria-hidden="true">&lt;</span>
+      </span>
+    </li>}
+	<!--//MINUS-5?-->
+	@if(currentpage-5>tag_counter / numperpg){<li>
+      <span><a href="@Href("?page=" + ((total / numperpg)-5))">@((total / numperpg)-5)</a></span>
+    </li>}
+	<!--//Current Page-->
+	<li class="active">
+				<span>@currentpage <span class="sr-only">(current)</span></span>
+			</li>
+	<!--//ELLIPSIS SPACER-->
+	@*if(currentpage-5<tag_counter / numperpg){<li class="unavailable disabled">
+      <span><a>&#8230;</a></span>
+    </li>}*@
+	<!--//PAGE COUNT--
+	@for(int i = currentpage-2;i>0 && (i<currentpage+2||i<total);i++){//foreach(int i in total)){
+		if(currentpage==i){<li class="active">
+				<span>@i <span class="sr-only">(current)</span></span>
+			</li>}else{<li>
+				<span><a href="@Href("?page=" + i)">@i</a></span>
+			</li>}
+	}
+	<!--//PLUS+5?-->
+	@if(currentpage+5<total / numperpg){<li>
+      <span><a href="@Href("?page=" + ((total / numperpg)+5))">@((total / numperpg)+5)</a></span>
+    </li>}
+	<!--//NEXT-->
+    @if(tag_counter + numperpg < total){<li>
+      <a href="@Href("?page=" + currentpage++)" rel="next" aria-label="Next"><span aria-hidden="true">&gt;</span></a>
+    </li>}else{<li class="disabled">
+      <span>
+        <span aria-hidden="true">&gt;</span>
+      </span>
+    </li>}
+	<!--//LAST-->
+    @if(tag_counter + numperpg < total){<li>
+      <a href="@Href("?page=" + (total / numperpg))" rel="last" aria-label="Last"><span aria-hidden="true">&raquo;</span></a>
+    </li>}else{<li class="disabled">
+      <span>
+        <span aria-hidden="true">&raquo;</span>
+      </span>
+    </li>}<!--
+	<li>
+		<a href="javascript:;" class="go_page" title="Jump to page" id="go_page_1" aria-label="Jump to page">
+			<span aria-hidden="true"><img src="http://www.vg-resource.com/images/arrow_down.png" alt="Jump to page"></span>
+		</a>
+	</li>
+	<li class="popup_menu drop_go_page" style="display: none;" id="go_page_1_popup">
+		<form action="online.php" method="post">
+			<label for="page">Jump to page:</label> 
+			<input type="text" class="textbox" name="page" id="page" value="1" size="4">
+			<input type="submit" class="button" value="Go">
+		</form>
+	</li>-->
+  </ul>
+</nav>
+<!--<script type="text/javascript">
+	var go_page = 'go_page_' + $(".go_page").length;
+	$(".go_page").last().attr('id', go_page);
+	$(".drop_go_page").last().attr('id', go_page + '_popup');
+	$('#' + go_page).popupMenu(false).click(function() {
+		var drop_go_page = $(this).prev('.drop_go_page');
+		if (drop_go_page.is(':visible')) {
+			drop_go_page.find('.textbox').focus();
+		}
+	});
+</script>-->

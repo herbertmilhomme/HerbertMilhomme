@@ -1,0 +1,21 @@
+@{
+    //{module_webapps,Testimonials,r,1 template="/ModuleTemplates/WebApps/home-testimonial.tpl"}
+    
+    var db = Database.Open("ColonielHeights");
+    var testimonial = db.Query("SELECT * FROM business_testimonials");
+    //var testimony = "";
+    //int count = (int)db.QueryValue("SELECT count(*) FROM business_testimonials");
+    Random randomz = new Random();
+    int rnum = 0;
+    if(testimonial.Count()>1){
+        rnum = randomz.Next(1,testimonial.Count())-1;
+        //testimony = testimonial.ElementAt(rnum);
+    }/*else{
+        rnum = 1;
+    }*/
+    
+    //var testimonial = db.QuerySingle("SELECT * FROM business_testimonials WHERE testid=@0", rnum);
+    var testimony = testimonial.ElementAt(rnum);
+}
+				<p class="size18 testimonial-copy">@testimony.Testimony</p>
+				<a class="btn iosbtn" href="~/about-us/testimonials">Read more</a>

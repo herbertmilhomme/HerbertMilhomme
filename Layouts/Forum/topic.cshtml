@@ -1,0 +1,91 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    IEnumerable<dynamic> threads=null;
+    int discussion; //= UrlData[0];
+    //string forumname = "Forum Name";
+	DateTime lastviewed = new DateTime();
+    if(UrlData[0] != null && UrlData[0] != ""){
+        if(int.TryParse(UrlData[0], out discussion)){
+            if(discussion < 1){
+                discussion = 1;
+            }
+            //tag_counter = discussion * numperpg;
+            threads = db.Query("SELECT * FROM website_forumthread WHERE discussionid=@0 AND remove='false'", discussion);
+            //forumname = db.QueryValue("SELECT name FROM website_forumdiscussion WHERE forumid=@0",discussion);
+        }else{
+            //Response.Redirect("?SearchQuery=" + SearchQuery + "/" + discussion);
+            /*threads = db.Query("SELECT * FROM website_forumdiscussion as d, website_forumthread as t WHERE d.name=@0 AND t.Forumid=d.forumid AND t.[remove]='false'",UrlData[0]);
+            forumname = db.QueryValue("SELECT name FROM website_forumdiscussion WHERE name=@0",UrlData[0]);*/
+
+			//discussion = db.QueryValue("SELECT forumid FROM website_forumdiscussion WHERE name='@0'",UrlData[1].Replace("-", " "));
+			discussion = (int)db.QueryValue("SELECT coalesce(forumid, 0) as forumid FROM website_forumdiscussion WHERE LOWER(name)=LOWER(@0)",(string)UrlData[0].Replace("-"," ").Trim());
+            if(discussion==0){threads = db.Query("SELECT * FROM website_forumthread WHERE remove='false'"); /*forumname = "All Discussions";*/}
+			else{threads = db.Query("SELECT * FROM website_forumthread WHERE discussionid=@0 AND remove='false'", discussion);}
+            //forumname = db.QueryValue("SELECT name FROM website_forumdiscussion WHERE forumid=@0",discussion);
+        }
+		if(WebSecurity.IsAuthenticated){
+			// Check if subscribe
+			lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND userid=@1", discussion, WebSecurity.CurrentUserId);
+		}
+    }else{threads = db.Query("SELECT * FROM website_forumthread WHERE remove='false'"); /*forumname = "All Discussions";*/}
+    int Replies = 0;
+    //IEnumerable<dynamic> lastpost = null;
+
+    int numperpg = PageData[0];
+	int totalthreads = threads.Count();
+    int currentpage = threads.Count() / numperpg;//1;
+    int tag_counter = currentpage * numperpg;/*0;
+    if(Request.QueryString["page"] != null){
+        if(int.TryParse(Request.QueryString["page"], out currentpage)){
+            currentpage = (int)Request.QueryString["page"].AsInt();
+            if(currentpage >= (threads.Count() / numperpg)){
+                currentpage = threads.Count() / numperpg;
+            }
+            if(currentpage < 1){
+                currentpage = 1;
+            }
+            tag_counter = currentpage * numperpg;
+        }else{
+            Response.Redirect("?page=" + currentpage);
+        }
+    }*/
+	Html.Hidden("TotalTagCount",threads.Count());
+}
+<div id="catformoutput">
+@for(int i = tag_counter; i < threads.Count(); i++){
+<table class="topic" cellspacing="0">  
+	@foreach(var topic in threads){//if sub-forum: make new table //make a new-column: sub-form=bit
+	int replies = (int)db.QueryValue("SELECT count(*) FROM website_forumpost WHERE threadid=@0", topic.threadid)-1;
+	//var lastpost = db.QuerySingle("SELECT *, Max(LastEdit AND PostDate) AS MaxDate FROM website_forumpost WHERE threadID=@0 ORDER BY date desc", topic.threadid);//(SELECT Max(v) FROM (VALUES (LastEdit), (PostDate)) AS value(v)) as [MaxDate]
+	var lastpost = db.QuerySingle("SELECT *, CASE WHEN DatePost < COALESCE(LastEdit,'') THEN LastEdit ELSE DatePost END AS MostRecent FROM website_forumpost WHERE threadID=@0 ORDER BY MostRecent desc", topic.threadid);
+    <tr @if(WebSecurity.IsAuthenticated && lastpost.mostrecent<lastviewed){<text>class="viewed"</text>}>   
+        <td class="name">
+            @if(WebSecurity.IsAuthenticated){<div class="icon">
+                if(readstatus){<img src="~/_assets/images/forum/forum_read.png" style="width:16px;height:16px;" border="0">}else{<img src="~/_assets/images/forum/forum_unread.png" style="width:16px;height:16px;" border="0">}
+            </div>}
+            <a href="/features/forum/@UrlData[0]/@topic.topicname.Replace(" ","-")" @*topic.threadid*@>@topic.topicname</a>
+        </td>   
+        <td class="replies">@replies</td>   
+        <td class="views">@topic.views</td>   
+        <td class="date">
+            <time datetime="@lastpost.MostRecent">@lastpost.MostRecent</time>@*{tag_topiclastpostdate}*@<br />
+            @lastpost.userid@*referral link to user's profile page*@
+        </td>  
+    </tr> i++;if(i == (numperpg+tag_counter)){break;}}
+</table>  }</div>
+@*
+<td class="alt2">
+    <div class="smallfont" align="left">
+    <div>
+        <span style="white-space:nowrap">
+        <a href="URL" style="white-space:nowrap"><strong>NAME</strong></a></span>
+    </div>
+    <div style="white-space:nowrap">
+        by <a href="USERPAGEURL">USER</a>
+    </div>
+    <div align="right" style="white-space:nowrap">
+        <time>09/18/2015 <span class="time">15:35</span></time>
+        <a href="URL#LASTPOST"><img width="15" height="15" class="inlineimg" src="ICON/buttons/lastpost.gif" alt="Go to last post" border="0" title="Go to last post"></a>
+    </div>
+    </div>
+</td>*@

@@ -1,0 +1,447 @@
+﻿@{
+    var db = Database.Open("Template_Pizza");
+	Layout = "";         
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <!--Order a Pizza.
+
+What time of pizza do you want?
+
+		itemline* (hidden)
+		Array|Dictionary{int,string(comma delimited)}
+or		Form.ProductID=String(comma delimited)
+
+		Size:
+		small
+		medium
+		large
+		x-large
+
+		Crust:
+		regular
+		thin
+			garlic
+			pretzal
+			cheese-stuffed
+			plain
+
+		Cheese:
+		none
+		Mozzarella
+		Cheddar
+		Reduced Fat
+		Feta
+			Light
+			Regular
+			Extra
+			Double
+			Triple
+
+		Sauces:
+		Marinera Sauce
+		BBQ Sauce
+		Garlic Sauce
+		Alfredo Sauce
+
+		Meat Toppings:
+		Anchovies
+		Bacon
+		Chicken
+		Ham
+		Pepperoni
+		Salami
+		Sausage
+		Tofu
+			Light
+			Regular
+			Extra
+			Double
+			Triple
+
+		Misc. Toppings:
+		Broccoli
+		Green Olives
+		Green Peppers
+		Mushrooms
+		Red Onions
+		Roasted Garlic
+		Pineapples
+		Yellow Banana Pepper
+			Left
+			Right
+			Whole
+		
+		Breadsticks
+		Garlic rolls
+		Wings
+
+		Drink:
+		None
+		Brand1
+		Brand2
+			Small
+			Large
+
+		Delivery
+		Pick-Up-->
+		<div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="panel-title">Order Pizza Online</h3></div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+		@{     
+                            <!--<div class="form-group">
+                                <label class="col-md-2 control-label" for="example-email">Email</label>
+                                <div class="col-md-10">
+                                    <input type="email" id="example-email" name="example-email" class="form-control" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Password</label>
+                                <div class="col-md-10">
+                                    <input type="password" class="form-control" value="password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Readonly</label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" readonly="" value="Readonly value">
+                                </div>
+                            </div>                                    
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Disabled</label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" disabled="" value="Disabled value">
+                                </div>
+                            </div>                                    
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Placeholder</label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" placeholder="placeholder">
+                                </div>
+                            </div>                                                                        
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Text area</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                                    
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Static control</label>
+                                <div class="col-sm-10">
+                                    <p class="form-control-static">email@example.com</p>
+                                </div>
+                            </div>  
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Helping text</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" placeholder="Helping text">
+                                    <span class="help-block"><small>A block of help text that breaks onto a new line and may extend beyond one line.</small></span>
+                                </div>
+                            </div>  
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Input Select</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                    <h6>Multiple select</h6>
+                                    <select multiple="" class="form-control">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                            </div>-->
+                   
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Product?</label>
+                                <div class="col-md-10">
+			@foreach(var product in db.Query("Select * From itemtype")){
+				<div class="radio-inline">
+					<label class="cr-styled" for="@product.idnum">
+						<input type="radio" id="@product.idnum" name="itemtype" class="" value="@product.idnum" />
+						<i class="fa"></i>
+						@product.type
+					</label>
+				</div> 
+			}
+                                </div>
+                            </div>@:B.Y.O.P.
+
+                            <div class="form-group PizzaSetup product_1" style="display: none">
+                                <label class="col-md-2 control-label">Pizza Size</label>
+                                <div class="col-md-10">
+			@foreach(var size in db.Query("Select * From sizes")){
+				<div class="radio-inline">
+					<label class="cr-styled" for="@size.idnum">
+						<input type="radio" id="@size.idnum" name="sizes" class="" value="@size.idnum" />
+						<i class="fa"></i>
+						@size.sizes
+					</label>
+				</div> 
+			}
+                                </div>
+                            </div>	
+
+			<div class="form-group product_1" style="display: none">
+				<label class="col-md-3 control-label">What type of crust?</label>
+				<div class="col-md-9">
+			@foreach(var crust in db.Query("Select * From crust")){
+				<div class="radio-inline">
+					<label class="cr-styled" for="@crust.idnum">
+						<input type="radio" id="@crust.idnum" name="crust" class="" value="@crust.idnum" />
+						<i class="fa"></i>
+						@crust.crust
+					</label>
+					<div class="row form-group">
+						<div id="crustoption_@crust.idnum" class="col-md-12 crustoption-@crust.idnum crustoption" style="display: none">
+						@foreach(var crustoption in db.Query("Select * From crustoption")){
+							<div class="radio-inline">
+								<label class="cr-styled" for="crustoption_@crustoption.idnum">
+									<input type="radio" id="crustoption_@crustoption.idnum" name="crustoption" class="crustoption crustoption-@crustoption.flavoring" value="@crustoption.idnum" />
+									<i class="fa"></i>
+									@crustoption.flavoring
+								</label>
+							</div> 
+						}</div>
+					</div>
+				</div> 
+			}
+                </div>
+            </div> <!-- form-group -->	
+
+			<div class="form-group product_1" style="display: none">
+				<label class="col-md-3 control-label">Pizza Sauce</label>
+				<div class="col-md-9">
+			@foreach(var sauce in db.Query("Select * From sauces")){
+				<div class="radio-inline">
+					<label class="cr-styled" for="@sauce.idnum">
+						<input type="radio" id="@sauce.idnum" name="sauce" class="" value="@sauce.idnum" />
+						<i class="fa"></i>
+						@sauce.sauces
+					</label>
+				</div> 
+			}
+                </div>
+            </div> <!-- form-group -->	
+
+			<div class="form-group product_1" style="display: none">
+				<label class="col-md-3 control-label">Choice of Cheese?</label>
+				<div class="col-md-9">
+			@foreach(var cheese in db.Query("Select * From cheese")){
+				<div class="radio-inline">
+					<label class="cr-styled" for="@cheese.idnum">
+						<input type="radio" id="@cheese.idnum" name="cheese" class="" value="@cheese.idnum" />
+						<i class="fa"></i>
+						@cheese.cheese
+					</label>
+					<div class="row form-group">
+						<div id="cheeseqty_@cheese.idnum" class="col-md-12 cheese_qty-@cheese.idnum cheese_qty quantity" style="display: none">
+						@foreach(var qty in db.Query("Select * From qty")){
+							if(qty.idnum!=0){<div class="radio-inline">
+								<label class="cr-styled" for="cheese_@cheese.idnum-qty_@qty.idnum">
+									<input type="radio" id="cheese_@cheese.idnum-qty_@qty.idnum" name="cheeseqty-@qty.idnum" class="cheese_qty cheese_qty-@cheese.cheese" value="@qty.idnum" />
+									<i class="fa"></i>
+									@qty.quantity
+								</label>
+							</div>}
+						}</div>
+					</div>
+				</div> 
+			}
+                </div>
+            </div> <!-- form-group -->
+
+			<div class="form-group product_1" style="display: none">
+				<label class="col-md-3 control-label">Meat Toppings</label>
+				<div class="col-md-9">
+				@foreach(var meat in db.Query("Select * From meat")){
+					<div class="checkbox">
+						<label class="cr-styled">
+							<input type="checkbox" name="meatoptions" value="@meat.idnum" />
+							<i class="fa"></i> 
+							@meat.meat
+						</label>
+						<div class="row form-group">
+							<div id="meatspread_@meat.idnum" class="col-md-12 meat_spread-@meat.idnum meat_spread" style="display: none" >
+								<div class="radio-inline">
+									<label class="cr-styled" for="meat_spread-whole-@meat.idnum">
+										<input type="radio" name="meat_spread-@meat.idnum" id="meat_spread-whole-@meat.idnum" class="meat_spread meat_spread-@meat.idnum" value="0" />
+										<i class="fa"></i>
+										Whole
+									</label>
+								</div> 
+								<div class="radio-inline">
+									<label class="cr-styled" for="meat_spread-left-@meat.idnum">
+										<input type="radio" name="meat_spread-@meat.idnum" id="meat_spread-left-@meat.idnum" class="meat_spread meat_spread-@meat.idnum" value="1" />
+										<i class="fa"></i>
+										Left
+									</label>
+								</div> 
+								<div class="radio-inline">
+									<label class="cr-styled" for="meat_spread-right-@meat.idnum">
+										<input type="radio" name="meat_spread-@meat.idnum" id="meat_spread-right-@meat.idnum" class="meat_spread meat_spread-@meat.idnum" value="2" />
+										<i class="fa"></i>
+										Right
+									</label>
+								</div> 
+							</div> 
+							<div id="meatqty_@meat.idnum" class="col-md-12 meat_qty-@meat.idnum meat_qty" style="display: none">
+							@foreach(var qty in db.Query("Select * From qty")){
+								<div class="radio-inline">
+									<label class="cr-styled" for="meat_@meat.idnum-qty_@qty.idnum">
+										<input type="radio" id="meat_@meat.idnum-qty_@qty.idnum" name="meatqty-@qty.idnum" class="meat_qty meat_qty-@meat.meat" value="@qty.idnum" />
+										<i class="fa"></i>
+										@qty.quantity
+									</label>
+								</div> 
+							}</div>
+						</div>
+					</div>
+				}
+                </div>
+            </div> <!-- form-group -->
+
+			<div class="form-group product_1" style="display: none">
+				<label class="col-md-3 control-label">Non-Meat Toppings</label>
+				<div class="col-md-9">
+				@foreach(var misc in db.Query("Select * From misc")){
+					<div class="checkbox">
+						<label class="cr-styled">
+							<input type="checkbox" name="nonmeatoptions" value="@misc.idnum" />
+							<i class="fa"></i> 
+							@misc.nonmeat
+						</label>
+						<div class="row form-group">
+							<div id="nonmeatspread_@misc.idnum" class="col-md-12 nonmeat_spread-@misc.idnum nonmeat_spread" style="display: none" >
+								<div class="radio-inline">
+									<label class="cr-styled" for="nonmeat_spread-whole-@misc.idnum">
+										<input type="radio" name="nonmeat_spread-@misc.idnum" id="nonmeat_spread-whole-@misc.idnum" class="nonmeat_spread nonmeat_spread-@misc.idnum" value="0" />
+										<i class="fa"></i>
+										Whole
+									</label>
+								</div> 
+								<div class="radio-inline">
+									<label class="cr-styled" for="nonmeat_spread-left-@misc.idnum">
+										<input type="radio" name="nonmeat_spread-@misc.idnum" id="nonmeat_spread-left-@misc.idnum" class="nonmeat_spread nonmeat_spread-@misc.idnum" value="1" />
+										<i class="fa"></i>
+										Left
+									</label>
+								</div> 
+								<div class="radio-inline">
+									<label class="cr-styled" for="nonmeat_spread-right-@misc.idnum">
+										<input type="radio" name="nonmeat_spread-@misc.idnum" id="nonmeat_spread-right-@misc.idnum" class="nonmeat_spread nonmeat_spread-@misc.idnum" value="2" />
+										<i class="fa"></i>
+										Right
+									</label>
+								</div> 
+							</div> 
+							<div id="nonmeatqty_@misc.idnum" class="col-md-12 nonmeat_qty-@misc.idnum nonmeat_qty" style="display: none">
+				@foreach(var qty in db.Query("Select * From qty")){
+					<div class="radio-inline">
+						<label class="cr-styled" for="nonmeat_@misc.idnum-qty_@qty.idnum">
+							<input type="radio" id="nonmeat_@misc.idnum-qty_@qty.idnum" name="nonmeatqty-@qty.idnum" class="nonmeat_qty nonmeat_qty-@misc.nonmeat" value="@qty.idnum" />
+							<i class="fa"></i>
+							@qty.quantity
+						</label>
+					</div> 
+				}</div>
+						</div>
+					</div>
+				}
+                </div>
+            </div> <!-- form-group -->
+
+			<div class="form-group product_4" style="display: none">
+				<label class="col-md-3 control-label">Sides</label>
+				<div class="col-md-9">
+			@foreach(var sides in db.Query("Select * From sideoption")){
+				<div class="radio-inline">
+					<label class="cr-styled" for="@sides.idnum">
+						<input type="radio" id="@sides.idnum" name="sideoption" class="" value="@sides.idnum" />
+						<i class="fa"></i>
+						@sides.sides
+					</label>
+				</div> 
+			}
+                </div>
+            </div> <!-- form-group -->
+
+			<div class="form-group product_3" style="display: none">
+				<label class="col-md-3 control-label">Wings</label>
+				<div class="col-md-9">
+			@foreach(var wings in db.Query("Select * From wingsoption")){
+				<div class="radio-inline">
+					<label class="cr-styled" for="@wings.idnum">
+						<input type="radio" id="@wings.idnum" name="wingsoption" class="" value="@wings.idnum" />
+						<i class="fa"></i>
+						@wings.flavors
+					</label>
+				</div> 
+			}
+                </div>
+            </div> <!-- form-group -->
+
+			<div class="form-group drinkoption product_2" style="display: none">
+				<label class="col-md-3 control-label">Drink Option</label>
+				<div class="col-md-9">
+			@foreach(var drink in db.Query("Select * From drinkoption")){
+				<div class="radio-inline">
+					<label class="cr-styled" for="drinkoption_@drink.idnum">
+						<input type="radio" id="drinkoption_@drink.idnum" name="drinkoption" class="" value="@drink.idnum" />
+						<i class="fa"></i>
+						@drink.drinks
+					</label>
+				</div> 
+			}
+                </div>
+            </div> <!-- form-group -->
+				
+			<div class="form-group">
+				<label class="col-md-3 control-label">Delivery or Carry-out?</label>
+				<div class="col-md-9">
+					<div class="radio-inline">
+						<label class="cr-styled" for="delivery">
+							<input type="radio" id="delivery" name="orderoptions" class="" style="display: ;" value="0" />
+							<i class="fa"></i>
+							Delivery
+						</label>
+					</div> 
+					<div class="radio-inline">
+						<label class="cr-styled" for="pickup">
+							<input type="radio" id="pickup" name="orderoptions" class="" style="display: ;" value="1" />
+							<i class="fa"></i>
+							Pick-up
+						</label>
+					</div> 
+                </div>
+            </div> <!-- form-group -->
+}
+							
+                            <button type="submit" class="btn btn-purple">Add to Order</button>
+
+                        </form>
+                    </div> <!-- panel-body -->
+                </div> <!-- panel -->
+            </div> <!-- col -->
+        </div> <!-- End row -->
+    </body>
+</html>

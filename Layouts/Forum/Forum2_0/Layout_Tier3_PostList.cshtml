@@ -1,0 +1,3331 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    IEnumerable<dynamic> posts = db.Query("SELECT * FROM website_forumpost WHERE remove='false'");
+    //IEnumerable<dynamic> threads=null;
+	var topictitle = "";//UrlData[1];//db.Query("SELECT * FROM website_forumthread");
+	bool subscribe = false;
+    int thread=0; //= UrlData[0];
+	string topicurl=UrlData[0];
+    if((topicurl != null || topicurl != "") || !string.IsNullOrEmpty(topicurl)){
+        if(int.TryParse(topicurl, out thread) /*|| int.TryParse(topicurl.Substring(0,topicurl.IndexOf("-")), out thread)*/){
+            if(thread < 1){
+                thread = 1;
+            }
+            //tag_counter = discussion * numperpg;
+            posts = db.Query("SELECT * FROM website_forumpost FULL JOIN userprofile ON website_forumpost.userid=userprofile.userid WHERE threadid=@0 AND remove='false'", thread);
+            topictitle = db.QueryValue("SELECT topicname FROM website_forumthread WHERE threadid=@0 AND remove='false'", thread);
+        }else{
+            //Response.Redirect("?SearchQuery=" + SearchQuery + "/" + discussion);
+            posts = db.Query("SELECT * FROM website_forumpost FULL JOIN userprofile ON website_forumpost.userid=userprofile.userid WHERE threadid=@0 AND remove='false'", thread);
+            //posts = db.Query("SELECT * FROM website_forumdiscussion as d, website_forumthread as t, website_forumpost as p WHERE t.topicname LIKE @0 AND t.Forumid=d.forumid AND t.[remove]='false'",topicurl.Replace("-"," "));
+            //posts = db.Query("SELECT * FROM website_forumpost WHERE threadid=@0 AND remove='false'", UrlData[1].Split("-")[0]);
+            topictitle = db.QueryValue("SELECT topicname FROM website_forumdiscussion as d, website_forumthread as t, website_forumpost as p WHERE t.topicname LIKE @0 AND t.Forumid=d.forumid AND t.[remove]='false'",topicurl.Replace("-"," "));
+            //topictitle = db.QueryValue("SELECT topicname FROM website_forumthread WHERE threadid = @0 AND remove='false'",topicurl/*.Split("-")[0]*/);
+        }/*
+		if(WebSecurity.IsAuthenticated){
+			// Check if subscribe
+			bool subscribe = db.QueryValue("SELECT subscribe FROM website_forumthreadview WHERE threadid=@0 AND userid=@1", thread, WebSecurity.CurrentUserId);
+			if (subscribe == null) {
+				// Insert into view table
+				db.Execute("INSERT INTO website_forumthreadview (lastview, threadid, userid, viewed) VALUES (@0, @1, @2, @3)", DateTime.Now,thread,WebSecurity.CurrentUserId, true);
+			}else{db.Execute("UPDATE website_forumthreadview SET lastview=@0 WHERE threadid=@1 AND userid=@2",DateTime.Now, thread, WebSecurity.CurrentUserId);}
+		}
+		if(WebSecurity.IsAuthenticated){
+			// Check if subscribe
+			subscribe = db.QueryValue("SELECT subscribe FROM website_forumthreadview WHERE threadid=@0 AND userid=@1", thread, WebSecurity.CurrentUserId);
+			//subscribe = db.QuerySingle("SELECT lastview, subscribe FROM website_forumthreadview WHERE threadid=@0 AND userid=@1", thread, WebSecurity.CurrentUserId);
+			//var user = db.QuerySingle("SELECT Email FROM UserProfile WHERE LOWER(Email) = LOWER(@0)", email);
+            //if (user == null) {
+			if (subscribe == null) {
+				// Insert into view table
+				//lazy way = just insert on every view
+				db.Execute("INSERT INTO website_forumthreadview (lastview, threadid, userid, viewed) VALUES (@0, @1, @2, @3)", DateTime.Now,thread,WebSecurity.CurrentUserId, true);
+			}else{db.Execute("UPDATE website_forumthreadview SET lastview=@0 WHERE threadid=@1 AND userid=@2",DateTimeOffset.UtcNow, thread, WebSecurity.CurrentUserId);}
+		}else{subscribe=false;}*/
+    }//else{posts = db.Query("SELECT * FROM website_forumpost WHERE threadid=@0 AND remove='false'");}
+    //int Replies = 0;
+    //IEnumerable<dynamic> lastpost = null;
+
+	var firstpost = db.QuerySingle("SELECT *, CASE WHEN website_forumpost.DatePost < COALESCE(website_forumpost.LastEdit,'') THEN website_forumpost.LastEdit ELSE website_forumpost.DatePost END AS MostRecent FROM website_forumpost FULL JOIN website_forumthread ON website_forumthread.forumid=website_forumpost.forumid FULL JOIN userprofile ON website_forumpost.userid=userprofile.userid WHERE website_forumpost.ForumID=@0 ORDER BY DatePost ASC", thread); //merge userprofile and forumthread
+
+    int numperpg = /*int.Parse(PageData[0]) ?? Request.Cookies["perpage"] ?? int.Parse(Request.QueryString["perpage"]) ?? int.Parse(Request.Form["perpage"]) ??*/ 20;
+	int totalposts = posts==null?0:posts.Count();
+	int lastcount = 0;
+    int currentpage = posts==null? 1 : (int)Math.Ceiling((decimal)totalposts / numperpg);//1;
+    int tag_counter = currentpage==1? 1:currentpage * numperpg;//*0;
+    if(Request.QueryString["page"] != null){
+        if(int.TryParse(Request.QueryString["page"], out currentpage)){
+            currentpage = (int)Request.QueryString["page"].AsInt();
+            if(currentpage >= (posts.Count() / numperpg)){
+                currentpage = posts.Count() / numperpg;
+            }
+            if(currentpage < 1){
+                currentpage = 1;
+            }
+            tag_counter = currentpage==1? 1:currentpage * numperpg;
+        }else{
+            Response.Redirect("?page=" + currentpage);
+        }
+    }
+}<div id="headerMover">
+	@*<div id="headerProxy"></div>
+<header>
+	
+
+
+<div id="header">
+	
+
+	
+	
+	
+		<div id="logoBlock" class="header__blockItem ">
+
+	
+	<div class="pageWidth">
+		
+		
+		<div class="pageContent defaultBorderRadius">
+		
+		
+			
+		
+		<div id="logo"><a href="https://landofooo.com/community">
+			<span></span>
+			<h2 class="uix_logoText">The LandOfOoo</h2>
+			
+		</a></div>
+		
+		
+		
+			
+		
+			
+		<span class="helper"></span>
+		</div>
+	</div>	
+</div>
+	
+	
+	
+
+<div id="navigation" class="header__blockItem withSearch stickyTop activePagination lastSticky activeSticky uix_hideSubElement" style="height: 89px;">
+	<div class="sticky_wrapper" style="top: 0px;">
+		<div class="uix_navigationWrapper">
+		
+		<div class="pageWidth">
+		
+			<div class="pageContent noBorderRadiusBottom">
+				<nav>
+					<div class="navTabs">
+						
+							
+							<ul class="publicTabs navLeft">
+	
+							
+							<li id="logo_small" class=" uix_leftMost">
+								<a href="https://landofooo.com/community">
+								
+									<img src="styles/uix/uix/logo_small.png">
+								
+								</a>
+							</li>
+							
+							
+							
+
+
+
+
+	
+	
+										
+	
+		
+	
+	
+	
+	
+	
+	
+		
+	
+
+
+	
+
+
+
+
+
+
+
+
+
+
+	<li class="navTab  navTab--panelTrigger navTab--navPanelTrigger PopupClosed" style="display: list-item;">
+		<a class="navLink js-leftPanelTrigger" href="#">
+			<i class="uix_icon uix_icon-menu"></i>Menu
+		</a>
+	</li>
+
+
+							
+							<!-- home -->
+							
+								<li class="navTab home PopupClosed"><a href="https://landofooo.com/community" class="navLink"><i class="uix_icon uix_icon-home"></i></a></li>
+							
+								
+								
+								<!-- extra tabs: home -->
+								
+								
+								
+								<!-- forums -->
+								
+									<li class="navTab forums selected uix_rightMost">
+									
+										<a href="https://landofooo.com/community/" class="navLink">Forums</a>
+										<a href="https://landofooo.com/community/" class="SplitCtrl" rel="Menu"></a>
+										
+										<div class="tabLinks forumsTabLinks">
+											
+												<div class="primaryContent menuHeader">
+													<h3>Forums</h3>
+													<div class="muted">Quick Links</div>
+												</div>
+												<ul class="secondaryContent blockLinksList">
+												
+													
+													<li><a href="search/?type=post">Search Forums</a></li>
+													
+													<li><a href="find-new/posts" rel="nofollow">Recent Posts</a></li>
+												
+												</ul>
+												
+											
+										</div>
+									</li>
+								
+								
+								<!-- extra tabs: middle -->
+								
+								
+								
+								<!-- members -->
+												
+								
+								<!-- extra tabs: end -->
+								
+								
+								<!-- responsive popup -->
+								<li class="navTab navigationHiddenTabs navTab--justIcon Popup PopupControl PopupClosed PopupContainerControl" style="display: none;">	
+												
+									<a rel="Menu" class="navLink NoPopupGadget uix_dropdownDesktopMenu"><i class="uix_icon uix_icon-navOverflow"></i><span class="uix_hide menuIcon">Menu</span></a>
+									
+									
+								</li>
+									
+								
+								<!-- no selection -->
+								
+								
+	
+									
+									
+									
+										
+	
+							</ul>
+							
+							
+							
+								
+								
+								<ul class="navRight visitorTabs">
+								
+								
+								
+									
+										<li class="navTab audentio_postPagination uix_leftMost" id="audentio_postPagination"><div class="navLink" rel="Menu" style="display: block;"><a href="javascript: void(0)" onclick="audentio.pagination.scrollToPost(0)"><i class="fa fa-angle-double-up pointer fa-fw pagetop"></i></a><a href="javascript: void(0)" onclick="audentio.pagination.prevPost()"><i class="fa fa-angle-up pointer fa-fw pageup"></i></a><a href="javascript:void(0)" class="uix_paginationMenu">	<span><span id="audentio_postPaginationCurrent" class="uix_postPagination_x">1</span> / <span id="audentio_postPaginationTotal" class="uix_postPagination_y">20</span></span></a><a href="javascript: void(0)" onclick="audentio.pagination.nextPost()"><i class="fa fa-angle-down pointer fa-fw pagedown"></i></a><a href="javascript: void(0)" onclick="audentio.pagination.scrollToPost(19)"><i class="fa fa-angle-double-down pointer fa-fw pagebottom"></i></a><div class="progress-container">	<div class="progress-bar" id="audentio_postPaginationBar" style="width: 5%;"></div></div>	<div class="Menu" id="audentio_postPaginationDropdown">		<div class="primaryContent">			<input type="text" id="audentio_postPaginationInput" class="textCtrl" placeholder="Enter Index">		</div>	</div></div></li>
+									
+								
+									
+									
+									
+									
+									
+										
+
+	<li class="navTab login PopupClosed">
+		
+			<a href="login/" class="navLink uix_dropdownDesktopMenu OverlayTrigger" data-cacheoverlay="false">
+				
+				<strong class="loginText">Log in</strong>
+			</a>
+		
+		
+		
+		
+	</li>
+	
+	
+	<li class="navTab register PopupClosed">
+		<a href="register/" class="navLink">
+			
+			<strong>Sign up</strong>
+		</a>
+	</li>
+	
+	
+
+									
+							
+									
+									
+									
+
+
+
+
+
+	
+											
+	
+		
+	
+	
+	
+	
+	
+	
+		
+	
+	
+
+
+
+
+
+
+
+
+
+	
+									
+										
+
+		<li class="navTab uix_searchTab uix_rightMost">
+		
+			
+
+<div id="searchBar" class="hasSearchButton">
+	
+	<i id="QuickSearchPlaceholder" class="uix_icon uix_icon-search" title="Search"></i>
+	
+	
+	
+	
+	<fieldset id="QuickSearch">
+		<form action="search/search" method="post" class="formPopup">
+			
+			<div class="primaryControls">
+				<!-- block: primaryControls -->
+				<i class="uix_icon uix_icon-search" onclick="$(&quot;#QuickSearch form&quot;).submit()"></i>
+				<input type="search" name="keywords" value="" class="textCtrl" placeholder="Search..." results="0" title="Enter your search and hit enter" id="QuickSearchQuery">				
+				<!-- end block: primaryControls -->
+			</div>
+			
+			<div class="secondaryControls">
+				<div class="controlsWrapper">
+				
+					<!-- block: secondaryControls -->
+					<dl class="ctrlUnit">
+						<dt></dt>
+						<dd><ul>
+							<li><label><input type="checkbox" name="title_only" value="1" id="search_bar_title_only" class="AutoChecker" data-uncheck="#search_bar_thread"> Search titles only</label></li>
+						</ul></dd>
+					</dl>
+				
+					<dl class="ctrlUnit">
+						<dt><label for="searchBar_users">Posted by Member:</label></dt>
+						<dd>
+							<input type="text" name="users" value="" class="textCtrl AutoComplete" id="searchBar_users" autocomplete="off">
+							<p class="explain">Separate names with a comma.</p>
+						</dd>
+					</dl>
+				
+					<dl class="ctrlUnit">
+						<dt><label for="searchBar_date">Newer Than:</label></dt>
+						<dd><input type="text" data-orig-type="date" name="date" value="" class="textCtrl date" id="searchBar_date"></dd>
+					</dl>
+					
+					
+					<dl class="ctrlUnit">
+						<dt></dt>
+						<dd><ul>
+								
+									<li><label title="Search only S3E21: Marceline's Closet"><input type="checkbox" name="type[post][thread_id]" value="3882" id="search_bar_thread" class="AutoChecker" data-uncheck="#search_bar_title_only, #search_bar_nodes"> Search this thread only</label></li>
+								
+									<li><label title="Search only Season 3 (2011-2012)"><input type="checkbox" name="nodes[]" value="62" id="search_bar_nodes" class="Disabler AutoChecker" checked="checked" data-uncheck="#search_bar_thread"> Search this forum only</label>
+	<ul id="search_bar_nodes_Disabler">
+		<li><label><input type="checkbox" name="type[post][group_discussion]" value="1" id="search_bar_group_discussion" class="AutoChecker" data-uncheck="#search_bar_thread"> Display results as threads</label></li>
+	</ul></li>
+								
+						</ul></dd>
+					</dl>
+					
+				</div>
+				<!-- end block: secondaryControls -->
+				
+				<dl class="ctrlUnit submitUnit">
+					<dt></dt>
+					<dd>
+						<input type="submit" value="Search" class="button primary Tooltip">
+						<a href="search/" class="button moreOptions Tooltip">More...</a>
+						<div class="Popup" id="commonSearches">
+							<a rel="Menu" class="button NoPopupGadget Tooltip PopupControl" data-tipclass="flipped"><span class="arrowWidget"></span></a>
+							
+						</div>
+					</dd>
+				</dl>
+				
+			</div>
+			
+			<input type="hidden" name="_xfToken" value="">
+		</form>		
+	</fieldset>
+	
+
+</div>
+		</li>
+	
+
+									
+								
+								
+								
+								</ul>
+								
+							
+							
+							
+								
+
+
+	<div id="uix_searchMinimal">
+		<form action="search/search" method="post">
+			<i id="uix_searchMinimalClose" class="uix_icon uix_icon-close" title="Close"></i>
+			<i id="uix_searchMinimalOptions" class="uix_icon uix_icon-cog" title="Options"></i>
+			<div id="uix_searchMinimalInput">
+				<input type="search" name="keywords" value="" placeholder="Search..." results="0">
+			</div>
+			<input type="hidden" name="_xfToken" value="">
+		</form>
+	</div>
+
+
+
+
+							
+									
+								
+						
+					</div>
+	
+				<span class="helper"></span>
+					
+				</nav>
+			</div>
+		</div>
+		</div>
+	</div>
+</div>
+	
+	
+
+
+</div>
+
+	
+	
+</header>*@
+
+<div id="content" class="thread_view">
+	
+	<div class="pageWidth">
+		<div class="pageContent noBorderRadius">
+	
+			<!-- main content area -->		
+			
+			<div class="breadBoxTop  ">
+	
+@*<nav>
+
+	<fieldset class="breadcrumb" style="">
+		<a href="misc/quick-navigation-menu?selected=node-62" class="OverlayTrigger jumpMenuTrigger" data-cacheoverlay="true" title="Open quick navigation"><i class="uix_icon uix_icon-sitemap"></i><!--Jump to...--></a>
+			
+		<div class="boardTitle"><strong>The LandOfOoo</strong></div>
+		
+		<span class="crumbs">
+			
+				<span class="crust homeCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+					<a href="https://landofooo.com/community" class="crumb" rel="up" itemprop="url"><span itemprop="title"><i class="uix_icon uix_icon-home" title="Home"></i></span></a>
+					<span class="arrow"><span></span></span>
+				</span>
+			
+			
+			
+				<span class="crust selectedTabCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+					<a href="https://landofooo.com/community/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Forums</span></a>
+					<span class="arrow"><span>&gt;</span></span>
+				</span>
+			
+			
+			
+				
+					<span class="crust" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+						<a href="https://landofooo.com/community/.#adventure-time.57" class="crumb" rel="up" itemprop="url"><span itemprop="title">Adventure Time</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+				
+					<span class="crust" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+						<a href="https://landofooo.com/community/forums/episode-discussion.60/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Episode Discussion</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+				
+					<span class="crust" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+						<a href="https://landofooo.com/community/forums/season-3-2011-2012.62/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Season 3 (2011-2012)</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+				
+			
+		</span>
+	</fieldset>
+</nav>*@
+				
+			</div>
+			
+					<div class="mainContainer_noSidebar">
+					
+						<!--[if lt IE 8]>
+							<p class="importantMessage">You are using an out of date browser. It  may not display this or other websites correctly.<br />You should upgrade or use an <a href="https://www.google.com/chrome/browser/" target="_blank">alternative browser</a>.</p>
+						<![endif]-->
+						
+<!--<div class="PanelScroller Notices" data-vertical="0" data-speed="400" data-interval="4000" style="display: block;">
+	<div class="scrollContainer">
+		<div class="PanelContainer">
+			<ol class="Panels" style="position: static;">
+				
+					<li class="panel Notice DismissParent notice_4 " data-notice="4">
+	
+	<div class="baseHtml noticeContent">Logging in for the first time since we switched over to XenForo? You'll need to manually reset your password before you can login. Sorry for the inconvenience.</div>
+	
+	
+		<a href="account/dismiss-notice?notice_id=4" class="DismissCtrl Tooltip" data-offsetx="7" data-tipclass="flipped">Dismiss Notice</a>
+</li>
+				
+			</ol>
+		</div>
+	</div>
+		
+</div>
+<div class="PanelScroller Notices" data-vertical="0" data-speed="400" data-interval="4000" style="display: block;">
+	<div class="scrollContainer">
+		<div class="PanelContainer" style="overflow: hidden; height: 108px;">
+			<ol class="Panels" style="width: 20000em; left: -563px;"><li class="panel Notice DismissParent notice_5  cloned" data-notice="5" style="float: left; width: 563px; height: 108px;">
+	
+	<div class="baseHtml noticeContent">Hey herby9ml! Just a heads up, you will not be able to post any content with links in them until you've achieved <strong>2 posts</strong>. This is in place to help us mitigate spam messages that are being posted on our community. Sorry for the inconvenience.</div>
+	
+	
+</li>
+				
+					<li class="panel Notice DismissParent notice_notice_confirm_email " data-notice="notice_confirm_email" style="float: left; width: 563px; height: 108px;">
+	
+	<div class="baseHtml noticeContent">Your account is currently awaiting confirmation. Confirmation was sent to herby9ml@yahoo.com.<br>
+<a href="account-confirmation/resend" class="OverlayTrigger">Resend Confirmation Email</a></div>
+	
+	
+</li>
+				
+					<li class="panel Notice DismissParent notice_5 " data-notice="5" style="float: left; width: 563px; height: 108px;">
+	
+	<div class="baseHtml noticeContent">Hey herby9ml! Just a heads up, you will not be able to post any content with links in them until you've achieved <strong>2 posts</strong>. This is in place to help us mitigate spam messages that are being posted on our community. Sorry for the inconvenience.</div>
+	
+	
+</li>
+				
+			<li class="panel Notice DismissParent notice_notice_confirm_email  cloned" data-notice="notice_confirm_email" style="float: left; width: 563px; height: 108px;">
+	
+	<div class="baseHtml noticeContent">Your account is currently awaiting confirmation. Confirmation was sent to herby9ml@yahoo.com.<br>
+<a href="account-confirmation/resend" class="OverlayTrigger">Resend Confirmation Email</a></div>
+	
+	
+</li></ol>
+		</div>
+	</div>
+	
+	<div class="navContainer">
+		<span class="navControls Nav JsOnly">
+			
+				<a id="nnotice_confirm_email" href="/community/register/register#nnotice_confirm_email" class="current">
+					<span class="arrow"><span></span></span>
+					<!--1 --Confirm Email</a>
+			
+				<a id="n5" href="/community/register/register#n5" class="">
+					<span class="arrow"><span></span></span>
+					<!--2 --Anti-Spam Measures</a>
+			
+		</span>
+	</div>
+</div>-->
+							
+								<!-- h1 title, description -->
+								<div class="titleBar">
+									@*<h1>S3E21: Marceline's Closet</h1>*@
+									<h1>@topictitle</h1>
+									
+									<p id="pageDescription" class="muted ">
+										@*Discussion in '<a href="forums/season-3-2011-2012.62/">Season 3 (2011-2012)</a>' started by <a href="members/georgie56.361/" class="username" dir="auto">Georgie56</a>, <a href="threads/s3e21-marcelines-closet.3882/"><span class="DateTime" title="Dec 6, 2011 at 7:36 PM">Dec 6, 2011</span></a>.*@
+										Discussion in '<a href="forums/@firstpost.forumid/">@firstpost.topicname</a>' started by <a href="members/@firstpost.userid/" class="user-name" dir="auto">@if(firstpost.userid==0){<text>SystemServer</text>}else{@firstpost.alias}</a>, <a href="threads/@firstpost.threadid/"><time datetime="@firstpost.datepost" class="DateTime" title="@firstpost.datepost.ToString("MMM d',' yyyy 'at' h':'mm T")">@firstpost.datepost.ToString("MMM d',' yyyy")</time></a>.
+									</p>
+								</div>
+							
+	<div class="sectionMain funbox">
+	@*<div class="funboxWrapper">
+				<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_above_content -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5808314520834618" data-ad-slot="1471521488" data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+	</div>*@
+	</div>
+						<!-- main template -->
+<div class="pageNavLinkGroup">
+	<!--<div class="linkGroup SelectionCountContainer"></div>
+
+<div class="PageNav" data-page="1" data-range="2" data-start="2" data-end="6" data-last="9" data-sentinel="{{sentinel}}" data-baseurl="threads/s3e21-marcelines-closet.3882/page-{{sentinel}}">
+	
+	<span class="pageNavHeader">Page 1 of 9</span>
+	
+	<nav>
+		<a href="threads/s3e21-marcelines-closet.3882/" class="currentPage " rel="start">1</a>
+		
+			<a class="PageNavPrev hidden" style="">←</a> <span class="scrollable"><span class="items">
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-2" class="">2</a>
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-3" class="">3</a>
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-4" class="">4</a>
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-5" class="">5</a>
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-6" class="">6</a>
+		
+			</span></span> <a class="PageNavNext " style="">→</a>
+		
+		<a href="threads/s3e21-marcelines-closet.3882/page-9" class="">9</a>
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-2" class="text">Next &gt;</a>
+		
+	</nav>	
+	
+</div>-->
+
+</div>
+
+<form action="inline-mod/post/switch" method="post" class="InlineModForm section" data-cookiename="posts" data-controls="#InlineModControls" data-imodoptions="#ModerationSelect option">
+
+	<ol class="messageList hasFlexbox Responsive" id="messageList">
+@for(int i = tag_counter-1; i < totalposts && i < (numperpg+tag_counter); i++){
+<li id="post-@posts.ElementAt(i).postid" class="sectionMain message uix_threadAuthor uix_discussionAuthor" data-author="@if(posts.ElementAt(i).userid==0){<text>SystemServer</text>}else{@posts.ElementAt(i).alias}">
+
+	<div class="uix_message ">
+	
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/@posts.ElementAt(i).userid-@posts.ElementAt(i).alias/" class="avatar Av-@posts.ElementAt(i).userid" data-avatarhtml="true">
+				@*<img src="data/avatars/m/0/361.jpg?1446788710" width="96" height="96" alt="@posts.ElementAt(i).alias">*@
+				@if(File.Exists(Href("/_assets/images/users/avatar-"+posts.ElementAt(i).userid+".jpg"))){<text><img src="@Href("/_assets/images/users/avatar-"+posts.ElementAt(i).userid+".jpg")" alt="@posts.ElementAt(i).alias's avatar image" width="96" height="96" /></text>}
+				else{<img src="/_assets/images/users/avatar-guest.jpg" alt="No avatar image set" width="96" height="96" />}
+			</a>
+			<!--if(Membership.GetUser()){<span class="Tooltip onlineMarker" data-offsetx="-22" data-offsety="-8"><span class="onlineMarker_pulse"></span></span>}//if user is online
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				<a href="members/@posts.ElementAt(i).userid-@posts.ElementAt(i).alias/" class="user-name" dir="auto" itemprop="name">@if(posts.ElementAt(i).userid==0){<text>SystemServer</text>}else{@posts.ElementAt(i).alias}</a>
+				<em class="userTitle" itemprop="title"><!--USER ROLE/RANK/TITLE--></em>
+			</div>
+			@*if(Roles.GetRolesForUser(posts.ElementAt(i).username/*Membership.GetUser(posts.ElementAt(i).userid)*/)!=null){<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Staff Member</strong><span class="after"></span></em><!--Merge Roles with Query, and sort by authority rank-->}*@
+			<!-- slot: message_user_info_text -->
+		</h3>
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						@posts.ElementAt(i).postmsg
+						@*Any thoughts on what's gonna happen on Monday's episode?*@
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+			</div>
+
+			<div class="messageDetails">
+		<a href="threads/@thread-@topictitle/" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/@posts.ElementAt(i).postid/permalink">#@(i+1)</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/@posts.ElementAt(i).userid-@posts.ElementAt(i).alias/" class="username author" dir="auto">@if(posts.ElementAt(i).userid==0){<text>SystemServer</text>}else{@posts.ElementAt(i).alias}</a>,</span>
+			<a href="threads/@thread-@topictitle/" title="Permalink" class="datePermalink">
+				@*<span class="DateTime" title="Dec 6, 2011 at 7:36 PM">Dec 6, 2011</span>*@
+				<time datetime="@posts.ElementAt(i).datepost" class="DateTime" title="@posts.ElementAt(i).datepost.ToString("MMM d',' yyyy 'at' h':'mm t")">@posts.ElementAt(i).datepost.ToString("MMM d',' yyyy")</time>
+			</a>
+		</span>
+			</div>
+			
+		</div>
+	
+	</div> 
+	
+</li>}
+		
+@*<li id="post-215126" class="sectionMain message     " data-author="dragonaqua">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/dragonaqua.902/" class="avatar Av902m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="dragonaqua"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/dragonaqua.902/" class="username" dir="auto" itemprop="name">dragonaqua</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						&lt;iframe width="480" height="270" src="http://www.youtube.com/embed/3Yxz2OhtvrQ?feature=oembed" frameborder="0"&gt;&lt;/iframe&gt;<br>
+<br>
+<br>
+Dude... she's <i>picky</i>... get it? It's a pun. <img src="proxy.php?image=http%3A%2F%2F%3CfileStore.core_Emoticons%3E%2Fdefault_grin.png&amp;hash=9eac61f4ad3882de625bb225602c9429" class="bbCodeImage LbImage" alt="[​IMG]" data-url="http://<fileStore.core_Emoticons>/default_grin.png" style=""><br>
+<br>
+<br>
+*fail*
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215126" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215126/permalink">#2</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/dragonaqua.902/" class="username author" dir="auto">dragonaqua</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215126" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 6, 2011 at 8:53 PM">Dec 6, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215127" class="sectionMain message     " data-author="Greena">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/greena.986/" class="avatar Av986m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="Greena"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/greena.986/" class="username" dir="auto" itemprop="name">Greena</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						&lt;iframe width="480" height="270" src="http://www.youtube.com/embed/wCvsNuq1on0?feature=oembed" frameborder="0"&gt;&lt;/iframe&gt;<br>
+<br>
+<br>
+Aye....
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215127" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215127/permalink">#3</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/greena.986/" class="username author" dir="auto">Greena</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215127" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 7, 2011 at 7:50 PM">Dec 7, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215128" class="sectionMain message     " data-author="HayaMika">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/hayamika.774/" class="avatar Av774m" data-avatarhtml="true"><img src="data/avatars/m/0/774.jpg?1444110782" width="96" height="96" alt="HayaMika"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/hayamika.774/" class="username" dir="auto" itemprop="name">HayaMika</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						Marcy.... is... I'm NEVER TOUCHING HER HANDS.<br>
+<br>
+<br>
+Me being a germaphobe, would make her wash her hands like... 300 times after not washing them after picking her nose and going to the bathroom. :|
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215128" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215128/permalink">#4</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/hayamika.774/" class="username author" dir="auto">HayaMika</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215128" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 7, 2011 at 9:38 PM">Dec 7, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215129" class="sectionMain message     " data-author="Frieth">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/frieth.347/" class="avatar Av347m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="Frieth"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/frieth.347/" class="username" dir="auto" itemprop="name">Frieth</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						All I can think of is "Trapped in the Closet..."
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215129" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215129/permalink">#5</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/frieth.347/" class="username author" dir="auto">Frieth</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215129" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 7, 2011 at 9:49 PM">Dec 7, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215130" class="sectionMain message     " data-author="Greena">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/greena.986/" class="avatar Av986m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="Greena"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/greena.986/" class="username" dir="auto" itemprop="name">Greena</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						Hold it! In the beginning of the extended preview, why does Jake look like Finn?<br>
+<br>
+<br>
+All I can say is: Best. Transformation. Ever.<br>
+<br>
+<br>
+XD
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215130" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215130/permalink">#6</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/greena.986/" class="username author" dir="auto">Greena</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215130" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 7, 2011 at 10:22 PM">Dec 7, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215131" class="sectionMain message     " data-author="ZombieLikeBrains">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/zombielikebrains.812/" class="avatar Av812m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="ZombieLikeBrains"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/zombielikebrains.812/" class="username" dir="auto" itemprop="name">ZombieLikeBrains</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						It's Animatic Time!<br>
+<br>
+unfortunately it's nothing really exciting<br>
+<br>
+<br>
+http://www.youtube.com/watch?v=gkxpOSj8u1g
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215131" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215131/permalink">#7</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/zombielikebrains.812/" class="username author" dir="auto">ZombieLikeBrains</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215131" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 7, 2011 at 10:40 PM">Dec 7, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215132" class="sectionMain message     " data-author="Avalon">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/avalon.490/" class="avatar Av490m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="Avalon"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/avalon.490/" class="username" dir="auto" itemprop="name">Avalon</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						first off shes a vampire, meaning she is immune to disease. another thing is at the begging at the preview she was sniffing at the air smelling someone, and when she went upstairs she found no one. now vampires are stealthy creatures and are based on their stealth. as well as rely on their smell much like a blood hound sniffing a person in a forest. but if the hound is stuff up he is useless and would smell the same scent all over the place until he can clean it. Marc did the same thing, she thought she smell someone but didn't found them so she had to clean her nose so she can get the misguided scent out.
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215132" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215132/permalink">#8</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/avalon.490/" class="username author" dir="auto">Avalon</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215132" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 9, 2011 at 11:16 PM">Dec 9, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215133" class="sectionMain message     " data-author="LeroyStrall">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/leroystrall.918/" class="avatar Av918m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="LeroyStrall"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/leroystrall.918/" class="username" dir="auto" itemprop="name">LeroyStrall</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						<div class="bbCodeBlock bbCodeQuote">
+	<aside>
+		
+		<blockquote class="quoteContainer"><div class="quote">first off shes a vampire' date=' meaning she is immune to disease. another thing is at the begging at the preview she was sniffing at the air smelling someone, and when she went upstairs she found no one. now vampires are stealthy creatures and are based on their stealth. as well as rely on their smell much like a blood hound sniffing a person in a forest. but if the hound is stuff up he is useless and would smell the same scent all over the place until he can clean it. Marc did the same thing, she thought she smell someone but didn't found them so she had to clean her nose so she can get the misguided scent out.[/quote']<br>
+<br>
+<br>
+Ah But you forget because Vampires are not real (as far as we know) They can be changed up completely because there is no real standard they have to follow, Thus why some vampires sparkle <img src="proxy.php?image=http%3A%2F%2F%3CfileStore.core_Emoticons%3E%2Fdefault_grin.png&amp;hash=9eac61f4ad3882de625bb225602c9429" class="bbCodeImage LbImage" alt="[​IMG]" data-url="http://<fileStore.core_Emoticons>/default_grin.png" style=""> and some just eat the color red <img src="proxy.php?image=http%3A%2F%2Flandofooo.com%2Fcommunity%2Fuploads%2Fdefault_happy.png&amp;hash=92eab97ab6b44977b579892121dbc6a0" class="bbCodeImage LbImage" alt="[​IMG]" data-url="http://landofooo.com/community/uploads/default_happy.png" style=""><br>
+<br>
+<br>
+Also Nice to meet you <img src="styles/default/xenforo/clear.png" class="mceSmilieSprite mceSmilie80" alt=":)" title="Smile    :)"></div><div class="quoteExpand quoteCut">Click to expand...</div></blockquote>
+	</aside>
+</div>
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215133" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215133/permalink">#9</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/leroystrall.918/" class="username author" dir="auto">LeroyStrall</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215133" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 9, 2011 at 11:22 PM">Dec 9, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215134" class="sectionMain message     " data-author="Avalon">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/avalon.490/" class="avatar Av490m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="Avalon"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/avalon.490/" class="username" dir="auto" itemprop="name">Avalon</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						you are correct, i was just implying to the most common vampires. also im thinking she just eats the color red since she cant digest radioactive blood since they need pure iron. so she could have adapted IMO.<br>
+<br>
+<br>
+and nice to meet you too <img src="proxy.php?image=http%3A%2F%2F%3CfileStore.core_Emoticons%3E%2Fdefault_grin.png&amp;hash=9eac61f4ad3882de625bb225602c9429" class="bbCodeImage LbImage" alt="[​IMG]" data-url="http://<fileStore.core_Emoticons>/default_grin.png" style=""> im gana try to be more active here.
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215134" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215134/permalink">#10</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/avalon.490/" class="username author" dir="auto">Avalon</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215134" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 9, 2011 at 11:26 PM">Dec 9, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215135" class="sectionMain message     " data-author="LeroyStrall">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/leroystrall.918/" class="avatar Av918m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="LeroyStrall"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/leroystrall.918/" class="username" dir="auto" itemprop="name">LeroyStrall</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						<div class="bbCodeBlock bbCodeQuote">
+	<aside>
+		
+		<blockquote class="quoteContainer"><div class="quote">you are correct, i was just implying to the most common vampires. also im thinking she just eats the color red since she cant digest radioactive blood since they need pure iron. so she could have adapted IMO.<br>
+<br>
+<br>
+and nice to meet you too <img src="proxy.php?image=http%3A%2F%2Flandofooo.com%2Fcommunity%2Fuploads%2Fdefault_happy.png&amp;hash=92eab97ab6b44977b579892121dbc6a0" class="bbCodeImage LbImage" alt="[​IMG]" data-url="http://landofooo.com/community/uploads/default_happy.png" style=""> im gana try to be more active here.</div><div class="quoteExpand">Click to expand...</div></blockquote>
+	</aside>
+</div><br>
+But she has said she can and will drink Blood on occasion she just does not need to <img src="proxy.php?image=http%3A%2F%2F%3CfileStore.core_Emoticons%3E%2Fdefault_grin.png&amp;hash=9eac61f4ad3882de625bb225602c9429" class="bbCodeImage LbImage" alt="[​IMG]" data-url="http://<fileStore.core_Emoticons>/default_grin.png" style=""><br>
+<br>
+<br>
+That's great I hope you enjoy it here <img src="proxy.php?image=http%3A%2F%2Flandofooo.com%2Fcommunity%2Fuploads%2Fdefault_happy.png&amp;hash=92eab97ab6b44977b579892121dbc6a0" class="bbCodeImage LbImage" alt="[​IMG]" data-url="http://landofooo.com/community/uploads/default_happy.png" style=""> if you ever have any questions feel free to ask (even tho I am still "new" here. I do know about a lot of the goings on) Also I type like I talk Sarcastically But I am not trying to offend that's just me :S i just thought I should warn you of that.<br>
+<br>
+<br>
+EDIT: O I am so sorry I did not know you have been here longer then me :S  I just thought you were new because I have not seen you around :S
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215135" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215135/permalink">#11</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/leroystrall.918/" class="username author" dir="auto">LeroyStrall</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215135" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 9, 2011 at 11:34 PM">Dec 9, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215136" class="sectionMain message     " data-author="Avalon">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/avalon.490/" class="avatar Av490m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="Avalon"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/avalon.490/" class="username" dir="auto" itemprop="name">Avalon</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						lol its ok. the other thing that caught my interest was a bigger portrait of Jesus and Mary. <br>
+<img src="proxy.php?image=http%3A%2F%2Fi48.servimg.com%2Fu%2Ff48%2F16%2F38%2F67%2F84%2F250px-10.png&amp;hash=eca52d8604182623b9e71ee8eae16c7b" class="bbCodeImage LbImage" alt="[​IMG]" data-url="http://i48.servimg.com/u/f48/16/38/67/84/250px-10.png" style=""><br>
+<br>
+<br>
+yes i know it could be a decoration but its the second one in the house.
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215136" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215136/permalink">#12</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/avalon.490/" class="username author" dir="auto">Avalon</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215136" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 9, 2011 at 11:45 PM">Dec 9, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215137" class="sectionMain message     " data-author="Kenny Florian">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/kenny-florian.961/" class="avatar Av961m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="Kenny Florian"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/kenny-florian.961/" class="username" dir="auto" itemprop="name">Kenny Florian</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						So I guess these Vampires aren't bothered by Christian artifacts.
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215137" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215137/permalink">#13</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/kenny-florian.961/" class="username author" dir="auto">Kenny Florian</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215137" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 9, 2011 at 11:55 PM">Dec 9, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215138" class="sectionMain message     " data-author="LeroyStrall">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/leroystrall.918/" class="avatar Av918m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="LeroyStrall"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/leroystrall.918/" class="username" dir="auto" itemprop="name">LeroyStrall</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						I cant see anything Christan in there :S but I don't follow that stuff much anymore so i might just not know :s
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215138" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215138/permalink">#14</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/leroystrall.918/" class="username author" dir="auto">LeroyStrall</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215138" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 10, 2011 at 12:05 AM">Dec 10, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215139" class="sectionMain message     " data-author="Greena">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/greena.986/" class="avatar Av986m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="Greena"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/greena.986/" class="username" dir="auto" itemprop="name">Greena</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						I noticed that too. The interesting thing about that is religion in Ooo is obviously different from what it was in the past. So it seems kind of weird that she would have a portrait of Mary and Jesus. But, then again, it could be just some artwork she liked and kept. Notice the French-Victorian style collar on her sweater? The Victorian style is very popular among Goths (I would know. <img src="proxy.php?image=http%3A%2F%2F%3CfileStore.core_Emoticons%3E%2Fdefault_grin.png&amp;hash=9eac61f4ad3882de625bb225602c9429" class="bbCodeImage LbImage" alt="[​IMG]" data-url="http://<fileStore.core_Emoticons>/default_grin.png" style="">) and Goths tend to like old artwork, even religious artwork. Marceline has a very Goth at***ude (well of course she does! She's a Vampire!) and her clothing style is pretty gothic too, as are a lot of the other things she owns.<br>
+<br>
+<br>
+It's interesting, at least.
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215139" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215139/permalink">#15</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/greena.986/" class="username author" dir="auto">Greena</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215139" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 10, 2011 at 12:25 AM">Dec 10, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215140" class="sectionMain message     " data-author="ZombieLikeBrains">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/zombielikebrains.812/" class="avatar Av812m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="ZombieLikeBrains"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/zombielikebrains.812/" class="username" dir="auto" itemprop="name">ZombieLikeBrains</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						Another preview!<br>
+<br>
+<br>
+&lt;iframe width="480" height="270" src="http://www.youtube.com/embed/64bAg3Zz40w?feature=oembed" frameborder="0"&gt;&lt;/iframe&gt;
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215140" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215140/permalink">#16</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/zombielikebrains.812/" class="username author" dir="auto">ZombieLikeBrains</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215140" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 10, 2011 at 12:59 AM">Dec 10, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215141" class="sectionMain message     " data-author="MarcelineVQueen">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/marcelinevqueen.995/" class="avatar Av995m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="MarcelineVQueen"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/marcelinevqueen.995/" class="username" dir="auto" itemprop="name">MarcelineVQueen</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						<div class="bbCodeBlock bbCodeQuote">
+	<aside>
+		
+		<blockquote class="quoteContainer"><div class="quote">Marcy.... is... I'm NEVER TOUCHING HER HANDS.<br>
+<br>
+<br>
+Me being a germaphobe, would make her wash her hands like... 300 times after not washing them after picking her nose and going to the bathroom. :|</div><div class="quoteExpand">Click to expand...</div></blockquote>
+	</aside>
+</div>
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215141" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215141/permalink">#17</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/marcelinevqueen.995/" class="username author" dir="auto">MarcelineVQueen</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215141" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 10, 2011 at 8:15 AM">Dec 10, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215142" class="sectionMain message     " data-author="FinnsDescendent">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/finnsdescendent.937/" class="avatar Av937m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="FinnsDescendent"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/finnsdescendent.937/" class="username" dir="auto" itemprop="name">FinnsDescendent</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						Thats pretty cool that they put a picutre of Mary and Jesus in there. Makes me seem Marceline in a whole new light.
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215142" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215142/permalink">#18</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/finnsdescendent.937/" class="username author" dir="auto">FinnsDescendent</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215142" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 10, 2011 at 8:49 AM">Dec 10, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215143" class="sectionMain message     uix_threadAuthor uix_discussionAuthor" data-author="Georgie56">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/georgie56.361/" class="avatar Av361m" data-avatarhtml="true"><img src="data/avatars/m/0/361.jpg?1446788710" width="96" height="96" alt="Georgie56"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/georgie56.361/" class="username" dir="auto" itemprop="name">Georgie56</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						I like the Mary and Jesus artifiacts.
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215143" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215143/permalink">#19</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/georgie56.361/" class="username author" dir="auto">Georgie56</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215143" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 10, 2011 at 9:17 PM">Dec 10, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-215144" class="sectionMain message     " data-author="Namotasso">
+
+	<div class="uix_message ">
+	
+		
+		
+	
+	
+	
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+
+<div class="messageUserBlock  is-expanded ">	
+	
+	
+		<div class="avatarHolder is-expanded">
+			<div class="uix_avatarHolderInner">
+			<span class="helper"></span>
+			<a href="members/namotasso.1047/" class="avatar Av1047m" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_m.png" width="96" height="96" alt="Namotasso"></a>
+			
+			
+			<!-- slot: message_user_info_avatar -->
+			</div>
+		</div>
+		
+
+	
+		<h3 class="userText">
+			<div class="uix_userTextInner">
+				
+				
+				
+				<a href="members/namotasso.1047/" class="username" dir="auto" itemprop="name">Namotasso</a>
+				<em class="userTitle" itemprop="title">Adventurer</em>
+			</div>
+			
+			
+			<!-- slot: message_user_info_text -->
+		</h3>
+		
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+	
+		<div class="messageInfo primaryContent">
+			
+			
+			
+			<div class="messageContent">
+				<article>
+					<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+						
+						
+						Ok before I comment I'm knew so forgive me if I say anything that sounds stupid for reasons I can't understand.<br>
+<br>
+And did anyone else notice the cross in the background on the last tape of holly jolly secrets?
+						<div class="messageTextEndMarker">&nbsp;</div>
+					</blockquote>
+				</article>
+				
+				
+			</div>
+			
+			
+			
+			
+			<div class="messageDetails">
+			
+				
+		
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/#post-215144" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/215144/permalink">#20</a>
+		
+		<span class="item muted">
+			<span class="authorEnd"><a href="members/namotasso.1047/" class="username author" dir="auto">Namotasso</a>,</span>
+			<a href="threads/s3e21-marcelines-closet.3882/#post-215144" title="Permalink" class="datePermalink">
+			
+				<span class="DateTime" title="Dec 10, 2011 at 9:49 PM">Dec 10, 2011</span>
+			
+			</a>
+		</span>
+	
+	
+			
+				
+				
+			</div>
+			
+			
+			
+		
+		 
+	
+	
+			
+			
+		</div>
+	
+	</div> 
+
+	
+	
+	
+	
+</li>*@
+		
+	</ol>
+
+	<!--<input type="hidden" name="_xfToken" value="">-->
+
+</form>
+
+	<div class="pageNavLinkGroup">
+			
+				<!--<div class="linkGroup">
+					
+							<a href="login/" class="concealed element OverlayTrigger">(You must log in or sign up to post here.)</a>
+						
+				</div>
+			
+			<div class="linkGroup" style="display: none"><a href="javascript:" class="muted JsOnly DisplayIgnoredContent Tooltip">Show Ignored Content</a></div>-->
+
+<!--<div class="PageNav" data-page="1" data-range="2" data-start="2" data-end="6" data-last="9" data-sentinel="{{sentinel}}" data-baseurl="threads/@thread-@topictitle/page-{{sentinel}}">
+	
+	<span class="pageNavHeader">Page 1 of 9</span>
+	
+	<nav>
+		
+		
+		<a href="threads/@thread-@topictitle/" class="currentPage " rel="start">1</a>
+		
+		
+			<a class="PageNavPrev hidden" style="">←</a> <span class="scrollable"><span class="items">
+		
+		
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-2" class="">2</a>
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-3" class="">3</a>
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-4" class="">4</a>
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-5" class="">5</a>
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-6" class="">6</a>
+		
+		
+		
+			</span></span> <a class="PageNavNext " style="">→</a>
+		
+		
+		<a href="threads/s3e21-marcelines-closet.3882/page-9" class="">9</a>
+		
+		
+			<a href="threads/s3e21-marcelines-closet.3882/page-2" class="text">Next &gt;</a>
+			
+		
+	</nav>	
+
+</div>-->
+
+	</div>
+
+	<div class="sectionMain funbox">
+	@*<div class="funboxWrapper">
+				<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- matched_content_bottom_of_threads -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5808314520834618" data-ad-slot="5284647485" data-ad-format="autorelaxed"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+	</div>*@
+	</div>
+	
+	<!--<div class="sharePage">
+		<h3 class="textHeading larger">Share This Page</h3>
+		
+				<div class="tweet shareControl">
+					<iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.63be138ae6e7e33561724f46bdab61ed.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=https%3A%2F%2Flandofooo.com%2Fcommunity%2Fthreads%2Fs3e21-marcelines-closet.3882%2F&amp;related=landofooo&amp;size=m&amp;text=S3E21%3A%20Marceline%27s%20Closet&amp;time=1463020598388&amp;type=share&amp;url=https%3A%2F%2Flandofooo.com%2Fcommunity%2Fthreads%2Fs3e21-marcelines-closet.3882%2F" style="position: static; visibility: visible; width: 60px; height: 20px;" data-url="https://landofooo.com/community/threads/s3e21-marcelines-closet.3882/"></iframe>
+				</div>
+			
+				<div class="plusone shareControl">
+					<div id="___plusone_0" style="text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 90px; height: 20px; background: transparent;"><iframe frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 90px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 20px;" tabindex="0" vspace="0" width="100%" id="I0_1463020598117" name="I0_1463020598117" src="https://apis.google.com/u/0/se/0/_/+1/fastbutton?usegapi=1&amp;size=medium&amp;count=true&amp;hl=en-US&amp;origin=https%3A%2F%2Flandofooo.com&amp;url=https%3A%2F%2Flandofooo.com%2Fcommunity%2Fthreads%2Fs3e21-marcelines-closet.3882%2F&amp;gsrc=3p&amp;ic=1&amp;jsh=m%3B%2F_%2Fscs%2Fapps-static%2F_%2Fjs%2Fk%3Doz.gapi.en.CxUqauGeRF8.O%2Fm%3D__features__%2Fam%3DAQ%2Frt%3Dj%2Fd%3D1%2Frs%3DAGLTcCNi-zgDahy-eSl6avC9s6W0dF5pUQ#_methods=onPlusOne%2C_ready%2C_close%2C_open%2C_resizeMe%2C_renderstart%2Concircled%2Cdrefresh%2Cerefresh%2Conload&amp;id=I0_1463020598117&amp;parent=https%3A%2F%2Flandofooo.com&amp;pfname=&amp;rpctoken=18897798" data-gapiattached="true" title="+1"></iframe></div>
+				</div>
+			
+				<div class="facebookLike shareControl">
+					
+					<div class="fb-like fb_iframe_widget" data-href="https://landofooo.com/community/threads/s3e21-marcelines-closet.3882/" data-width="400" data-layout="standard" data-action="like" data-show-faces="true" data-colorscheme="light" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=425131034358731&amp;color_scheme=light&amp;container_width=0&amp;href=https%3A%2F%2Flandofooo.com%2Fcommunity%2Fthreads%2Fs3e21-marcelines-closet.3882%2F&amp;layout=standard&amp;locale=en_US&amp;sdk=joey&amp;show_faces=true&amp;width=400"><span style="vertical-align: bottom; width: 400px; height: 25px;"><iframe name="ff878ebe4d312" width="400px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:like Facebook Social Plugin" src="https://www.facebook.com/v2.4/plugins/like.php?action=like&amp;app_id=425131034358731&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D42%23cb%3Df10bec036a6e588%26domain%3Dlandofooo.com%26origin%3Dhttps%253A%252F%252Flandofooo.com%252Ff2f3753b694cf34%26relation%3Dparent.parent&amp;color_scheme=light&amp;container_width=0&amp;href=https%3A%2F%2Flandofooo.com%2Fcommunity%2Fthreads%2Fs3e21-marcelines-closet.3882%2F&amp;layout=standard&amp;locale=en_US&amp;sdk=joey&amp;show_faces=true&amp;width=400" style="border: none; visibility: visible; width: 400px; height: 25px;" class=""></iframe></span></div>
+				</div>
+		
+	</div>--?
+
+	<div class="sectionMain funbox">
+	@*<div class="funboxWrapper">
+				<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_below_content -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5808314520834618" data-ad-slot="2948254682" data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+	</div>*@
+	</div>
+	
+							<!-- login form, to be moved to the upper drop-down -->
+							
+				</div>
+			
+			<div class="breadBoxBottom">@*
+
+<nav>
+	<fieldset class="breadcrumb" style="">
+		<a href="misc/quick-navigation-menu?selected=node-62" class="OverlayTrigger jumpMenuTrigger" data-cacheoverlay="true" title="Open quick navigation"><i class="uix_icon uix_icon-sitemap"></i><!--Jump to...--></a>
+			
+		<div class="boardTitle"><strong>The LandOfOoo</strong></div>
+		
+		<span class="crumbs">
+			
+				<span class="crust homeCrumb">
+					<a href="https://landofooo.com/community" class="crumb"><span><i class="uix_icon uix_icon-home" title="Home"></i></span></a>
+					<span class="arrow"><span></span></span>
+				</span>
+			
+				<span class="crust selectedTabCrumb">
+					<a href="https://landofooo.com/community/" class="crumb"><span>Forums</span></a>
+					<span class="arrow"><span>&gt;</span></span>
+				</span>
+			
+					<span class="crust">
+						<a href="https://landofooo.com/community/.#adventure-time.57" class="crumb"><span>Adventure Time</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+				
+					<span class="crust">
+						<a href="https://landofooo.com/community/forums/episode-discussion.60/" class="crumb"><span>Episode Discussion</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+				
+					<span class="crust">
+						<a href="https://landofooo.com/community/forums/season-3-2011-2012.62/" class="crumb"><span>Season 3 (2011-2012)</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+				
+		</span>
+	</fieldset>
+</nav>*@</div>
+					
+			</div>
+	
+		</div>
+	</div>
+</div>

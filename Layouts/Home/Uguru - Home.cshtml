@@ -1,0 +1,74 @@
+﻿@*RenderPage("~/ModuleTemplates/Forum/WhoIsOnline.cshtml")*@
+<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" >
+<!-- InstanceBegin template="/Templates/Home Page.dwt" codeOutsideHTMLIsLocked="false" --> 
+<![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" >
+<!--<![endif]-->
+    <head>
+        @RenderPage("~/_System/ContentHolders/_Template - Head Metatags.cshtml")
+        @RenderSection("Metatags", required: false)	
+        <!--{module_contentholder, name="_Template - Head Scripts - HomePg Only"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Head Scripts - HomePg Only.cshtml")
+	
+    </head>
+    <body>
+    @RenderSection("googlemanager", required: false)
+    
+        <!-- Header -->	
+	    <!--{module_contentholder, name="_Template - Header"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Header - Uguru.cshtml")
+	    <!-- /Header -->		
+
+	    <!-- Slider -->
+	    <!--{module_contentholder, name="_Home - Slider"}-->
+        @*RenderPage("~/_System/ContentHolders/_Home - Login Banner.cshtml")*@
+	    <!-- /Slider -->
+
+		@RenderBody()
+
+		<!-- Features -->
+		<!--{module_contentholder, name="_Home - Features"}-->
+        @*RenderPage("~/_System/ContentHolders/_Home - Marketing.cshtml")
+		<!-- /Features -->
+
+	    @*<!-- Content -->
+	    <div class="wrap cstyle03">
+		
+		    <!-- Features -->
+		    <!--{module_contentholder, name="_Home - Features"}-->
+            @RenderPage("~/_System/ContentHolders/_Home - Features.cshtml")
+		    <!-- /Features -->
+		
+		    <!-- Testimonials -->
+		    <div class="lastminute testimonials cf">
+			    <div class="container lmc">
+				    <!-- InstanceBeginEditable name="ContentArea" --><h2 class="slim">Happy Customers Tell Great Stories</h2>
+<!--{module_webapps,Testimonials,r,1 template="/ModuleTemplates/WebApps/home-testimonial.tpl"}-->
+                    @RenderPage("~/ModuleTemplates/WebApps/home-testimonial.cshtml")
+<!-- InstanceEndEditable -->
+			    </div>
+		    </div>
+		    <!-- /Testimonials -->
+		
+		    <div class="cf">&nbsp;</div>
+		
+		    <!-- Top Deals - Carousel -->
+		    <!--{module_contentholder, name="_Home - Deals"}-->
+            @RenderPage("~/_System/ContentHolders/_Home - Deals.cshtml")
+		    <!-- /Top Deals - Carousel -->
+		
+	    </div>
+	    <!-- /Content -->*@
+				
+	    <!-- FOOTER -->
+	    <!--{module_contentholder, name="_Template - Footer"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer.cshtml")
+	    <!-- /FOOTER -->
+			
+	    <!--{module_contentholder, name="_Template - Footer Scripts - HomePg Only"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer Scripts - HomePg Only.cshtml")
+	
+    </body>
+<!-- InstanceEnd --></html>

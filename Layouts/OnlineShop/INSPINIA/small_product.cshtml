@@ -1,0 +1,57 @@
+@{
+    var products;
+	var db = Database.Open("eCommerce");
+    if(!UrlData[1].IsEmpty){
+		products = db.QuerySingle("SELECT * FROM inventory_products");// WHERE dept='@0'",UrlData[1]);//inventory_products AS p, inventory_services AS s
+		if(!UrlData[2].IsEmpty){
+			products = db.QuerySingle("SELECT * FROM inventory_products WHERE dept='@1'",UrlData[2]);
+			if(!UrlData[3].IsEmpty){
+				products = db.QuerySingle("SELECT * FROM inventory_products WHERE dept=@1' AND class='@2'",UrlData[2],UrlData[3]);
+			}
+		}
+	}
+}
+@foreach(var product in products){
+  <div class="shop-product-small clear">  
+      <h5>@product.name</h5>  
+      <div class="image">{tag_smallimage}</div>  
+      <ul>  
+          <li class="price">Price: $<strong>@product.price{tag_saleprice}</strong>&nbsp;</li>  
+          <li class="stock">
+				<!--In stock: <strong>{tag_instock}</strong>&nbsp;-->
+				if(UnitsInStock==0){<span class="OOS">Out of Stock!</span>}
+				else if(UnitsInStock < 4){
+					<!--In stock: --><span class="LoStock">Only .UnitsInStock left!</span>}
+				else{<span class="HiStock">In stock: <strong>{tag_instock}</strong>&nbsp;</span>}
+		  </li>  
+          <li class="quantity">Qty: <strong>{tag_addtocartinputfield}</strong> {tag_addtocart}</li>  
+      </ul>  
+  </div>}
+
+
+<div class="col-md-3">
+                    <div class="ibox">
+                        <div class="ibox-content product-box">
+
+                            <div class="product-imitation">
+                                [ INFO ]
+                            </div>
+                            <div class="product-desc">
+                                <span class="product-price">
+                                    $10@product.price
+                                </span>
+                                <small class="text-muted">Category</small>
+                                <a href="#" class="product-name">Product@product.name</a>
+
+
+
+                                <div class="small m-t-xs">
+                                    Many desktop publishing packages and web page editors now.
+                                </div>
+                                <div class="m-t text-righ">
+                                    <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>

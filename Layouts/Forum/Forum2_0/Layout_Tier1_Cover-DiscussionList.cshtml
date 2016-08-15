@@ -1,0 +1,3506 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    var categories = db.Query("SELECT * FROM website_forumcatagory ORDER BY sortorder, catagoryname");
+    //var discussions = db.Query("SELECT * FROM website_forumdiscussion ORDER BY");
+    //for each forum in catagory, open a table, and title the catagory
+	DateTime lastviewed = new DateTime();
+}<div class="uix_contentFix">	
+					<div class="mainContainer">
+						<div class="mainContent">
+					
+						<!--[if lt IE 8]>
+							<p class="importantMessage">You are using an out of date browser. It  may not display this or other websites correctly.<br />You should upgrade or use an <a href="https://www.google.com/chrome/browser/" target="_blank">alternative browser</a>.</p>
+						<![endif]-->
+
+<!--<div class="PanelScroller Notices" data-vertical="0" data-speed="400" data-interval="4000" style="display: block;">
+	<div class="scrollContainer">
+		<div class="PanelContainer">
+			<ol class="Panels" style="position: static;">
+				
+					<li class="panel Notice DismissParent notice_4 " data-notice="4">
+	
+	<div class="baseHtml noticeContent">Logging in for the first time since we switched over to XenForo? You'll need to manually reset your password before you can login. Sorry for the inconvenience.</div>
+	
+		<a href="account/dismiss-notice?notice_id=4" class="DismissCtrl Tooltip" data-offsetx="7" data-tipclass="flipped">Dismiss Notice</a>
+</li>
+				
+			</ol>
+		</div>
+	</div>
+</div> -->
+
+	<div class="sectionMain funbox">
+	@*<div class="funboxWrapper">
+				<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_above_content -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5808314520834618" data-ad-slot="1471521488" data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+	</div>*@
+	</div>
+						<!-- //start main template -->
+<ol class="nodeList section uix_nodeStyle_3" id="forums">
+
+@*<li class="node category level_1 node_49" id="the-candy-kingdom.49">
+
+	<div class="nodeInfo categoryNodeInfo categoryStrip ">
+		<span class="js-collapseNodeTrigger categoryStrip__collapseToggle" title="Toggle Visibility"><i class="uix_icon js-collapseIcon uix_icon-collapse uix_icon--fixedWidth"></i></span>
+		
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="categoryStripIcon hasGlyph" title="Unread messages"><i class="fa fa-folder"></i></span>
+
+		
+		<div class="categoryText">
+			<h3 class="nodeTitle"><a href=".#the-candy-kingdom.49" data-description="#nodeDescription-49">The Candy Kingdom</a></h3>
+			
+		</div>
+	</div>
+	
+			
+		<ol class="nodeList">
+			
+
+
+<li class="node forum level_2  node_50">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-bullhorn"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/news-announcements.50/" data-description="#nodeDescription-50">News &amp; Announcements</a>
+				
+			</h3>
+
+			
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-50"><p>Get the latest scoop on what's happenin' in The LandOfOoo and in Adventure Time!</p></blockquote>
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>78</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>1,225</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/biggerboot.5044/" class="avatar Av5044s" data-avatarhtml="true"><img src="data/avatars/s/5/5044.jpg?1454550557" width="48" height="48" alt="Biggerboot" /></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/271206/" title="Announcement: Update on Chatroom">Announcement: Update on Chatroom</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/biggerboot.5044/" class="username" dir="auto">Biggerboot</a>,</span>
+					
+						<a href="posts/271206/" title="Announcement: Update on Chatroom"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Feb 28, 2016 at 3:51 AM">Feb 28, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/news-announcements.50/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_51">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-info-circle"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/feedback-suggestions.51/" data-description="#nodeDescription-51">Feedback &amp; Suggestions</a>
+				
+			</h3>
+
+			
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-51"><p>Offer some feedback or suggestions to help make the community even better! Need help? Put in a <a href="http://landofooo.com/community/support/">request here</a>.</p></blockquote>
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>301</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>2,459</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/mordecai626.1566/" class="avatar Av1566s" data-avatarhtml="true"><img src="data/avatars/s/1/1566.jpg?1441218033" width="48" height="48" alt="Mordecai626" /></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273861/" title="How to set wallpaper and screen saver">How to set wallpaper and screen saver</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/mordecai626.1566/" class="username" dir="auto">Mordecai626</a>,</span>
+					
+						<a href="posts/273861/" title="How to set wallpaper and screen saver"><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1462327374" data-diff="12853" data-datestring="May 3, 2016" data-timestring="10:02 PM">May 3, 2016 at 10:02 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/feedback-suggestions.51/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+		</ol>
+	
+	<div class="clear"></div>
+	<span class="tlc"></span>
+	<span class="trc"></span>
+	<span class="blc"></span>
+	<span class="brc"></span>
+</li>*@
+@foreach(var catagory in categories){
+//<li class="node category level_1 node_57" id="adventure-time.57">
+<li class="node category level_1 node_@catagory.catagoryid" id="@catagory.catagoryname-@catagory.catagoryid">
+
+	<div class="nodeInfo categoryNodeInfo categoryStrip ">
+		<span class="js-collapseNodeTrigger categoryStrip__collapseToggle" title="Toggle Visibility"><i class="uix_icon js-collapseIcon uix_icon-collapse uix_icon--fixedWidth"></i></span>
+		<span class="categoryStripIcon hasGlyph" title="Unread messages"><i class="fa fa-folder"></i></span>@*if(lastpost.mostrecent < lastviewed){<text>Read</text>}else{<text>Unread</text>}*@
+
+		
+		<div class="categoryText">
+			@*<h3 class="nodeTitle"><a href=".#adventure-time.57" data-description="#nodeDescription-57">Adventure Time</a></h3>*@
+			<h3 class="nodeTitle"><a href="#@catagory.catagoryname-@catagory.catagoryid" data-description="#nodeDescription-@catagory.catagoryid">@catagory.catagoryname</a></h3>
+		</div>
+	</div>
+			
+		<ol class="nodeList">
+			@*<li class="node forum level_2  node_58">
+
+	<div class="nodeInfo forumNodeInfo unread ">
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-television"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/show-discussion.58/" data-description="#nodeDescription-58">Show Discussion</a>
+				
+			</h3>
+
+			
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-58"><p>General Adventure Time discussion that isn't covered in the other boards.</p></blockquote>
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>880</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>38,529</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/cernunnos.6923/" class="avatar Av6923s" data-avatarhtml="true"><img src="data/avatars/s/6/6923.jpg?1461703719" width="48" height="48" alt="Cernunnos" /></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273657/" title="Spirituality and &quot;Adventure Time&quot;">Spirituality and &quot;Adventure Time&quot;</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/cernunnos.6923/" class="username" dir="auto">Cernunnos</a>,</span>
+					
+						<a href="posts/273657/" title="Spirituality and &quot;Adventure Time&quot;"><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1461875295" data-diff="464932" data-datestring="Apr 28, 2016" data-timestring="4:28 PM">Apr 28, 2016 at 4:28 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/show-discussion.58/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+</li>*@
+
+	@foreach(var discussion in db.Query("SELECT * FROM website_forumdiscussion WHERE CatagoryID=@0 AND TierTree=0 ORDER BY name", catagory.catagoryid)){
+	int totalposts = (int)db.QueryValue("SELECT count(*) FROM website_forumpost FULL JOIN website_forumthread ON website_forumthread.forumid=website_forumpost.forumid WHERE website_forumpost.CatagoryID=@0 AND website_forumpost.ForumID=@1 AND website_forumpost.remove='false'", catagory.catagoryid, discussion.forumid); //merge thread; both remove thread or post
+	int totaltopics = (int)db.QueryValue("SELECT count(threadid) FROM website_forumthread WHERE CatagoryID=@0 AND ForumID=@1 AND remove='false'", catagory.catagoryid, discussion.forumid);
+	var lastpost = db.QuerySingle("SELECT *, CASE WHEN website_forumpost.DatePost < COALESCE(website_forumpost.LastEdit,'') THEN website_forumpost.LastEdit ELSE website_forumpost.DatePost END AS MostRecent FROM website_forumpost FULL JOIN website_forumthread ON website_forumthread.forumid=website_forumpost.forumid FULL JOIN userprofile ON website_forumpost.userid=userprofile.userid WHERE website_forumpost.ForumID=@0 AND website_forumpost.remove='false' ORDER BY MostRecent desc", discussion.forumid); //merge userprofile and forumthread
+	var subForum = db.Query("SELECT * FROM website_forumdiscussion WHERE CatagoryID=@0 and TierTree=@1 ORDER BY name", catagory.catagoryid, discussion.forumid);
+	if(WebSecurity.IsAuthenticated){
+		// Check if subscribe
+		lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND (userid=@1 OR SessionID=@2)", discussion.forumid, WebSecurity.CurrentUserId, Session["ASP.NET_SessionId"])??DateTime.MinValue;
+	}else{
+		//lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND SessionID=@1", discussion.forumid, Session["ASP.NET_SessionId"])??DateTime.MinValue;
+		lastviewed = /*db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND SessionID=@1", discussion.forumid, Session["ASP.NET_SessionId"])??*/DateTime.MinValue;
+	}
+<li class="node forum level_2  node_@discussion.forumid">
+	<div class="nodeInfo forumNodeInfo @if(lastpost.mostrecent < lastviewed){<text>read</text>}else{<text>unread</text>} ">
+	<span class="nodeIcon hasGlyph" title="@if(lastpost.mostrecent < lastviewed){<text>Read</text>}else{<text>Unread</text>} messages"><i class="fa fa-@discussion.classIcon"></i></span>
+
+		<div class="nodeText">
+			@*<h3 class="nodeTitle"><a href="forums/episode-discussion.60/" data-description="#nodeDescription-60">Episode Discussion</a></h3>*@
+			<h3 class="nodeTitle">
+				<a href="forums/@discussion.forumid-@discussion.name/" data-description="#nodeDescription-@discussion.forumid">@discussion.name</a>
+				@if(lastpost.mostrecent < lastviewed){<div class="uix_nodeTitle_status">New</div>}
+			</h3>
+			
+				@*<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-60"><p>Episode discussion for upcoming and previous episodes.</p></blockquote>*@
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-60"><p>@discussion.description</p></blockquote>
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>@totaltopics</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>@totalposts</dd></dl>
+			</div>
+			
+		</div>
+		@if(subForum != null || subForum.Count()>0){
+			<ol class="subForumList">
+			@foreach(var subThread in subForum){
+			if(WebSecurity.IsAuthenticated){
+				// Check if subscribe
+				lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND userid=@1", subForum.forumid, WebSecurity.CurrentUserId)??DateTime.MinValue;
+			}else{
+				lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND SessionID=0", subForum.forumid)??DateTime.MinValue;
+			}
+				<li class="node forum level-n node_@subForum.forumid">
+	<div class="@if(lastpost.mostrecent < lastviewed){<text>read</text>}else{<text>unread</text>}">
+		<h4 class="nodeTitle">
+			@*<a href="forums/season-7-2015.67/" class="menuRow">*@
+			<a href="forums/@subThread.forumid-@subThread.name" class="menuRow">
+				<span class="subForumIcon hasGlyph" title="@if(lastpost.mostrecent < lastviewed){<text>Read</text>}else{<text>Unread</text>} messages"><i class="fa fa-@subThread.classIcon"></i></span>
+				@*Season 7 (2015)*@
+				@subThread.name
+			</a>
+		</h4>
+	</div>
+</li>}
+				@*<li class="node forum level-n node_66">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-6-2014-2015.66/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 6 (2014-2015)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_63">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-5-2012-2014.63/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 5 (2012-2014)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_61">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-4-2012.61/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 4 (2012)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_62">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-3-2011-2012.62/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 3 (2011-2012)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_65">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-2-2010-2011.65/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 2 (2010-2011)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_64">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-1-2010.64/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 1 (2010)</a></h4>
+	</div>
+	
+</li>*@
+			</ol>}
+
+		<div class="nodeLastPost secondaryContent">
+			@if(lastpost == null){<span class="lastThreadTitle"><span>Latest:</span> None</span>}else{   
+				//<td class="lastpost"><strong>@lastpost.MostRecent</strong><br />by @lastpost.userid</td>
+				if(lastpost.userid==0/*||string.IsNullOrEmpty(lastpost.userid)*/){<img src="/_assets/images/users/avatar-guest.jpg" width="48" height="48" alt="Anonymous Guest" />}
+				else{
+					<a href="members/@lastpost.userid" class="avatar Av-@lastpost.userid" data-avatarhtml="true">
+						@*<img src="data/avatars/s/5/5949.jpg?1459703928" width="48" height="48" alt="casus" />*@
+						@if(File.Exists(Href("/_assets/images/users/avatar-"+lastpost.userid+".jpg"))){<text><img src="@Href("/_assets/images/users/avatar-"+lastpost.userid+".jpg")" alt="@lastpost.alias's avatar image" width="48" height="48" /></text>}
+						else{<img src="/_assets/images/users/avatar-guest.jpg" alt="No avatar image set" width="48" height="48" />}
+					</a>
+					<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/@lastpost.postid/" title="@lastpost.topicname">@lastpost.topicname</a></span>
+					<span class="lastThreadMeta">
+						<span class="lastThreadUser"><a href="members/@lastpost.userid" class="username" dir="auto">@lastpost.alias</a>,</span>
+						<a href="posts/@lastpost.postid/" title="@lastpost.topicname"><time datetime="@lastpost.mostrecent.ToString("MMM d',' yyyy 'at' h':'mm t")">@lastpost.mostrecent</time>@*<abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1462335812" data-diff="4415" data-datestring="May 4, 2016" data-timestring="12:23 AM">May 4, 2016 at 12:23 AM</abbr>*@</a>
+					</span>}
+				}			
+		</div>
+
+		<div class="nodeControls">
+			@*<a href="forums/episode-discussion.60/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>*@
+			<a href="forums/@discussion.forumid-@discussion.name/rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+	
+</li>}
+
+@*<li class="node forum level_2  node_69">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-users"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/character-discussion.69/" data-description="#nodeDescription-69">Character Discussion</a>
+				
+			</h3>
+
+			
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-69"><p>A place to discuss all of the different and unique character in Adventure Time.</p></blockquote>
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>138</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>20,769</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/scalyghost.6806/" class="avatar Av6806s" data-avatarhtml="true"><img src="data/avatars/s/6/6806.jpg?1457336820" width="48" height="48" alt="ScalyGhost" /></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273720/" title="Lards.">Lards.</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/scalyghost.6806/" class="username" dir="auto">ScalyGhost</a>,</span>
+					
+						<a href="posts/273720/" title="Lards."><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1462055217" data-diff="285010" data-datestring="Apr 30, 2016" data-timestring="6:26 PM">Apr 30, 2016 at 6:26 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/character-discussion.69/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>*@
+
+		</ol>
+	
+	<div class="clear"></div>
+	<span class="tlc"></span>
+	<span class="trc"></span>
+	<span class="blc"></span>
+	<span class="brc"></span>
+</li>}
+	</ol>
+	@*<ol class="nodeList section uix_nodeStyle_3 audentio_grid_running" id="forums" style="visibility: visible;">
+		<!-- //<li class="node category level_1 node_49 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_right audentio_grid_column_1 audentio_grid_columnMax_1 audentio_grid_rowSublayout_1 audentio_grid_row_1 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_1 audentio_grid_node_1 audentio_grid_row_odd audentio_grid_xl below-xl above-xs above-sm above-md above-lg node--lg " id="the-candy-kingdom.49">
+
+	<div class="nodeInfo categoryNodeInfo categoryStrip ">
+		<span class="js-collapseNodeTrigger categoryStrip__collapseToggle" title="Toggle Visibility"><i class="uix_icon js-collapseIcon uix_icon-collapse uix_icon--fixedWidth"></i></span>
+
+	<span class="categoryStripIcon hasGlyph" title="Unread messages"><i class="fa fa-folder"></i></span>
+
+		
+		<div class="categoryText">
+			<h3 class="nodeTitle"><a href=".#the-candy-kingdom.49" data-description="#nodeDescription-49">The Candy Kingdom</a></h3>
+			
+		</div>
+	</div>
+	
+			
+		<ol class="nodeList">
+			
+
+
+<li class="node forum level_2  node_50 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_column_1 audentio_grid_columnMax_2 audentio_grid_rowSublayout_1 audentio_grid_row_1 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_1 audentio_grid_node_1 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-bullhorn"></i></span>
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/news-announcements.50/" data-description="#nodeDescription-50">News &amp; Announcements</a></h3>
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>78</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>1,225</dd></dl>
+				
+			</div>
+		</div>
+		<div class="nodeLastPost secondaryContent">
+					<a href="members/biggerboot.5044/" class="avatar Av5044s" data-avatarhtml="true"><img src="data/avatars/s/5/5044.jpg?1454550557" width="48" height="48" alt="Biggerboot"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/271206/" title="Announcement: Update on Chatroom">Announcement: Update on Chatroom</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/biggerboot.5044/" class="username" dir="auto">Biggerboot</a>,</span>
+					
+						<a href="posts/271206/" title="Announcement: Update on Chatroom"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Feb 28, 2016 at 3:51 AM">Feb 28, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/news-announcements.50/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_51 audentio_grid audentio_grid_active audentio_grid_right audentio_grid_column_2 audentio_grid_columnMax_2 audentio_grid_rowSublayout_1 audentio_grid_row_1 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_2 audentio_grid_node_2 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-info-circle"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/feedback-suggestions.51/" data-description="#nodeDescription-51">Feedback &amp; Suggestions</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>301</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>2,459</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/mordecai626.1566/" class="avatar Av1566s" data-avatarhtml="true"><img src="data/avatars/s/1/1566.jpg?1441218033" width="48" height="48" alt="Mordecai626"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273861/" title="How to set wallpaper and screen saver">How to set wallpaper and screen saver</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/mordecai626.1566/" class="username" dir="auto">Mordecai626</a>,</span>
+					
+						<a href="posts/273861/" title="How to set wallpaper and screen saver"><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1462327374" data-diff="12853" data-datestring="May 3, 2016" data-timestring="10:02 PM" title="May 3, 2016 at 10:02 PM">Yesterday at 10:02 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/feedback-suggestions.51/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+		</ol>
+	
+	<div class="clear"></div>
+	<span class="tlc"></span>
+	<span class="trc"></span>
+	<span class="blc"></span>
+	<span class="brc"></span>
+</li> -->
+
+<li class="node category level_1 node_57 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_right audentio_grid_column_1 audentio_grid_columnMax_1 audentio_grid_rowSublayout_2 audentio_grid_row_2 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_2 audentio_grid_node_2 audentio_grid_row_even audentio_grid_xl below-xl above-xs above-sm above-md above-lg node--lg " id="adventure-time.57">
+
+	<div class="nodeInfo categoryNodeInfo categoryStrip ">
+		<span class="js-collapseNodeTrigger categoryStrip__collapseToggle" title="Toggle Visibility"><i class="uix_icon js-collapseIcon uix_icon-collapse uix_icon--fixedWidth"></i></span>
+	<span class="categoryStripIcon hasGlyph" title="Unread messages"><i class="fa fa-folder"></i></span>
+
+		
+		<div class="categoryText">
+			<h3 class="nodeTitle"><a href=".#adventure-time.57" data-description="#nodeDescription-57">Adventure Time</a></h3>
+			
+		</div>
+	</div>
+	<ol class="nodeList">
+			<li class="node forum level_2  node_58 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_column_1 audentio_grid_columnMax_1 audentio_grid_rowSublayout_1 audentio_grid_row_1 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_1 audentio_grid_node_1 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-television"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/show-discussion.58/" data-description="#nodeDescription-58">Show Discussion</a></h3>
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>880</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>38,529</dd></dl>
+			</div>
+		</div>
+		<div class="nodeLastPost secondaryContent">
+					<a href="members/cernunnos.6923/" class="avatar Av6923s" data-avatarhtml="true"><img src="data/avatars/s/6/6923.jpg?1461703719" width="48" height="48" alt="Cernunnos"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273657/" title="Spirituality and &quot;Adventure Time&quot;">Spirituality and "Adventure Time"</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/cernunnos.6923/" class="username" dir="auto">Cernunnos</a>,</span>
+					
+						<a href="posts/273657/" title="Spirituality and &quot;Adventure Time&quot;"><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1461875295" data-diff="464932" data-datestring="Apr 28, 2016" data-timestring="4:28 PM" title="Apr 28, 2016 at 4:28 PM">Thursday at 4:28 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/show-discussion.58/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+</li>
+
+@*<!-- //
+<li class="node forum level_2  node_60 audentio_grid audentio_grid_active audentio_grid_right audentio_grid_column_2 audentio_grid_columnMax_1 audentio_grid_rowSublayout_1 audentio_grid_row_1 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_2 audentio_grid_node_2 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	<div class="nodeInfo forumNodeInfo unread ">
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/episode-discussion.60/" data-description="#nodeDescription-60">Episode Discussion</a></h3>
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>232</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>55,561</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+			<ol class="subForumList">
+			
+				<li class="node forum level-n node_67">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-7-2015.67/" class="menuRow">
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 7 (2015)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_66">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-6-2014-2015.66/" class="menuRow">
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 6 (2014-2015)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_63">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-5-2012-2014.63/" class="menuRow">
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 5 (2012-2014)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_61">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-4-2012.61/" class="menuRow">
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 4 (2012)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_62">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-3-2011-2012.62/" class="menuRow">
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+		Season 3 (2011-2012)</a></h4>
+	</div>
+</li>
+			
+				<li class="node forum level-n node_65">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-2-2010-2011.65/" class="menuRow">
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 2 (2010-2011)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_64">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-1-2010.64/" class="menuRow">
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 1 (2010)</a></h4>
+	</div>
+	
+</li>
+			</ol>
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/casus.5949/" class="avatar Av5949s" data-avatarhtml="true"><img src="data/avatars/s/5/5949.jpg?1459703928" width="48" height="48" alt="casus"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273876/" title="S7E34: Elemental">S7E34: Elemental</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/casus.5949/" class="username" dir="auto">casus</a>,</span>
+					
+						<a href="posts/273876/" title="S7E34: Elemental"><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1462335812" data-diff="4415" data-datestring="May 4, 2016" data-timestring="12:23 AM" title="May 4, 2016 at 12:23 AM">Today at 12:23 AM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/episode-discussion.60/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_69 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_column_1 audentio_grid_columnMax_1 audentio_grid_rowSublayout_2 audentio_grid_row_2 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_3 audentio_grid_node_3 audentio_grid_row_even audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-users"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/character-discussion.69/" data-description="#nodeDescription-69">Character Discussion</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>138</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>20,769</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/scalyghost.6806/" class="avatar Av6806s" data-avatarhtml="true"><img src="data/avatars/s/6/6806.jpg?1457336820" width="48" height="48" alt="ScalyGhost"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273720/" title="Lards.">Lards.</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/scalyghost.6806/" class="username" dir="auto">ScalyGhost</a>,</span>
+					
+						<a href="posts/273720/" title="Lards."><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1462055217" data-diff="285010" data-datestring="Apr 30, 2016" data-timestring="6:26 PM" title="Apr 30, 2016 at 6:26 PM">Saturday at 6:26 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/character-discussion.69/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_59 audentio_grid audentio_grid_active audentio_grid_right audentio_grid_column_2 audentio_grid_columnMax_1 audentio_grid_rowSublayout_2 audentio_grid_row_2 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_4 audentio_grid_node_4 audentio_grid_row_even audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-book"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/theories-and-speculation.59/" data-description="#nodeDescription-59">Theories and Speculation</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>540</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>16,044</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/rainbowpancakeofdoom.6877/" class="avatar Av6877s" data-avatarhtml="true"><img src="data/avatars/s/6/6877.jpg?1459872047" width="48" height="48" alt="RainbowPancakeOfDOOM"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/272657/" title="There's More Than 1 PB">There's More Than 1 PB</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/rainbowpancakeofdoom.6877/" class="username" dir="auto">RainbowPancakeOfDOOM</a>,</span>
+					
+						<a href="posts/272657/" title="There's More Than 1 PB"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Apr 6, 2016 at 10:53 AM">Apr 6, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/theories-and-speculation.59/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_68 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_right audentio_grid_column_1 audentio_grid_columnMax_1 audentio_grid_rowSublayout_3 audentio_grid_row_3 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_5 audentio_grid_node_5 audentio_grid_row_odd audentio_grid_xl below-xl above-xs above-sm above-md above-lg node--lg ">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-paint-brush"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/adventure-time-art.68/" data-description="#nodeDescription-68">Adventure Time Art</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>412</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>21,089</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/aquaseashells.6445/" class="avatar Av6445s" data-avatarhtml="true"><img src="data/avatars/s/6/6445.jpg?1461702279" width="48" height="48" alt="AquaSeashells"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273748/" title="Random adventure time pictures">Random adventure time pictures</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/aquaseashells.6445/" class="username" dir="auto">AquaSeashells</a>,</span>
+					
+						<a href="posts/273748/" title="Random adventure time pictures"><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1462158560" data-diff="181667" data-datestring="May 1, 2016" data-timestring="11:09 PM" title="May 1, 2016 at 11:09 PM">Sunday at 11:09 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/adventure-time-art.68/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>-->
+		</ol>
+	
+	<div class="clear"></div>
+	<span class="tlc"></span>
+	<span class="trc"></span>
+	<span class="blc"></span>
+	<span class="brc"></span>
+</li>
+@*<!-- //
+<li class="node category level_1 node_7 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_right audentio_grid_column_1 audentio_grid_columnMax_1 audentio_grid_rowSublayout_3 audentio_grid_row_3 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_3 audentio_grid_node_3 audentio_grid_row_odd audentio_grid_xl below-xl above-xs above-sm above-md above-lg node--lg " id="other-shows.7">
+
+	<div class="nodeInfo categoryNodeInfo categoryStrip ">
+		<span class="js-collapseNodeTrigger categoryStrip__collapseToggle" title="Toggle Visibility"><i class="uix_icon js-collapseIcon uix_icon-collapse uix_icon--fixedWidth"></i></span>
+		
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="categoryStripIcon hasGlyph" title="Unread messages"><i class="fa fa-folder"></i></span>
+
+		
+		<div class="categoryText">
+			<h3 class="nodeTitle"><a href=".#other-shows.7" data-description="#nodeDescription-7">Other Shows</a></h3>
+			
+		</div>
+	</div>
+	
+			
+		<ol class="nodeList">
+			
+
+
+<li class="node forum level_2  node_8 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_column_1 audentio_grid_columnMax_1 audentio_grid_rowSublayout_1 audentio_grid_row_1 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_1 audentio_grid_node_1 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/steven-universe.8/" data-description="#nodeDescription-8">Steven Universe</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>169</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>1,041</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+			<ol class="subForumList">
+			
+				<li class="node forum level-n node_10">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/episode-discussion.10/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Episode Discussion</a></h4>
+	</div>
+	
+		<ol>
+			
+				<li class="node forum level-n node_11">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-1-2013-2015.11/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Season 1 (2013 - 2015)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_12">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-2-2015-present.12/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Season 2 (2015 - Present)</a></h4>
+	</div>
+	
+</li>
+			
+		</ol>
+	
+</li>
+			
+				<li class="node forum level-n node_13">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/character-discussion.13/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Character Discussion</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_9">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/theories-speculation.9/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Theories &amp; Speculation</a></h4>
+	</div>
+	
+</li>
+			
+			</ol>
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/thivi15.6914/" class="avatar Av6914s" data-avatarhtml="true"><img src="data/avatars/s/6/6914.jpg?1460860358" width="48" height="48" alt="thivi15"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273644/" title="S3E2: Gem Drill">S3E2: Gem Drill</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/thivi15.6914/" class="username" dir="auto">thivi15</a>,</span>
+					
+						<a href="posts/273644/" title="S3E2: Gem Drill"><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1461869516" data-diff="470711" data-datestring="Apr 28, 2016" data-timestring="2:51 PM" title="Apr 28, 2016 at 2:51 PM">Thursday at 2:51 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/steven-universe.8/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_14 audentio_grid audentio_grid_active audentio_grid_right audentio_grid_column_2 audentio_grid_columnMax_1 audentio_grid_rowSublayout_1 audentio_grid_row_1 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_2 audentio_grid_node_2 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/regular-show.14/" data-description="#nodeDescription-14">Regular Show</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>41</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>240</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+			<ol class="subForumList">
+			
+				<li class="node forum level-n node_16">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/episode-discussion.16/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Episode Discussion</a></h4>
+	</div>
+	
+		<ol>
+			
+				<li class="node forum level-n node_17">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/seasons-1-5-2009-2014.17/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Seasons 1 - 5 (2009-2014)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_19">
+	<div>
+		<h4 class="nodeTitle"><a href="forums/season-6-2014-2015.19/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title=""><i class="fa fa-comment"></i></span>
+
+		Season 6 (2014-2015)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_18">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-7-2015-present.18/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Season 7 (2015-present)</a></h4>
+	</div>
+	
+</li>
+			
+		</ol>
+	
+</li>
+			
+				<li class="node forum level-n node_20">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/character-discussion.20/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Character Discussion</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_15">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/theories-speculation.15/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Theories &amp; Speculation</a></h4>
+	</div>
+	
+</li>
+			
+			</ol>
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/burritodetodo.6539/" class="avatar Av6539s" data-avatarhtml="true"><img src="data/avatars/s/6/6539.jpg?1458569735" width="48" height="48" alt="burritodetodo"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273863/" title="Rigby Goes to Prom">Rigby Goes to Prom</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/burritodetodo.6539/" class="username" dir="auto">burritodetodo</a>,</span>
+					
+						<a href="posts/273863/" title="Rigby Goes to Prom"><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1462327689" data-diff="12538" data-datestring="May 3, 2016" data-timestring="10:08 PM" title="May 3, 2016 at 10:08 PM">Yesterday at 10:08 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/regular-show.14/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_21 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_right audentio_grid_column_1 audentio_grid_columnMax_1 audentio_grid_rowSublayout_2 audentio_grid_row_2 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_3 audentio_grid_node_3 audentio_grid_row_even audentio_grid_xl below-xl above-xs above-sm above-md above-lg node--lg ">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/gravity-falls.21/" data-description="#nodeDescription-21">Gravity Falls</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>24</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>107</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+			<ol class="subForumList">
+			
+				<li class="node forum level-n node_23">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/episode-discussion.23/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Episode Discussion</a></h4>
+	</div>
+	
+		<ol>
+			
+				<li class="node forum level-n node_24">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-1-2012.24/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Season 1 (2012)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_25">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-2-2014-present.25/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Season 2 (2014-present)</a></h4>
+	</div>
+	
+</li>
+			
+		</ol>
+	
+</li>
+			
+				<li class="node forum level-n node_26">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/character-discussion.26/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Character Discussion</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_22">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/theories-speculation.22/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+		Theories &amp; Speculation</a></h4>
+	</div>
+	
+</li>
+			
+			</ol>
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/ranku.1981/" class="avatar Av1981s" data-avatarhtml="true"><img src="data/avatars/s/1/1981.jpg?1441214005" width="48" height="48" alt="ranku"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/271424/" title="I feel sad that Ford never found a love interest,He seems a nice guy">I feel sad that Ford never found a love interest,He seems a nice guy</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/ranku.1981/" class="username" dir="auto">ranku</a>,</span>
+					
+						<a href="posts/271424/" title="I feel sad that Ford never found a love interest,He seems a nice guy"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Mar 6, 2016 at 11:18 AM">Mar 6, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/gravity-falls.21/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+		</ol>
+	
+	<div class="clear"></div>
+	<span class="tlc"></span>
+	<span class="trc"></span>
+	<span class="blc"></span>
+	<span class="brc"></span>
+</li>
+
+
+<li class="node category level_1 node_54 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_right audentio_grid_column_1 audentio_grid_columnMax_1 audentio_grid_rowSublayout_4 audentio_grid_row_4 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_4 audentio_grid_node_4 audentio_grid_row_even audentio_grid_xl below-xl above-xs above-sm above-md above-lg node--lg " id="roleplay-center.54">
+
+	<div class="nodeInfo categoryNodeInfo categoryStrip ">
+		<span class="js-collapseNodeTrigger categoryStrip__collapseToggle" title="Toggle Visibility"><i class="uix_icon js-collapseIcon uix_icon-collapse uix_icon--fixedWidth"></i></span>
+		
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="categoryStripIcon hasGlyph" title="Unread messages"><i class="fa fa-folder"></i></span>
+
+		
+		<div class="categoryText">
+			<h3 class="nodeTitle"><a href=".#roleplay-center.54" data-description="#nodeDescription-54">Roleplay Center</a></h3>
+			
+		</div>
+	</div>
+	
+			
+		<ol class="nodeList">
+			
+
+
+<li class="node forum level_2  node_55 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_column_1 audentio_grid_columnMax_2 audentio_grid_rowSublayout_1 audentio_grid_row_1 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_1 audentio_grid_node_1 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-shield"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/roleplays.55/" data-description="#nodeDescription-55">Roleplays</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>215</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>34,463</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/glenn.1975/" class="avatar Av1975s" data-avatarhtml="true"><img src="data/avatars/s/1/1975.jpg?1441517380" width="48" height="48" alt="Glenn"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273806/" title="The days of Marceline and Simon (closed and private) part 2">The days of Marceline and Simon (closed and private) part 2</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/glenn.1975/" class="username" dir="auto">Glenn</a>,</span>
+					
+						<a href="posts/273806/" title="The days of Marceline and Simon (closed and private) part 2"><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1462246514" data-diff="93713" data-datestring="May 2, 2016" data-timestring="11:35 PM" title="May 2, 2016 at 11:35 PM">Monday at 11:35 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/roleplays.55/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_56 audentio_grid audentio_grid_active audentio_grid_right audentio_grid_column_2 audentio_grid_columnMax_2 audentio_grid_rowSublayout_1 audentio_grid_row_1 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_2 audentio_grid_node_2 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-pencil"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/roleplay-planning-ooc-discussion.56/" data-description="#nodeDescription-56">Roleplay Planning &amp; OOC Discussion</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>96</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>1,122</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/sorryoutoforder.6564/" class="avatar Av6564s" data-avatarhtml="true"><img src="data/avatars/s/6/6564.jpg?1461019644" width="48" height="48" alt="SorryOutOfOrder"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273065/" title="Adventure Time RP Revival: planning">Adventure Time RP Revival: planning</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/sorryoutoforder.6564/" class="username" dir="auto">SorryOutOfOrder</a>,</span>
+					
+						<a href="posts/273065/" title="Adventure Time RP Revival: planning"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Apr 18, 2016 at 7:02 PM">Apr 18, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/roleplay-planning-ooc-discussion.56/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+		</ol>
+	
+	<div class="clear"></div>
+	<span class="tlc"></span>
+	<span class="trc"></span>
+	<span class="blc"></span>
+	<span class="brc"></span>
+</li>
+
+
+<li class="node category level_1 node_27 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_right audentio_grid_column_1 audentio_grid_columnMax_1 audentio_grid_rowSublayout_5 audentio_grid_row_5 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_5 audentio_grid_node_5 audentio_grid_row_odd audentio_grid_xl below-xl above-xs above-sm above-md above-lg node--lg " id="the-cloud-kingdom.27">
+
+	<div class="nodeInfo categoryNodeInfo categoryStrip ">
+		<span class="js-collapseNodeTrigger categoryStrip__collapseToggle" title="Toggle Visibility"><i class="uix_icon js-collapseIcon uix_icon-collapse uix_icon--fixedWidth"></i></span>
+		
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="categoryStripIcon hasGlyph" title="Unread messages"><i class="fa fa-folder"></i></span>
+
+		
+		<div class="categoryText">
+			<h3 class="nodeTitle"><a href=".#the-cloud-kingdom.27" data-description="#nodeDescription-27">The Cloud Kingdom</a></h3>
+			
+		</div>
+	</div>
+	
+			
+		<ol class="nodeList">
+			
+
+
+<li class="node forum level_2  node_30 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_column_1 audentio_grid_columnMax_2 audentio_grid_rowSublayout_1 audentio_grid_row_1 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_1 audentio_grid_node_1 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-comments"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/general-discussion.30/" data-description="#nodeDescription-30">General Discussion</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>1,731</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>36,724</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/burritodetodo.6539/" class="avatar Av6539s" data-avatarhtml="true"><img src="data/avatars/s/6/6539.jpg?1458569735" width="48" height="48" alt="burritodetodo"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273749/" title="80's music!">80's music!</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/burritodetodo.6539/" class="username" dir="auto">burritodetodo</a>,</span>
+					
+						<a href="posts/273749/" title="80's music!"><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1462158729" data-diff="181498" data-datestring="May 1, 2016" data-timestring="11:12 PM" title="May 1, 2016 at 11:12 PM">Sunday at 11:12 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/general-discussion.30/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_47 audentio_grid audentio_grid_active audentio_grid_right audentio_grid_column_2 audentio_grid_columnMax_2 audentio_grid_rowSublayout_1 audentio_grid_row_1 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_2 audentio_grid_node_2 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-desktop"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/television-movies.47/" data-description="#nodeDescription-47">Television &amp; Movies</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>126</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>2,859</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/cadis.5081/" class="avatar Av5081s" data-avatarhtml="true"><img src="data/avatars/s/5/5081.jpg?1441233627" width="48" height="48" alt="Cadis"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273166/" title="Powerpuff Girls Reboot">Powerpuff Girls Reboot</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/cadis.5081/" class="username" dir="auto">Cadis</a>,</span>
+					
+						<a href="posts/273166/" title="Powerpuff Girls Reboot"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Apr 20, 2016 at 9:52 PM">Apr 20, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/television-movies.47/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_48 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_column_1 audentio_grid_columnMax_2 audentio_grid_rowSublayout_2 audentio_grid_row_2 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_3 audentio_grid_node_3 audentio_grid_row_even audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-book"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/books-literature-comics.48/" data-description="#nodeDescription-48">Books, Literature &amp; Comics</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>26</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>725</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/yusuke-wrath.1290/" class="avatar Av1290s" data-avatarhtml="true"><img src="data/avatars/s/1/1290.jpg?1457319509" width="48" height="48" alt="Yusuke Wrath"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273488/" title="Famous Quotes">Famous Quotes</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/yusuke-wrath.1290/" class="username" dir="auto">Yusuke Wrath</a>,</span>
+					
+						<a href="posts/273488/" title="Famous Quotes"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Apr 26, 2016 at 8:58 AM">Apr 26, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/books-literature-comics.48/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_29 audentio_grid audentio_grid_active audentio_grid_right audentio_grid_column_2 audentio_grid_columnMax_2 audentio_grid_rowSublayout_2 audentio_grid_row_2 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_4 audentio_grid_node_4 audentio_grid_row_even audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-gamepad"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/consoles-video-games.29/" data-description="#nodeDescription-29">Consoles &amp; Video Games</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>74</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>1,156</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/ranku.1981/" class="avatar Av1981s" data-avatarhtml="true"><img src="data/avatars/s/1/1981.jpg?1441214005" width="48" height="48" alt="ranku"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/272734/" title="Ruin the ending to your favorite game without context">Ruin the ending to your favorite game without context</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/ranku.1981/" class="username" dir="auto">ranku</a>,</span>
+					
+						<a href="posts/272734/" title="Ruin the ending to your favorite game without context"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Apr 9, 2016 at 9:42 AM">Apr 9, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/consoles-video-games.29/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_28 audentio_grid audentio_grid_active audentio_grid_left audentio_grid_column_1 audentio_grid_columnMax_2 audentio_grid_rowSublayout_3 audentio_grid_row_3 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_5 audentio_grid_node_5 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-paint-brush"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/graphics-drawings-photos.28/" data-description="#nodeDescription-28">Graphics, Drawings &amp; Photos</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>259</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>5,632</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/yusuke-wrath.1290/" class="avatar Av1290s" data-avatarhtml="true"><img src="data/avatars/s/1/1290.jpg?1457319509" width="48" height="48" alt="Yusuke Wrath"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/272859/" title="Art Gallery">Art Gallery</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/yusuke-wrath.1290/" class="username" dir="auto">Yusuke Wrath</a>,</span>
+					
+						<a href="posts/272859/" title="Art Gallery"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Apr 12, 2016 at 12:17 AM">Apr 12, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/graphics-drawings-photos.28/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_46 audentio_grid audentio_grid_active audentio_grid_right audentio_grid_column_2 audentio_grid_columnMax_2 audentio_grid_rowSublayout_3 audentio_grid_row_3 audentio_grid_subLayout_1 audentio_grid_numSubLayouts_1 audentio_grid_nodeSublayout_6 audentio_grid_node_6 audentio_grid_row_odd audentio_grid_lg audentio_grid_xl below-lg below-xl above-xs above-sm above-md node--md " style="width: 50%;">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-bomb"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/posting-games-misc-threads.46/" data-description="#nodeDescription-46">Posting Games &amp; Misc. Threads</a>
+				
+			</h3>
+
+			
+				
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>166</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>25,558</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/aquaseashells.6445/" class="avatar Av6445s" data-avatarhtml="true"><img src="data/avatars/s/6/6445.jpg?1461702279" width="48" height="48" alt="AquaSeashells"></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273678/" title="what are you listening to right now?? (Music)">what are you listening to right now?? (Music)</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/aquaseashells.6445/" class="username" dir="auto">AquaSeashells</a>,</span>
+					
+						<a href="posts/273678/" title="what are you listening to right now?? (Music)"><abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1461952401" data-diff="387826" data-datestring="Apr 29, 2016" data-timestring="1:53 PM" title="Apr 29, 2016 at 1:53 PM">Friday at 1:53 PM</abbr></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/posting-games-misc-threads.46/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+		</ol>
+	
+	<div class="clear"></div>
+	<span class="tlc"></span>
+	<span class="trc"></span>
+	<span class="blc"></span>
+	<span class="brc"></span>
+</li>-->
+	</ol>*@
+<!-- //end main template -->
+	<div class="sectionMain funbox">
+	@*<div class="funboxWrapper">			
+				<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_below_content -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5808314520834618" data-ad-slot="2948254682" data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+	</div>*@
+	</div>
+
+						</div>
+					</div>
+				
+					<!-- sidebar -->
+					@RenderPage("~/Layouts/Forum/forum2_0/Layout_sidebar.cshtml")
+					@*<aside class="uix_mainSidebar">
+						<div class="inner_wrapper" style="transition: top 0s;">
+							<div class="sidebar">
+
+								<div class="section widget-group-no-name widget-container">						
+<div class="secondaryContent widget side-block side-login">
+			<h3 class="side-block-head"><a href="#Login">Login</a><!--&nbsp; • &nbsp;<a href="#Register">Register</a>--></h3>
+			<div class="side-block-body">
+		<form method="post" action="#Login">
+				<fieldset>
+					<input type="text" name="username" id="username" size="10" class="inputbox" title="Username" placeholder="Username"><input type="password" name="password" id="password" size="10" class="inputbox" title="Password" placeholder="Password">
+					<br>
+											<a href="#Password">I forgot my password</a>
+																<label for="autologin" id="remember-me"><input type="checkbox" name="autologin" id="autologin">Remember me</label>
+										<br>
+					<input type="submit" name="login" value="Login" class="button2">
+					<!--<input type="hidden" name="redirect" value="./index.php?style=9&amp;style=9&amp;sid=9c9ac014a4afc9fe18b57c2e3fea57f7">-->
+
+				</fieldset>
+		</form>
+			</div>
+	</div>
+<!--</div>
+
+<div class="section loginButton">		-->
+	<div class="secondaryContent">
+		<label id="SignupButton"><a href="login/" class="inner OverlayTrigger" data-cacheoverlay="false">Sign up now!</a></label>
+	</div>
+</div>
+
+								<div class="section widget-group-no-name widget-container">
+		
+			<div class="secondaryContent widget WidgetFramework_WidgetRenderer_Threads" id="widget-15">
+				
+					<h3>
+						
+							Latest Replies
+						
+					</h3>
+					<div class="avatarList">
+			<ul>
+				
+					
+
+						
+							<li class="thread-6392 thread-node-67">
+	<a href="members/casus.5949/" class="avatar Av5949s" data-avatarhtml="true"><img src="data/avatars/s/5/5949.jpg?1459703928" width="48" height="48" alt="casus"></a>
+
+	
+
+	<a href="posts/273876/">
+		S7E34: Elemental
+	</a>
+
+	<div class="userTitle">
+									<a href="members/casus.5949/" class="username">casus</a> replied <abbr class="DateTime" data-time="1462335812" data-diff="4213" data-datestring="May 4, 2016" data-timestring="12:23 AM" title="May 4, 2016 at 12:23 AM">Today at 12:23 AM</abbr>
+								</div>
+	
+	
+</li>
+
+						
+							<li class="thread-6388 thread-node-67">
+	<a href="members/casus.5949/" class="avatar Av5949s" data-avatarhtml="true"><img src="data/avatars/s/5/5949.jpg?1459703928" width="48" height="48" alt="casus"></a>
+
+	
+
+	<a href="posts/273874/">
+		S07E33: Normal Man
+	</a>
+
+	<div class="userTitle">
+									<a href="members/casus.5949/" class="username">casus</a> replied <abbr class="DateTime" data-time="1462335386" data-diff="4639" data-datestring="May 4, 2016" data-timestring="12:16 AM" title="May 4, 2016 at 12:16 AM">Today at 12:16 AM</abbr>
+								</div>
+	
+	
+</li>
+
+						
+							<li class="thread-6386 thread-node-67">
+	<a href="members/gunterfan.2727/" class="avatar Av2727s" data-avatarhtml="true"><img src="data/avatars/s/2/2727.jpg?1453420072" width="48" height="48" alt="GunterFan"></a>
+
+	
+
+	<a href="posts/273871/">
+		S07E32: Bun Bun
+	</a>
+
+	<div class="userTitle">
+									<a href="members/gunterfan.2727/" class="username">GunterFan</a> replied <abbr class="DateTime" data-time="1462331220" data-diff="8805" data-datestring="May 3, 2016" data-timestring="11:07 PM" title="May 3, 2016 at 11:07 PM">Yesterday at 11:07 PM</abbr>
+								</div>
+	
+	
+</li>
+
+						
+
+					
+				
+			</ul>
+		</div>
+
+		<div id="PreviewTooltip">
+	<span class="arrow"><span></span></span>
+	
+	<div class="section">
+		<div class="primaryContent previewContent">
+			<span class="PreviewContents">Loading...</span>
+		</div>
+	</div>
+</div>
+				
+			</div>
+		
+	</div>
+
+	<div class="section widget-group-no-name widget-container">
+		
+			<div class="secondaryContent widget WidgetFramework_WidgetRenderer_OnlineUsers" id="widget-3">
+				
+					<h3>
+						
+							<a href="online/">Members Online Now</a>
+						
+					</h3>
+					<div class="userList WidgetFramework_WidgetRenderer_OnlineUsers">
+	
+		
+		
+		<ol class="listInline">
+			
+				
+					<li class="user-6151">
+					
+						<a href="members/kephri.6151/" class="username" dir="auto">Kephri</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-5887">
+					
+						<a href="members/bread-lady.5887/" class="username" dir="auto">Bread Lady</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6060">
+					
+						<a href="members/mrhathead.6060/" class="username" dir="auto">mrhathead</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-5044">
+					
+						<a href="members/biggerboot.5044/" class="username" dir="auto"><span class="style14">Biggerboot</span></a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6964">
+					
+						<a href="members/ponderingcat.6964/" class="username" dir="auto">PonderingCat</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6230">
+					
+						<a href="members/a-blob.6230/" class="username" dir="auto">A Blob</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6968">
+					
+						<a href="members/qcmd.6968/" class="username" dir="auto">qcmd</a>
+					
+					</li>
+				
+			
+			
+		</ol>
+	
+	
+	<div class="footnote">
+		
+			Total: 30 (members: 7, guests: 19, robots: 4)
+		
+	</div>
+</div>
+				
+			</div>
+		
+	</div>
+
+	<div class="section widget-group-no-name widget-container">
+		
+			<div class="secondaryContent widget WidgetFramework_WidgetRenderer_ProfilePosts" id="widget-6">
+				
+					<h3>
+						
+							<a href="find-new/profile-posts">Status Updates</a>
+						
+					</h3>
+					<ul class="WidgetFramework_WidgetRenderer_ProfilePosts_ProfilePostList">
+	
+</ul>
+				
+			</div>
+		
+	</div>
+
+	<div class="section widget-group-no-name widget-container">
+		
+			<div class="secondaryContent widget WidgetFramework_WidgetRenderer_Stats" id="widget-4">
+				
+					<h3>
+						
+							Forum Statistics
+						
+					</h3>
+					<div class="pairsJustified">
+	<dl class="discussionCount"><dt>Discussions:</dt>
+		<dd>6,258</dd></dl>
+	<dl class="messageCount"><dt>Messages:</dt>
+		<dd>273,045</dd></dl>
+	<dl class="memberCount"><dt>Members:</dt>
+		<dd>6,843</dd></dl>
+	<dl><dt>Latest Member:</dt>
+		<dd><a href="members/qcmd.6968/" class="username" dir="auto">qcmd</a></dd></dl>
+	<!-- slot: forum_stats_extra -->
+</div>
+				
+			</div>
+		
+	</div>
+
+<div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-5">
+			
+	
+	<div class="section infoBlock sharePage">
+		<div class="secondaryContent">
+			<h3>Share This Page</h3>
+			
+				
+				
+					<div class="tweet shareControl">
+						<iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.fd774b599f565016d763dd860cb31c79.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;related=landofooo&amp;size=m&amp;text=The%20LandOfOoo&amp;time=1462350303874&amp;type=share&amp;url=https%3A%2F%2Flandofooo.com%2Fcommunity%2F" style="position: static; visibility: visible; width: 60px; height: 20px;" data-url="https://landofooo.com/community/"></iframe>
+					</div>
+						
+				
+					<div class="facebookLike shareControl">
+						
+						<div class="fb-like fb_iframe_widget" data-href="https://landofooo.com/community/" data-layout="button_count" data-action="like" data-font="trebuchet ms" data-colorscheme="light" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=425131034358731&amp;color_scheme=light&amp;container_width=0&amp;font=trebuchet%20ms&amp;href=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey"><span style="vertical-align: bottom; width: 77px; height: 20px;"><iframe name="f2e0705dd4937a4" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:like Facebook Social Plugin" src="https://www.facebook.com/v2.4/plugins/like.php?action=like&amp;app_id=425131034358731&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D42%23cb%3Df3db664c1b889fc%26domain%3Dlandofooo.com%26origin%3Dhttps%253A%252F%252Flandofooo.com%252Ff2f7b4019b3d368%26relation%3Dparent.parent&amp;color_scheme=light&amp;container_width=0&amp;font=trebuchet%20ms&amp;href=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey" style="border: none; visibility: visible; width: 77px; height: 20px;" class=""></iframe></span></div>
+					</div>
+				
+				
+					<div class="plusone shareControl">
+						<div id="___plusone_0" style="text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 90px; height: 20px; background: transparent;"><iframe frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 90px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 20px;" tabindex="0" vspace="0" width="100%" id="I0_1462350303750" name="I0_1462350303750" src="https://apis.google.com/u/0/se/0/_/+1/fastbutton?usegapi=1&amp;size=medium&amp;count=true&amp;hl=en-US&amp;origin=https%3A%2F%2Flandofooo.com&amp;url=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;gsrc=3p&amp;ic=1&amp;jsh=m%3B%2F_%2Fscs%2Fapps-static%2F_%2Fjs%2Fk%3Doz.gapi.en.Xr5392wdai0.O%2Fm%3D__features__%2Fam%3DAQ%2Frt%3Dj%2Fd%3D1%2Frs%3DAGLTcCPDv22tBAls6NCV0AcnP6Dm4xm7yg#_methods=onPlusOne%2C_ready%2C_close%2C_open%2C_resizeMe%2C_renderstart%2Concircled%2Cdrefresh%2Cerefresh%2Conload&amp;id=I0_1462350303750&amp;parent=https%3A%2F%2Flandofooo.com&amp;pfname=&amp;rpctoken=16034965" data-gapiattached="true" title="+1"></iframe></div>
+					</div>
+					
+						
+			
+		</div>
+	</div>
+
+	</div>
+
+	<div class="section funbox">
+		<div class=" funboxWrapper">
+		
+		
+			
+				
+									
+					
+					
+					<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_sidebar_bottom_new -->
+<ins class="adsbygoogle" style="display:inline-block;width:250px;height:250px" data-ad-client="ca-pub-5808314520834618" data-ad-slot="7518055085"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+					
+					
+				
+			
+		
+		
+		</div>
+	</div>
+
+							</div>
+						</div>
+					</aside>*@
+				</div>

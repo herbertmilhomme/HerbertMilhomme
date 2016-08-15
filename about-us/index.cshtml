@@ -1,0 +1,97 @@
+@{
+    //Layout = "~/Layouts/Template/about.cshtml";
+    Page.Title = "About";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+}
+@*<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" ><!-- InstanceBegin template="/Templates/About-Us.dwt" codeOutsideHTMLIsLocked="false" --> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" >
+<!--<![endif]-->
+  <head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- InstanceBeginEditable name="doctitle" --><title>Page.Title</title><!-- InstanceEndEditable --><!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+	
+    <!-- {module_contentholder, name="_Template - Head Scripts"} -->	
+	@RenderPage("~/_System/ContentHolders/_Template - Head Scripts.cshtml")
+	
+  </head>
+  <body id="top" class="thebg two-column">
+    
+    <!-- Header -->	
+	<!-- {module_contentholder, name="_Template - Header"} -->	
+	@RenderPage("~/_System/ContentHolders/_Template - Header.cshtml")
+	<!-- /Header -->
+	
+	<div class="clearfix"></div>		
+
+	<!-- Content -->
+	<div class="container page-top">
+		
+		<!-- MAIN Content -->
+		<div class="col-md-8 pagecontainer content-pad">
+			
+			*@<!-- InstanceBeginEditable name="ContentArea" --><h2>About Me</h2>
+<div class="line3"></div>
+<p class="lato size20 slim textcenter margtop20">I am a web-developer/programmer that specilizes in C# ASP.NET framework. I really look forward to servicing companies and other businesses and aim to providing a complete business solution:  Me! I want to make it my business, to make your next business move a success. Let's grow to new heights together! <!--&#45; <em>[to] Coloniel Heights!</em>As one of the world's leading online travel tour companies, we make it easy to plan your next business or leisure trip.&#8212;
+--></p>
+<hr class="margtop20" />
+<h2>About the Site</h2>
+<p>This website is was made as an exhibition to showcase and present my skills in the form of my personal portfolio, practice website, and API demo for program developing.</p>
+<p>I started my webfolio using an html template (just the html), as my layout, and starting-place model for all necessary components. I crafted all the .NET framework scripts myself, in C#, using my personal expertise and resources found across the internet. The designs are also not mine; the css files were outsourced from other template files, and are swappable. I can do a complete design overhaul, changing in and out design layout to extreme levels without jeopardizing any of the components and scripts I have currently running. Similar to the concept of &lsquo;plug-and-play,&rsquo; I designed the components of the website to fit almost any theme, once the layout has been set.</p>
+<p>The purpose of this website is merely to express myself and my skills as a web-<em>developer</em> and as a &ldquo;programmer.&rdquo;</p>
+<!--<p>I've spent countless hours on this site, and yes, i know it isnt perfect and filled with many bugs. I'm honestly losing track of where i need to retu</p>-->
+<hr class="margtop20" />
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor aliquam felis, sit amet tempus nibh ullamcorper nec. Maecenas suscipit dolor at blandit congue. Sed adipiscing, odio feugiat pellentesque tincidunt, est leo vestibulum erat, ac pharetra massa justo ac lorem. Libero temporibus assumenda vel animi numquam ut vero quaerat soluta illum odit. Quia aliquid ipsam nesciunt necessitatibus pariatur debitis earum quis.</p>
+@*<hr />
+<h3>Meet the Team</h3>
+<!-- {module_webapps,Team Members,a} -->	
+@RenderPage("~/Layouts/WebApps/Team Members/list.cshtml")
+<!-- InstanceEndEditable -->
+			
+		</div>
+		<!-- /MAIN Content -->
+		
+		<!-- Sidebar Content -->
+		<div class="col-md-4 sidebar">
+		
+			<!-- Features Sidenav -->	
+			<!-- {module_contentholder, name="_Sidebar - Nav - About"} -->	
+	@RenderPage("~/_System/ContentHolders/_Sidebar - Nav - About.cshtml")
+			<!-- /Features Sidenav -->
+			
+			<!-- Deals -->	
+			<!-- {module_contentholder, name="_Sidebar - Deals"} -->	
+	@RenderPage("~/_System/ContentHolders/_Sidebar - Deals.cshtml")
+			<!-- /Deals -->
+			
+			<!-- Help -->	
+			<!-- {module_contentholder, name="_Sidebar - Help"} -->	
+	@RenderPage("~/_System/ContentHolders/_Sidebar - Help.cshtml")
+			<!-- /Help -->
+			
+		</div>
+		<!-- /Sidebar Content -->
+			
+	</div>
+	<!-- /Content -->
+				
+	<!-- FOOTER -->
+	<!-- {module_contentholder, name="_Template - Footer"} -->	
+	@RenderPage("~/_System/ContentHolders/_Template - Footer.cshtml")
+	<!-- /FOOTER -->
+			
+	<!-- {module_contentholder, name="_Template - Footer Scripts"} -->	
+	@RenderPage("~/_System/ContentHolders/_Template - Footer Scripts.cshtml")
+	
+  </body>
+<!-- InstanceEnd --></html>*@

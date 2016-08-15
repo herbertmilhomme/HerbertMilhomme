@@ -1,0 +1,18 @@
+﻿@{
+	DateTime date = DateTime.Now;
+	if(Request.QueryString[null] == "date" || Request.QueryString["date"] == ""){
+        date = DateTime.Now;}
+    if(Request.QueryString["date"] != null){
+        date = DateTime.Parse(Request.QueryString["date"]);}
+
+	var db = Database.Open("ColonielHeights");
+	var messages = db.Query("SELECT * FROM website_livechat WHERE PostDate>@0 ORDER BY PostDate ASC", date);	//date.ToString("d")
+}
+@foreach(var msg in messages){
+	if((bool)msg.removemsg){<div><p>This message has been removed.</p></div>}else{
+<div>
+	<p>[<time datetime="@msg.postdate">@msg.postdate</time>]
+	<span>@msg.username</span>:
+	@msg.postmsg</p>
+</div>}
+}

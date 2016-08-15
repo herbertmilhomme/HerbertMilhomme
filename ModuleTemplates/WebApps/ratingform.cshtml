@@ -1,0 +1,84 @@
+﻿@{
+    //RatingID-
+	//PageID
+	//PageUrl
+	//ItemID
+	//Helpful-
+	//Name-
+	//Website-
+	//Email-
+	//Comments-
+	//Date-
+	//UserID-
+	//SessionID- If submitted, cannot submit again (display thank you)
+
+	/*
+	if(IsPost){
+        string EncodedResponse = Request.Form["g-Recaptcha-Response"];
+        //bool IsCaptchaValid = (ReCaptchaClass.Validate(EncodedResponse) == "True");// ? true : false
+        var client = new System.Net.WebClient();
+        string PrivateKey = "6LeZhAcTAAAAAPLWCUHd4R7KSk7qVL4f-WJsyWCp";
+        var GoogleReply = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", PrivateKey, EncodedResponse));
+        bool IsCaptchaValid = GoogleReply.ToString().Contains("true");
+        //var captchaResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<object>(GoogleReply);
+
+        if (!IsCaptchaValid) {
+            //Valid Request
+            ModelState.AddError("recaptcha", "Captcha response was not successful");
+        }
+        
+        // Validate the user's captcha answer
+        // if (!ReCaptcha.Validate("PRIVATE_KEY")) {
+        //     ModelState.AddError("recaptcha", "Captcha response was not correct");
+        // }        
+        
+        // If all information is valid, create a new account
+        if (Validation.IsValid() && IsCaptchaValid) {}
+
+		// Redirect back to the return URL or homepage
+        var returnUrl = Request.QueryString["ReturnUrl"];
+        Context.RedirectLocal(returnUrl);
+    }*/
+}
+
+<form name="catratingform_@PageData[0]" method="post" action="@Href("/RatingProcess?PageID="+PageData[1]+"&ItemID="+PageData[0]+"&returnUrl="+ Request.Url.LocalPath+"#catratingform_"+PageData[0])" @*onsubmit="return checkWholeForm2343(this)"*@>
+		    <div class="form">
+		        <div class="item">   
+                    <label>Was this helpful?</label><br />
+		            No   <input type="radio" name="Rating" value="1" />   
+                    <input type="radio" name="Rating" value="2" />   
+                    <input type="radio" name="Rating" checked="checked" value="3" />   
+                    <input type="radio" name="Rating" value="4" />   
+                    <input type="radio" name="Rating" value="5" />   Very   
+                </div>
+		        <div class="item">   
+                    <label>Name (optional)</label><br />
+		            <input type="text" class="cat_textbox_small" name="FullName" maxlength="255" />   
+                </div>
+		        <div class="item">   
+                    <label>Website (optional)</label><br />
+		            <input type="text" class="cat_textbox_small" name="Website" maxlength="255" />   
+                </div>
+		        <div class="item">   
+                    <label>Email Address (optional)</label><br />
+		            <input type="text" class="cat_textbox_small" name="EmailAddress" maxlength="255" />   
+                </div><!--
+		        <div class="item">   
+                    <label>Enter Word Verification in box below</label><br />
+		            <!--{module_captchav2}--
+                    <div class="g-recaptcha" data-sitekey="6LeZhAcTAAAAAPx3LLf1H7tRH5gB_aHb0b0plFrM"></div><br> 
+                </div>-->
+		        <div class="item">   
+                    <label>Comment (optional)</label><br />
+		            <textarea class="cat_listbox_small" name="Feedback"></textarea>   
+                </div>
+		        <div class="item">   
+                    <input type="submit" class="button small" value="Submit" />   
+                </div>
+		    </div>
+		    @*<script type="text/javascript" src="/CatalystScripts/ValidationFunctions.js"></script>
+		    <script type="text/javascript">   //<![CDATA[
+		   function checkWholeForm2343(theForm){var why = "";if (theForm.EmailAddress) if (theForm.EmailAddress.value.length > 0) why += checkEmail(theForm.EmailAddress.value);if (theForm.CaptchaV2) why += isEmpty(theForm.CaptchaV2.value, "Enter Word Verification in box below");if (why != ""){alert(why);return false;}return true;}   
+		//]]>   
+			</script>*@
+		</form>

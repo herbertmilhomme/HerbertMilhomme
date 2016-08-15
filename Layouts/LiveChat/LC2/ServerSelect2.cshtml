@@ -1,0 +1,122 @@
+﻿@{
+/*
+Join a server
+--Check to see if server is available
+	--if not available, decline
+--Redirect to server
+
+or
+
+Host a server
+--Check to see if server is available
+	--if available, decline
+--Create and add server
+--Redirect to server
+--Settings Menu (Tabs Modal)
+	--if member, set passsword (PageData)
+	--Password
+
+
+Extend session time
+Session end, terminate server
+
+
+If server address with no log
+open modal with log-in
+--SignIn 
+--Redirect to login page (Register or SignIn)
+
+or 
+
+Guest
+--Choose alias
+--Save Alias to Cookie
+--Save Terms to Cookie
+--Save Session to Cookie
+*/   
+	var alias = Request.Form["alias"];
+	var servername = Request.Form["servername"];
+	var db = Database.Open("ColonielHeights");//StarterSite
+	if(IsPost){
+		var variable = db.QuerySingle("SELECT * FROM website_livechatServer WHERE LOWER(servername) = LOWER(@0)", servername);
+            if (variable == null) {//&& isHOST
+                //if(2==1){
+					// Insert email into the profile table
+					db.Execute("INSERT INTO website_livechatServer (servername, hostid, sessionkey, member) VALUES (@0,@1,@2,'@3')","/"+servername,WebSecurity.IsAuthenticated ? WebSecurity.CurrentUserId : 0,Session["SESSION_KEY"],WebSecurity.IsAuthenticated);
+					Response.Redirect(Request.Url.LocalPath/*"~/features/livechat2/"*/+servername);//Request.Url.LocalPath
+				/*}else{
+					//Server does not exist, cannot Join.
+				}*/
+			}
+	}
+}
+
+<div class="wrapper-page animated fadeInDown clearfix">
+            <div class="panel panel-color panel-primary">
+                <div class="panel-heading"> 
+                   <h3 class="text-center m-t-10" style="color: #fff"><strong>Host or Join a Server</strong></h3>
+                </div> 
+				<form id="ServerSelect2" class="form-horizontal m-t-40" method="post">
+                    <!--
+					<div class="form-group">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="email" required="" placeholder="Email">
+                        </div>
+                    </div>
+					-->
+										<div class="form-group clearfix">
+                                            <label class="col-lg-2 control-label" for="alias">Display Name</label>
+                                            <div class="col-lg-10">
+                                                <input id="alias" name="alias" type="text" class="form-control" value="@alias" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group clearfix">
+                                            <label class="col-lg-2 control-label " for="servername">Server Name*</label>
+                                            <div class="col-lg-10">
+                                                <input id="servername" name="servername" type="text" class="required servername form-control" value="@servername" />
+												@Html.ValidationMessage("servername",new Dictionary<string, object>(){{ "class", "help-block"}})
+                                            </div>
+                                        </div>
+                                        <div class="form-group clearfix">
+                                            <label class="col-lg-2 control-label " for="serverpass">Server Password (optional)</label>
+                                            <div class="col-lg-10">
+                                                <input id="serverpass" name="serverpass" type="text" class="serverpass form-control" value="" />
+												@Html.ValidationMessage("serverpass",new Dictionary<string, object>(){{ "class", "help-block"}})
+                                            </div>
+                                        </div>
+                                        <div class="form-group clearfix">
+                                            <div class="col-lg-12">
+                                                <label class="cr-styled">
+                                                    <input type="checkbox">
+                                                    <i class="fa"></i> 
+                                                    I agree with and 
+													I accept the <strong><a href="#">Terms and Conditions</a></strong>.
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group clearfix">
+                                            <label class="col-lg-12 control-label ">(*) Mandatory</label>
+                                        </div>
+                    <div class="form-group text-right">
+                        <div class="col-xs-12">
+                            <button class="btn btn-default btn-custom w-md" @*onclick="javascript:submitForm('/Layouts/LiveChat/LC2/Host.cshtml')"*@ formaction="/Layouts/LiveChat/LC2/Host.cshtml" type="submit">Host</button>
+                            <button class="btn btn-info w-md" @*onclick="javascript:submitForm('/Layouts/LiveChat/LC2/Join.cshtml')"*@ formaction="/Layouts/LiveChat/LC2/Join.cshtml" type="submit">Join</button>
+                        </div>
+                    </div>
+										<!--<div class="form-group clearfix">
+                                            <div class="col-lg-12">
+												<a href="@Href("~/Account/Login?returnUrl="+Request.Url.LocalPath)">
+													<button class="btn btn-info btn-custom m-b-5" type="button" onclick="">Sign-in</button>
+												</a>
+											</div>
+										</div>-->
+                    <div class="form-group m-t-30">
+                        <div class="col-sm-12 text-center">
+							@if(WebSecurity.IsAuthenticated){Html.Hidden("logged",true,new Dictionary<string, object>(){{ "id", "logged"}, {"checked","checked"}});}
+							else{Html.Hidden("logged",false,new Dictionary<string, object>(){{ "id", "logged"}, {"checked","unchecked"}});
+                            <a href="@Href("~/Account/Login?returnUrl="+Request.Url.LocalPath)">Already have account?</a>}
+                        </div>
+                    </div>
+                </form>      
+            </div>
+        </div>

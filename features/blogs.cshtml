@@ -1,0 +1,85 @@
+﻿@{
+    //Layout = "~/Layouts/Template/blog.cshtml";
+    Page.Title = "Blogs";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+}
+<!-- Left Ads Banner -->
+        @RenderSection("leftbanner", required: false)
+	    <!-- /Left Ads Banner -->
+		
+		
+	    <!-- MAIN Content -->
+        <div class="col-md-8 pagecontainer content-pad">  
+			@*RenderBody()*@
+<!-- InstanceBeginEditable name="ContentArea" -->
+<h2>@Page.Title</h2>
+<!--{module_forum,a,}-->
+@if(UrlData.Count == 0){
+	@RenderPage("~/Layouts/Blog/postlist.cshtml", 10)
+	//<hr />
+	//RenderPage("~/ModuleTemplates/WebApps/Pagination/pagination.cshtml",)
+}else if(UrlData.Count == 1){
+    @RenderPage("~/Layouts/Blog/post.cshtml")
+}@*else if(UrlData.Count == 2){
+    @RenderPage("~/Layouts/Forum/posts_page.cshtml") 
+}*@
+<!-- InstanceEndEditable -->
+	    </div>
+		<!-- /MAIN Content -->
+		
+		<!-- Sidebar Content -->
+			<aside class="col-md-4 sidebar">
+			
+				<!-- Recent-Blogs Sidenav -->	
+				@*<div class="pagecontainer sidenav">
+					<div>
+						<span class="icon"><em class="icon-link"></em></span>
+						<h3 class="opensans">Recent Posts</h3>
+						{tag_blogrecentpost}
+					</div>
+				</div>*@
+				@RenderPage("~/_System/ContentHolders/_Sidebar - Blog - Recent.cshtml")
+				<!-- /Recent-Blogs Sidenav -->
+			
+				<!-- Blog-Tags Sidenav -->	
+				@*<div class="pagecontainer sidenav">
+					<div>
+						<span class="icon"><em class="icon-link"></em></span>
+						<h3 class="opensans">Recent Posts</h3>
+						{tag_blogrecentpost}
+					</div>
+				</div>*@
+				@RenderPage("~/_System/ContentHolders/_Sidebar - Blog - Tags.cshtml")
+				<!-- /Blog-Tags Sidenav -->
+				
+				<!-- Archive Sidenav -->	
+				@*<div class="pagecontainer margtop20">
+					<div>
+						<span class="icon"><em class="icon-archive"></em></span>
+						<h3 class="opensans">Archive</h3>
+						<!--{tag_blogpostarchive}-->
+                        @RenderPage("~/Layouts/Blog/Archive.cshtml")
+					</div>
+				</div>*@
+				@RenderPage("~/_System/ContentHolders/_Sidebar - Blog - Archive.cshtml")
+				<!-- /Archive Sidenav -->
+			
+			@*<!-- Help -->	
+			<!-- {module_contentholder, name="_Sidebar - Help"} --	
+				@RenderPage("~/_System/ContentHolders/_Sidebar - Help.cshtml")
+			<!-- /Help -->*@
+
+        <!-- Right Ads Banner -->
+        @RenderSection("rightbanner", required: false)
+	    <!-- /Right Ads Banner -->
+
+			</aside>
+		<!-- /Sidebar Content -->

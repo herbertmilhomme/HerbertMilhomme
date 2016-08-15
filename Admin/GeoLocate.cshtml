@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+@{
+		// Full path to GeoLiteCity.dat file
+        string FullDBPath = Server.MapPath("~/App_Data/GeoLiteCity.dat");
+        // Visitor's IP address
+        string VisitorIP = Request.ServerVariables["REMOTE_ADDR"];
+ 
+        // Create objects needed for geo targeting
+        Geotargeting.LookupService ls = new Geotargeting.LookupService(FullDBPath,
+		Geotargeting.LookupService.GEOIP_STANDARD);
+        Geotargeting.Location visitorLocation = ls.getLocation(VisitorIP);
+ 
+        // Get geo targeting data 
+        <text>Response.Write("Your IP Address: " + @VisitorIP + "<br />");
+        Response.Write("Your country: " + @visitorLocation.countryName + "<br />");
+        Response.Write("Your country code: " + @visitorLocation.countryCode + "<br />");
+        Response.Write("Your region: " + @visitorLocation.region + "<br />");
+        Response.Write("Your city: " + @visitorLocation.city + "<br />");
+        Response.Write("Your postal code: " + @visitorLocation.postalCode + "<br />");
+        Response.Write("Area code: " + @visitorLocation.area_code + "<br />");
+        Response.Write("dma: " + @visitorLocation.dma_code + "<br />");
+        Response.Write("Latitude: " + @visitorLocation.latitude + "<br />");
+        Response.Write("Longitude: " + @visitorLocation.longitude + "<br />");</text>
+}
+
+
+    </body>
+</html>

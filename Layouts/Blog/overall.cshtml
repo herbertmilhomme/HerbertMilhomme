@@ -1,0 +1,79 @@
+@{
+    //var SearchQuery = Request.Form["SearchQuery"] ?? Request.QueryString["SearchQuery"]; //Or Request.Form[]
+    var db = Database.Open("ColonielHeights");
+    //var search = db.Query("SELECT * FROM tag_menuitemlabel");
+    var blogs = db.Query("SELECT * FROM website_blogs WHERE dateposted<=getdate() ORDER BY dateposted desc");
+    /*int numperpg = 10;
+    
+    int currentpage = 1;
+    int tag_counter = 0;
+    if(UrlData[0].IsInt){
+        currentpage = UrlData[0];
+    }
+    if(!currentpage.IsEmpty){
+        if(currentpage.IsInt){
+            if(currentpage > (blogs.Count / numperpg)){
+                currentpage = blogs.Count / numperpg;
+            }
+            if(currentpage < 1){
+                currentpage = 1;
+            }
+            tag_counter = currentpage * numperpg;
+        }
+    }if(!UrlData[0].IsInt){
+        Response.Redirect(currentpage);
+    }*/
+    //blogs.Count / 10;
+}		
+		<div class="blog-container">
+		
+			<!-- MAIN Content -->
+			<div class="col-md-8 pagecontainer content-pad">  
+				<h2>{tag_blogtitle}</h2>
+				@RenderPage("~/Layouts/Blog/postlist.cshtml")
+				<hr />
+				<p class="page-nav"><!--{tag_previouspage} {tag_pagination} {tag_nextpage}-->
+                @*if(i % numperpg){
+        if(i>numperpg){
+            <a id="previouspage" href="@Href(currentpage--)">Previous</a>
+        }else{
+            <a id="previouspage" href="#" style="display:none">Previous</a>  
+        }for(int pg = 0; pg < (blogs.Count / numperpg); pg++){
+            if(pg == currentpage){<span class="pagination" id="pagination"> @pg </span>}
+            else{<a id="" class="pagination" href="@Href(pg)"> @pg </a>} 
+        }
+        if(i < blogs.Count){
+            <a id="nextpage" href="@Href(currentpage++)">Next</a>
+        }else{
+            <a id="nextpage" href="#" style="display:none">Next</a>
+        }    
+        break;
+    }*@
+                </p>
+			</div>
+			
+			<!-- Sidebar Content -->
+			<aside class="col-md-4 sidebar">
+			
+				<div class="pagecontainer sidenav">
+					<div>
+						<span class="icon"><em class="icon-link"></em></span>
+						<h3 class="opensans">Recent Posts</h3>
+						{tag_blogrecentpost}
+					</div>
+				</div>
+				
+				<div class="pagecontainer margtop20">
+					<div>
+						<span class="icon"><em class="icon-archive"></em></span>
+						<h3 class="opensans">Archive</h3>
+						<!--{tag_blogpostarchive}-->
+                        @RenderPage("~/Layouts/Blog/Archive.cshtml")
+					</div>
+				</div>
+
+			</aside>
+			
+		</div>
+		<!-- END .blog-container -->
+   

@@ -1,0 +1,32 @@
+@{
+    //var db = Database.Open("eCommerce");
+    //var catalogues = db.QuerySingle("SELECT * FROM catalog"); //product, services, or all
+    var db = Database.Open("ColonielHeights");
+    var catalogues = db.Query("SELECT * FROM [taxonomy_en-US] WHERE ClassTier=1");
+}
+@foreach(var catalog in catalogues){
+	<div itemtype="http://schema.org/Enumeration" class="shop-catalogue clear">   
+		<h4 itemprop="name"><a href="/shop/catalog/@catalog.classname">@catalog.classname</a></h4>   
+		<div class="image">
+			<a href="/shop/catalog/@catalog.classname">@if(File.Exists(Href("/_assets/images/shop/catalog-"+catalog.classid+".jpg"))){<text><img itemprop="image" src="@Href("/_assets/images/shop/catalog-"+catalog.classid+".jpg")" class="" alt="@catalog.breadcrumbs"></text>}
+			else{<img itemprop="image" src="http://placehold.it/148x90/000000/ffffff&amp;text=Placeholder+@catalog.classid" class="" alt="No image set - Placeholder">}</a>
+		</div>
+	</div>}  
+@*<script>
+    //on product menu slecct, swap catalog list with new item filter
+function showCatalog(str) {
+  var xhttp4;/*
+  if (str == "") {
+    document.getElementById("cityS").innerHTML = "";
+    return;
+  }*/
+  xhttp4 = new XMLHttpRequest();
+  xhttp4.onreadystatechange = function() {
+    if (xhttp4.readyState == 4 && xhttp4.status == 200) {
+      document.getElementById("cityS").innerHTML = xhttp4.responseText;
+    }
+  }
+  xhttp4.open("GET", "locations.cshtml?type="+str, true);
+  xhttp4.send();
+}
+</script>*@

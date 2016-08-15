@@ -1,0 +1,18 @@
+﻿@{
+    //Layout = "~/Layouts/Template/features.cshtml";
+    Page.Title = "Live Chat";
+	/*if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}*/
+	//HttpApplication;
+	//HttpContext.Current.Session["yourSessionKey"] = value;
+	//AppState["TotalOnlineChatters"] = (int)AppState["TotalOnlineChatters"] + 1; 
+	//Request.Url.LocalPath on this page
+}
+@RenderPage("~/Layouts/LiveChat/chat_window.cshtml")

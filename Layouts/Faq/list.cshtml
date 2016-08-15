@@ -1,0 +1,57 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    var FAQs = db.Query("SELECT * FROM website_faqs WHERE display='true'");
+}@*
+<div class="faq-question">
+	<h3>{tag_question}</h3>
+	<p>Date: {tag_releasedate}</p>
+</div>
+*@
+@foreach(var item in FAQs){
+<div class="faq-question">
+	<div class="question">
+		<a href="#" onclick="showFAQ(@item.faqid);return false;" class="">@item.question</a>
+		<div id="catfaq_@item.faqid">
+			<div class="faq-details">
+				<div class="answer">
+					<p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat,  ...</p>
+				</div>
+			</div>
+			@*@RenderPage("~/Layouts/Faq/detail.cshtml", item.faqid)*@
+		</div>
+	</div>
+</div>}
+<!--
+<div class="faq-question">
+<div class="question"><a href="#" onclick="showFAQ(35976);return false;">Tip 2</a><div style="display:none;" id="catfaq_35976"></div>
+</div>
+</div>
+-->
+<script type="text/javascript">
+//<![CDATA[
+function showFAQ(faqid){
+	var obj = document.getElementById('catfaq_'+faqid);
+	if(obj){
+		if (obj.innerHTML.length == 0){
+			obj.innerHTML = '<span style=\'font: 10pt arial;color:#ff0000;\'>Loading..</span>';
+			//var response = CMS.FAQRetrieve.ServerSideFAQRetrieve(faqid);
+			//document.getElementById('catfaq_'+faqid).innerHTML = xhttp.responseText;
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if (xhttp.readyState == 4 && xhttp.status == 200) {
+					//document.getElementById("display-text").innerHTML = xhttp.responseText;
+					document.getElementById('catfaq_'+faqid).innerHTML = xhttp.responseText;
+				}
+			}
+			xhttp.open("GET", "/Layouts/Faq/detail?faqid="+faqid, true);//Layouts/LiveChat/chat_msgs?date=ChatStart
+			xhttp.send();
+			obj.style.display = 'block';
+		}else if(obj.style.display == 'none' && obj.innerHTML.length != 0){
+			obj.style.display = 'block';
+		}else{
+			obj.style.display = 'none';
+		}
+	}
+}
+//]]>
+</script>

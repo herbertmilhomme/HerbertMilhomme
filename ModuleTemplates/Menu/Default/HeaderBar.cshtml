@@ -1,0 +1,23 @@
+﻿@{
+    var db = Database.Open("ColonielHeights");
+    var navmenu = db.Query("SELECT * FROM tag_menuitemlabel");
+    var rootdir = db.Query("SELECT * FROM tag_menuitemlabel WHERE tag_menugroup = 'root'");
+
+    var currentpage = UrlData[0];
+}
+<ul>@foreach(var item in rootdir){
+    <li id="@item.tag_menuitemidname_withid" class="@item.tag_menuitemcssclass_withclass @if(item.tag_menuitemlabel == currentpage){<text>active-page</text>}">        
+        @if(item.tag_menuitemlabel == currentpage){
+            <span class="arrow">
+	            <span class="shape1"></span>
+	            <span class="shape2"></span>
+            </span>
+        }
+        <a href="@Href("~/" + item.tag_menuitemurl)">@item.tag_menuitemlabel</a>@if(item.tag_menuitemlabel == navmenu.tag_menugroup){
+        <ul>@foreach(var dropdown in db.Query("SELECT * FROM tag_menuitemlabel WHERE tag_menugroup = '@0'",item.tag_menuitemlabel)){
+            <li id="@dropdown.tag_menuitemidname_withid" class="@dropdown.tag_menuitemcssclass_withclass">
+                <a href="@Href("~/" + dropdown.tag_menuitemurl)">@dropdown.tag_menuitemlabel</a>
+            </li>}
+        </ul>}
+    </li>}
+</ul>

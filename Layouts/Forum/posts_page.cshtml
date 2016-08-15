@@ -1,0 +1,126 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    var topic = UrlData[1];//db.Query("SELECT * FROM website_forumthread");
+    IEnumerable<dynamic> threads=null;
+	bool subscribe = false;
+
+    //FORUM NAME
+    string forumname = UrlData[0];//"Forum Name";
+	string category = "";
+    int discussion; //= UrlData[0];
+    if(UrlData[0] != null && UrlData[0] != ""){
+        if(int.TryParse(UrlData[0], out discussion)){
+            if(discussion < 1){
+                discussion = 1;
+            }
+            //tag_counter = discussion * numperpg;
+            threads = db.Query("SELECT * FROM website_forumthread WHERE forumid LIKE @0 AND remove='false'", discussion);
+            //forumname = UrlData[0];//db.QueryValue("SELECT name FROM website_forumdiscussion WHERE forumid=@0",discussion);
+            //forumname = UrlData[0];//db.QueryValue("SELECT name FROM website_forumdiscussion WHERE forumid=@0",discussion);
+        }else{
+            //Response.Redirect("?SearchQuery=" + SearchQuery + "/" + discussion);
+            threads = db.Query("SELECT * FROM website_forumdiscussion as d, website_forumthread as t WHERE d.name LIKE '@0' AND t.Forumid=d.forumid AND t.[remove]='false'",discussion);
+            //category = db.QueryValue("SELECT catagoryname FROM website_forumcatagory WHERE catagoryid=@0",threads.catagoryid);
+            //forumname = db.QueryValue("SELECT name FROM website_forumdiscussion WHERE name='@0'",discussion);
+        }
+    }else{threads = db.Query("SELECT * FROM website_forumthread WHERE remove='false'"); forumname = "All Discussions";}
+
+    //THREAD NAME
+    int thread = 1; //= UrlData[0];
+    if(UrlData[1] != null && UrlData[1] != ""){
+        if(int.TryParse(UrlData[1], out thread)){
+            if(thread < 1){
+                thread = 1;
+            }
+            //tag_counter = discussion * numperpg;
+            topic = db.QueryValue("SELECT topicname FROM website_forumthread WHERE threadid=@0 AND remove='false'", thread);
+        }else{
+            //Response.Redirect("?SearchQuery=" + SearchQuery + "/" + discussion);
+            topic = db.QueryValue("SELECT topicname FROM website_forumdiscussion as d, website_forumthread as t, website_forumpost as p WHERE t.topicname LIKE @0 AND t.Forumid=d.forumid AND t.[remove]='false'",UrlData[1].Replace("-"," "));
+            //topic = db.QueryValue("SELECT topicname FROM website_forumthread WHERE threadid = @0 AND remove='false'",UrlData[1].Split("-")[0]);
+        }
+		if(WebSecurity.IsAuthenticated){
+			// Check if subscribe
+			subscribe = db.QueryValue("SELECT subscribe FROM website_forumthreadview WHERE threadid=@0 AND userid=@1", thread, WebSecurity.CurrentUserId);
+			//subscribe = db.QuerySingle("SELECT lastview, subscribe FROM website_forumthreadview WHERE threadid=@0 AND userid=@1", thread, WebSecurity.CurrentUserId);
+			//var user = db.QuerySingle("SELECT Email FROM UserProfile WHERE LOWER(Email) = LOWER(@0)", email);
+            //if (user == null) {
+			if (subscribe == null) {
+				// Insert into view table
+				//lazy way = just insert on every view
+				db.Execute("INSERT INTO website_forumthreadview (lastview, threadid, userid, viewed) VALUES (@0, @1, @2, @3)", DateTime.Now,thread,WebSecurity.CurrentUserId, true);
+			}else{db.Execute("UPDATE website_forumthreadview SET lastview=@0 WHERE threadid=@1 AND userid=@2",DateTimeOffset.UtcNow, thread, WebSecurity.CurrentUserId);}
+		}else{subscribe=false;}
+    }
+    
+    int numperpg = 25;/*
+    int currentpage = 1;
+    int tag_counter = 0;
+    if(Request.QueryString["page"] != null){
+        if(int.TryParse(Request.QueryString["page"], out currentpage)){
+            //currentpage = (int)Request.QueryString["page"].AsInt();
+            if(currentpage >= (threads.Count() / numperpg)){
+                currentpage = threads.Count() / numperpg;
+            }
+            if(currentpage < 1){
+                currentpage = 1;
+            }
+            tag_counter = currentpage * numperpg;
+        }else{
+            Response.Redirect("?page=1"/* + currentpage*);
+        }
+    }*/
+}
+<div class="forum-posts-container">   
+    <div class="breadcrumb">@*<a class="catagory" href="/features/forum">@category</a> > *@<a class="forum" href="/features/forum/@UrlData[0]">@forumname</a> > <span class="topic">@topic</span>
+    </div>   
+    <h1>@topic</h1>   
+    <div class="error">
+        <!--{module_error}-->
+        @* If at least one validation error exists, notify the user *@
+        @Html.ValidationSummary("Account creation was unsuccessful. Please correct the errors and try again.", excludeFieldErrors: true, htmlAttributes: null)
+    </div>   
+    <div class="editor">
+        <!--{tag_editor}
+        <iframe style="display:none;" id="editorf" width="440" height="540" frameborder="0" src="about:blank"></iframe>
+        <iframe style="display: inline;" id="editorf" width="440" height="540" frameborder="0" src="/ForumEditor.aspx?ForumID=2825&amp;TopicID=99231&amp;ParentID=898774&amp;SortType=&amp;NoTemplate=False&amp;Internal=False"></iframe>-->
+        <!--<a name="catforumeditor"></a>-->
+    </div>   
+    <ul class="cap-top">    
+        <li class="user">
+            <!--{module_whosloggedin}
+            System.Web.Security.Membership.GetNumberOfUsersOnline()
+            RenderPage("~/ModuleTemplates/Forum/LoggedIn.cshtml")
+            UserAlias logged in. <a href="/LogOutProcess.aspx">Log out</a>.-->
+        </li>    
+        <li class="actions">@if(WebSecurity.IsAuthenticated){<form id="subscribeForm" action="~/Layouts/Forum/forumsubscribe?forumid=@thread" method="post">
+            @if(WebSecurity.IsAuthenticated && subscribe){
+                <a href="javascript:document.getElementById('subscribeForm').submit()" title=""><img alt="Forum Unsubscribe" src="~/_assets/images/forum/Forum_NewTopics_Unsubscribe.png" /></a>
+            }else{
+			    <a href="javascript:document.getElementById('subscribeForm').submit()" title=""><img alt="Forum Subscribe" src="~/_assets/images/forum/Forum_NewTopics_Subscribe.png" /></a>}
+			</form>
+            <a href="" title=""><img alt="New Topic" src="~/_assets/images/forum/Forum_NewTopic.png" /></a>}else{
+                <a href="~/Account/Login" title=""><img alt="Forum Subscribe" src="~/_assets/images/forum/Forum_NewTopics_Subscribe.png" /></a>
+                <a href="~/Account/Login" title=""><img alt="New Topic" src="~/_assets/images/forum/Forum_NewTopic.png" /></a>}
+		</li>   
+    </ul>   
+    <div class="post-list">     
+        <!--{tag_postlist}-->
+        @RenderPage("~/Layouts/Forum/post.cshtml", (int)numperpg) 
+    </div>   
+    <ul class="cap-bottom">    
+        <li class="nav-page">
+			@RenderPage("~/ModuleTemplates/WebApps/Pagination/pagination.cshtml", (int)numperpg, (int)threads.Count())
+		</li>    
+        <li class="actions">@if(WebSecurity.IsAuthenticated){<form id="subscribeForm" action="~/Layouts/Forum/forumsubscribe?forumid=@thread" method="post">
+            @if(WebSecurity.IsAuthenticated && subscribe){
+                <a href="javascript:document.getElementById('subscribeForm').submit()" title=""><img alt="Forum Unsubscribe" src="~/_assets/images/forum/Forum_NewTopics_Unsubscribe.png" /></a>
+            }else{
+			    <a href="javascript:document.getElementById('subscribeForm').submit()" title=""><img alt="Forum Subscribe" src="~/_assets/images/forum/Forum_NewTopics_Subscribe.png" /></a>}
+			</form>
+            <a href="" title=""><img alt="New Topic" src="~/_assets/images/forum/Forum_NewTopic.png" /></a>}else{
+                <a href="~/Account/Login" title=""><img alt="Forum Subscribe" src="~/_assets/images/forum/Forum_NewTopics_Subscribe.png" /></a>
+                <a href="~/Account/Login" title=""><img alt="New Topic" src="~/_assets/images/forum/Forum_NewTopic.png" /></a>}
+		</li>   
+    </ul>  
+</div>    

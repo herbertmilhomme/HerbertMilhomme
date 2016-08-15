@@ -1,0 +1,132 @@
+﻿@{
+    var returnUrl = Request.QueryString["ReturnUrl"];
+    if (returnUrl.IsEmpty()) {
+        // Some external login providers always require a return URL value
+        returnUrl = Href("~/");
+    }    
+
+    if (Request.Cookies("shoppingcart").HasKeys) {//Need to fetch from database, after grabbing cart id
+        foreach(var item in Request.Cookies("shoppingcart")){
+            //add each item by their 'product_id' and 'quantity'
+            //items are added in seperated by commas
+            //use database to match product_id and prices
+        }
+    }    
+    //if not signed in, redirect to log in back and return to previous page
+    if (!WebSecurity.IsAuthenticated) {
+        Response.Redirect("~/Account/Login?returnUrl="
+            + Request.Url.LocalPath);
+    }
+
+    // Attempt to log in using provided credentials
+            if (WebSecurity.Login(email, password, rememberMe)) {
+                Context.RedirectLocal(returnUrl);
+                return;
+            }
+//}
+
+    //Page.Title = "Place Your Order";
+    //url houses product info
+    var db = Database.Open("eCommerce");
+    var productId = UrlData[0].AsInt();
+    var price = Request["price"].AsDecimal();
+    var quantity = Request["orderQty"].AsInt();
+    var commandText = string.Empty;
+    var cartId = 0;
+    var totalItems = 0;    
+    //bad url redirect
+    commandText = "SELECT * FROM PRODUCTS WHERE ID = @0";
+    var product = db.QuerySingle(commandText, productId);
+    if (product == null) {
+        Response.Redirect("~/");
+    }
+    //checks local pc for cookie
+    if(Request.Cookies["cart"] != null){
+        cartId = Request.Cookies["cart"].Value.AsInt();
+        commandText = "SELECT SUM(Quantity) AS TotalItems FROM CartItems WHERE CartId = @0";
+        object result = db.QueryValue(commandText, cartId);
+        totalItems = result == DBNull.Value ? 0 : Convert.ToInt32(result);
+    }
+    //if item is selected
+    if(IsPost && quantity > 0){
+        if(Request.Cookies["cart"] == null){
+            commandText = "INSERT INTO Cart (DateCreated) VALUES (GetDate())";
+            db.Execute(commandText);
+            cartId = (int)db.GetLastInsertId();
+        }//removes item from cart, and re-adds on reselect
+        commandText = "SELECT Quantity FROM CartItems WHERE CartId = @0 AND ProductId = @1";
+        var reduction = db.QueryValue(commandText, cartId, productId);
+        if(reduction != null){
+            totalItems -= reduction;
+        }//saves information to cookie on local pc
+        commandText = "DELETE FROM CartItems WHERE CartId = @0 AND ProductId = @1";
+        db.Execute(commandText, cartId, productId);
+        commandText = "INSERT INTO CartItems (CartId, ProductId, Quantity, Price) VALUES (@0, @1, @2, @3)";
+        db.Execute(commandText, cartId, productId, quantity, price);
+        totalItems += quantity;
+        Response.Cookies["cart"].Value = cartId.ToString();
+        Response.Cookies["cart"].Expires = DateTime.Now.AddMonths(6);
+    }
+    //var CartItems = db.Query("SELECT * FROM website_cartitems WHERE CartID=@0 AND Checkedout='false' AND (DateCreated BETWEEN getdate() AND DATEDIFF(day,7,getdate())",Request.Cookies["CartID"].Value);
+
+    //If shopping cart and signed in or zip is entered, show tax info.
+    //check cookie for zipcode entered
+    decimal us_tax = 0;
+    if(!Request.Cookies["ZipCode"].IsEmpty()){
+        us_tax = (decimal)(db.QueryValue("SELECT location_ustax.tax FROM locations_zipcodes AS z, locations_ustax AS t WHERE zip=@0 AND z.state=t.state",Request.Cookies["ZipCode"].Value)).Replace("%","") / 100;
+    }
+    decimal TotalSubPrice = 0; //int TotalItemQty = 0;
+}
+<div class="shop-cart">
+<div class="breadcrumbs">You are here: {tag_cataloguebreadcrumbs}</div>
+<h1>Your Shopping Cart</h1>
+<table class="cart">
+		<tr class="var">
+			<th>Sku/Identifier</th>
+			<th>Product</th>
+			<th>Price</th>
+			<th class="quantity">Quantity</th>
+			<th>Total</th>
+			<th>Remove</th>
+		</tr>@foreach(var item in CartItems){ TotalSubPrice += Math.Round(item.quantity * item.saleprice /* *(1+us_tax)*/, 2); 
+		<tr class="val">
+			<td>{tag_productid}</td>
+			<td>{tag_productname}</td>
+			<td><a id="@item.productID" name="@item.productID" >{tag_productname}</a></td>
+			<td>{tag_productextaxamount}</td>
+			<td class="quantity">@item.Quantity</td>
+			<td>{tag_producttotal}@Math.Round(item.quantity * item.saleprice /* *(1+us_tax)*/, 2)</td>
+			<td>{tag_productremovelink}</td>
+		</tr>}
+		<tr class="sub-total">
+			<td colspan="3">Sub-Total</td>
+			<td class="quantity"><!--{tag_totalunits}-->@totalItems units</td>
+			<td class="price"><!--{tag_productgrandtotal}-->$@TotalSubPrice</td>
+			<td>&nbsp;</td>
+		</tr>@*Another line for the Tax Total // remove the "1" from (1+us_tax)*@
+		<tr class="discount">
+			<td>{tag_discountid}</td>
+			<td>Discount</td>
+			<td colspan="2" class="quantity">{tag_discountcode}<input class="update" onClick="return false;" type="button" value="Update" /></td>
+			<td class="price-decrease price">({tag_invoicediscountamount})</td>
+			<td>&nbsp;</td>
+		</tr>@*if(WebSecurity.IsAuthenticated || !Request.Cookies["ZipCode"].Value.IsEmpty()){
+		<tr class="shipping">
+			<td>Shipping</td>
+			<td colspan="2" class="quantity">{tag_shippingoptions}</td>
+			<td>&nbsp;</td>
+			<td>{tag_shippingtotal}</td>
+			<td>&nbsp;</td>
+		</tr>}*@
+		<tr>
+			<td colspan="6">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="actions" colspan="6"> 
+                <img src="/CatalystImages/shop_clearcart.png" alt="tag_clearcartbutton" />
+                <img src="/CatalystImages/shop_getaquote.png" alt="tag_getquotebutton" />
+                <img src="/CatalystImages/shop_checkout.png" alt="tag_buybutton" />
+            </td>
+		</tr>
+</table>
+</div>

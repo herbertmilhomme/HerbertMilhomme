@@ -1,0 +1,110 @@
+@{
+    //Layout = "~/Layouts/Template/features.cshtml";
+    Page.Title = "Gallery";
+	/*if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}*/
+}@*<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" ><!-- InstanceBegin template="/Templates/Features.dwt" codeOutsideHTMLIsLocked="false" --> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" >
+<!--<![endif]-->
+  <head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- InstanceBeginEditable name="doctitle" --><title></title><!-- InstanceEndEditable --><!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+	
+    {module_contentholder, name="_Template - Head Scripts"}
+	
+  </head>
+  <body id="top" class="thebg two-column">
+    
+    <!-- Header -->	
+	{module_contentholder, name="_Template - Header"}
+	<!-- /Header -->
+	
+	<div class="clearfix"></div>		
+
+	<!-- Content -->
+	<div class="container page-top">
+		
+		<!-- MAIN Content -->
+		<div class="col-md-8 pagecontainer content-pad">
+			
+			*@<!-- InstanceBeginEditable name="ContentArea" --><h1>Photos</h1>
+<p>The images in your gallery should be the same size for the gallery images to align properly on all screen sizes.</p>
+<hr />
+<!--{module_photogallery,1144,2,,12,330,330,false}-->
+@RenderPage("~/ModuleTemplates/Gallery/photos2.cshtml")
+<!-- InstanceEndEditable -->@*
+			
+		</div>
+		<!-- /MAIN Content -->
+		
+		<!-- Sidebar Content -->
+		<div class="col-md-4 sidebar">
+		
+			<!-- Features Sidenav -->	
+			{module_contentholder, name="_Sidebar - Nav - Features"}
+			<!-- /Features Sidenav -->
+			
+			<!-- Deals -->	
+			{module_contentholder, name="_Sidebar - Deals"}
+			<!-- /Deals -->
+			
+			<!-- Help -->	
+			{module_contentholder, name="_Sidebar - Help"}
+			<!-- /Help -->
+			
+		</div>
+		<!-- /Sidebar Content -->
+			
+	</div>
+	<!-- /Content -->
+				
+	<!-- FOOTER -->
+	{module_contentholder, name="_Template - Footer"}
+	<!-- /FOOTER -->
+			
+	{module_contentholder, name="_Template - Footer Scripts"}
+	
+  </body>
+<!-- InstanceEnd --></html>
+*@
+@section HeadCSS{
+<link type="text/css" href="/_assets/css/lightbox.css" rel="StyleSheet">
+}
+@section FooterJS{
+<script type="text/javascript" src="/_assets/js/lightbox.js">//?vs=b1884.r475844-phase1 (css too)</script>
+<div id="lightbox" style="top: 179.9px; left: 0px; display: none;"><div id="outerImageContainer" style="font-size: 114.616px; height: 624px; width: 820px;">
+	<div id="imageContainer">
+		<img id="lightboxImage" @*src="/_assets/images/gallery/europe1.jpg"*@ width="799">
+		<div id="hoverNav">
+			<a id="prevLink" href="#" style="height: 604px;"></a>
+			<a id="nextLink" href="#" style="height: 604px;"></a>
+		</div>
+		<div id="loading" style="display: none;">
+			<a id="loadingLink" href="#"><img src="/_assets/images/gallery/loading.gif" alt="loading"></a>
+		</div>
+	</div>
+</div>
+	<div id="imageDataContainer" class="clearfix" style="width: 820px; overflow: visible;">
+		<div id="imageData" style="">
+			<div id="imageDetails">
+				<span id="caption"></span><span id="numberDisplay"><!--Image 2 of 21--></span>
+			</div>
+			<div id="bottomNav">
+				<a id="bottomNavClose" href="#"><img src="/_assets/images/gallery/closelabel.gif" alt="close"></a>
+				<a id="nextBLink" href="#" rel="next"></a>
+				<a id="prevBLink" href="#" rel="prev"></a>
+			</div>
+		</div>
+	</div>
+</div>
+}

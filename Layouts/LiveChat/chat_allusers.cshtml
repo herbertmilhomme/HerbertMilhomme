@@ -1,0 +1,104 @@
+﻿@{
+	string SendMsg = string.Empty;
+
+	if(IsPost){
+        // Verify the request was submitted by the user
+        AntiForgery.Validate();
+		var db = Database.Open("ColonielHeights");
+
+		var sql = @"INSERT INTO website_livechat (userid, userName, ipaddress, postmsg) VALUES (@0, @1, @2, @3)";
+		int userid = WebSecurity.IsAuthenticated ? WebSecurity.CurrentUserId : 0;
+		var username = WebSecurity.IsAuthenticated ? db.QueryValue("SELECT FirstName FROM business_customer WHERE customernumber=@0",WebSecurity.CurrentUserId) : "Guest";
+		//var username = WebSecurity.IsAuthenticated ? db.QueryValue("SELECT Username FROM UserProfile WHERE userid=@0",WebSecurity.CurrentUserId) : "Guest";
+
+		System.Web.HttpContext context = System.Web.HttpContext.Current; 
+		string ipAddress = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+		if (!string.IsNullOrEmpty(ipAddress))
+		{
+			string[] addresses = ipAddress.Split(',');
+			if (addresses.Length != 0)
+			{
+				ipAddress = addresses[0];
+			}
+		}
+		else{ipAddress = context.Request.ServerVariables["REMOTE_ADDR"];}
+
+		db.Execute(sql, userid,username,ipAddress, Request.Form["SendMsg"]);
+		
+		//Context.RedirectLocal("~/features/livechat");
+	}
+}
+<div class="panel-group" id="accordian-allusers" roles=
+tablist></div>
+<form id="PostMsg" method="post" @*action="/Layouts/LiveChat/chat_window"*@ >
+			@AntiForgery.GetHtml()
+			<input type="text" id="SendMsg" name="SendMsg" spellcheck="true" @*value="@SendMsg"*@ placeholder="Enter Message" autocomplete="off" 
+			@*onkeyup="sendLiveMsgs(this.value)"*@ />
+			@*"javascript:document.getElementById('PostMsg').submit()"*@
+			<input type="submit" value="Send" />
+			<input type="hidden" id="ChatStart" name="ChatStart" value="@ChatStart" />
+		</form>
+<script>
+	function SubmitOnEnter() {
+		document.getElementById("SendMsg").addEventListener("keydown", function (e) {
+			if (!e) { var e = window.event; }
+			e.preventDefault(); // sometimes useful
+
+			// Enter is pressed
+			if (e.keyCode == 13) { document.getElementById("PostMsg").submit(); }
+		}, false);
+	}
+
+	//while mouse is up, feed msgs into div
+	function showLiveMsgs() {//(str)
+		var xhttp; /*
+	            if (str == "") {
+	                document.getElementById("display-text").innerHTML = "";
+	                return;
+	            }*/
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function () {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				document.getElementById("display-text").innerHTML = xhttp.responseText;
+			}
+		}
+		xhttp.open("GET", "/Layouts/LiveChat/chat_msgs?date=@ChatStart", true);
+		xhttp.send();
+	}
+	/*
+	//while mouse is up, feed msgs into div
+	function sendLiveMsgs(str) {//(str)
+		var xhttp; /*
+	            if (str == "") {
+	                document.getElementById("display-text").innerHTML = "";
+	                return;
+	            }*
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function () {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				document.getElementById("display-text").innerHTML = xhttp.responseText;
+			}
+		}
+		xhttp.open("POST", "/Layouts/LiveChat/chat_allusers", true);
+		xhttp.send();
+	}
+	/* --------------------------------------------------------- */
+	var mousedownID = -1;  //Global ID of mouse down interval
+	function mousedown(event) {
+		if (mousedownID != -1) {  //Only stop if exists
+			clearInterval(mousedownID);
+			mousedownID = -1;
+		}
+	}
+	function mouseup(event) {
+		if (mousedownID == -1) {  //Prevent multiple loops!
+			mousedownID = setInterval(showLiveMsgs, 10 /*execute every 10ms*/);
+		}
+	}
+	//Assign events
+	document.addEventListener("mousedown", mousedown);
+	document.addEventListener("mouseup", mouseup);
+	//Also clear the interval when user leaves the window with mouse
+	document.addEventListener("mouseout", mousedown);
+	document.addEventListener("pageshow", mouseup);
+</script>

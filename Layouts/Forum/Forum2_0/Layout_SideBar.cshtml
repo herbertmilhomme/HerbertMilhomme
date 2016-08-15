@@ -1,0 +1,231 @@
+﻿@{
+    var db = Database.Open("ColonielHeights");
+    var LastUser = db.QuerySingle("SELECT * FROM userprofile FULL JOIN webpages_membership ON webpages_membership.userid=userprofile.userid ORDER BY createdate DESC");//minus original post
+	//var OnlineUser = ;
+	var lastreply = db.QuerySingle("SELECT * FROM website_forumpost FULL JOIN website_forumthread ON website_forumthread.forumid=website_forumpost.forumid FULL JOIN userprofile ON website_forumpost.userid=userprofile.userid WHERE website_forumpost.remove='false' ORDER BY datepost desc"); //merge userprofile and forumthread
+}
+
+<aside class="uix_mainSidebar" style="float: right;">
+						<div class="inner_wrapper" style="transition: top 0s;">
+							<div class="sidebar">
+								@if(!WebSecurity.IsAuthenticated){
+								<div class="section widget-group-no-name widget-container">						
+<div class="secondaryContent widget side-block side-login">
+			<h3 class="side-block-head"><a href="/Account/Login">Login</a><!--&nbsp; • &nbsp;<a href="#Register">Register</a>--></h3>
+			<div class="side-block-body">
+		<form method="post" action="/Account/Login">
+				<fieldset>
+					<input type="text" name="username" id="username" size="10" class="inputbox" title="Username" placeholder="Username"><input type="password" name="password" id="password" size="10" class="inputbox" title="Password" placeholder="Password">
+					<br>
+											<a href="#Password">I forgot my password</a>
+																<label for="autologin" id="remember-me"><input type="checkbox" name="autologin" id="autologin">Remember me</label>
+										<br>
+					<input type="submit" name="login" value="Login" class="button2">
+					<!--<input type="hidden" name="redirect" value="./index.php?style=9&amp;style=9&amp;sid=9c9ac014a4afc9fe18b57c2e3fea57f7">-->
+
+				</fieldset>
+		</form>
+			</div>
+	</div>
+<!--</div>
+
+<div class="section loginButton">		-->
+	<div class="secondaryContent">
+		<label id="SignupButton"><a href="/Account/MemberSignUp" class="inner OverlayTrigger" data-cacheoverlay="false">Sign up now!</a></label>
+	</div>
+</div>}
+
+	<div class="section widget-group-no-name widget-container">
+			<div class="secondaryContent widget WidgetFramework_WidgetRenderer_Threads" id="widget-15">
+					<h3>Latest Replies</h3>
+					<div class="avatarList">
+			<ul>
+							<li class="thread-6392 thread-node-67">
+	<a href="members/@lastreply.userid/" class="avatar Av-@lastreply.userid" data-avatarhtml="true">@if(File.Exists(Href("/_assets/images/users/avatar-"+lastreply.userid+".jpg"))){<text><img src="@Href("/_assets/images/users/avatar-"+lastreply.userid+".jpg")" alt="@lastreply.alias's avatar image" width="48" height="48" /></text>}else{<img src="/_assets/images/users/avatar-guest.jpg" alt="No avatar image set" width="48" height="48" />}</a>
+	<a href="posts/@lastreply.postid/">@lastreply.topicname</a>
+	<div class="userTitle">
+									@*<a href="members/casus.5949/" class="username">casus</a> replied <abbr class="DateTime" data-time="1462335812" data-diff="4213" data-datestring="May 4, 2016" data-timestring="12:23 AM" title="May 4, 2016 at 12:23 AM">Today at 12:23 AM</abbr>*@
+									<a href="members/@lastreply.userid/" class="username">@lastreply.alias</a> replied <time class="DateTime" datetime="@lastreply.datepost" title="@lastreply.datepost.ToString("MMM d',' yyyy 'at' h':'mm t")">@lastreply.datepost.ToString("MMM d',' yyyy")</time>						
+								</div>
+</li>
+
+							@*<li class="thread-6388 thread-node-67">
+	<a href="members/casus.5949/" class="avatar Av5949s" data-avatarhtml="true"><img src="data/avatars/s/5/5949.jpg?1459703928" width="48" height="48" alt="casus"></a>
+
+	
+
+	<a href="posts/273874/">
+		S07E33: Normal Man
+	</a>
+
+	<div class="userTitle">
+									<a href="members/casus.5949/" class="username">casus</a> replied <abbr class="DateTime" data-time="1462335386" data-diff="4639" data-datestring="May 4, 2016" data-timestring="12:16 AM" title="May 4, 2016 at 12:16 AM">Today at 12:16 AM</abbr>
+								</div>
+	
+	
+</li>
+
+						
+							<li class="thread-6386 thread-node-67">
+	<a href="members/gunterfan.2727/" class="avatar Av2727s" data-avatarhtml="true"><img src="data/avatars/s/2/2727.jpg?1453420072" width="48" height="48" alt="GunterFan"></a>
+
+	
+
+	<a href="posts/273871/">
+		S07E32: Bun Bun
+	</a>
+
+	<div class="userTitle">
+									<a href="members/gunterfan.2727/" class="username">GunterFan</a> replied <abbr class="DateTime" data-time="1462331220" data-diff="8805" data-datestring="May 3, 2016" data-timestring="11:07 PM" title="May 3, 2016 at 11:07 PM">Yesterday at 11:07 PM</abbr>
+								</div>
+	
+	
+</li>*@
+			</ul>
+		</div>
+
+		<div id="PreviewTooltip">
+	<span class="arrow"><span></span></span>
+	
+	<div class="section">
+		<div class="primaryContent previewContent">
+			<span class="PreviewContents">Loading...</span>
+		</div>
+	</div>
+</div>
+				
+			</div>
+		
+	</div>
+
+	<div class="section widget-group-no-name widget-container">
+		<div class="secondaryContent widget WidgetFramework_WidgetRenderer_OnlineUsers" id="widget-3">
+			<h3><a href="/online">Members Online Now</a></h3>
+			<div class="userList WidgetFramework_WidgetRenderer_OnlineUsers">
+				<ol class="listInline">
+					<li class="user-OnlineUser.userid ">
+						<a href="members/OnlineUser.userid/" class="username" dir="auto">OnlineUser.alias</a>,
+					</li>
+					<!--<li class="user-5887">
+					
+						<a href="members/bread-lady.5887/" class="username" dir="auto">Bread Lady</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6060">
+					
+						<a href="members/mrhathead.6060/" class="username" dir="auto">mrhathead</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-5044">
+					
+						<a href="members/biggerboot.5044/" class="username" dir="auto"><span class="style14">Biggerboot</span></a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6964">
+					
+						<a href="members/ponderingcat.6964/" class="username" dir="auto">PonderingCat</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6230">
+					
+						<a href="members/a-blob.6230/" class="username" dir="auto">A Blob</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6968">
+					
+						<a href="members/qcmd.6968/" class="username" dir="auto">qcmd</a>
+					
+					</li>-->
+				</ol>
+				<div class="footnote">Total: 30 (members: 7, guests: 19, robots: 4)</div>
+			</div>
+		</div>
+	</div>
+
+	<!--<div class="section widget-group-no-name widget-container">
+		
+			<div class="secondaryContent widget WidgetFramework_WidgetRenderer_ProfilePosts" id="widget-6">
+				
+					<h3>
+						
+							<a href="find-new/profile-posts">Status Updates</a>
+						
+					</h3>
+					<ul class="WidgetFramework_WidgetRenderer_ProfilePosts_ProfilePostList">
+	
+</ul>
+				
+			</div>
+		
+	</div>-->
+
+	<div class="section widget-group-no-name widget-container">
+			<div class="secondaryContent widget WidgetFramework_WidgetRenderer_Stats" id="widget-4">
+					<h3>Forum Statistics</h3>
+					<div class="pairsJustified">
+	<dl class="discussionCount"><dt>Discussions:</dt>
+		<dd>@db.QueryValue("SELECT count(*) FROM website_forumthread")</dd></dl>
+	<dl class="messageCount"><dt>Messages:</dt>
+		<dd>@db.QueryValue("SELECT count(*) FROM website_forumpost")</dd></dl>
+	<dl class="memberCount"><dt>Members:</dt>
+		<dd>@db.QueryValue("SELECT count(*) FROM userprofile")</dd></dl>
+	<dl><dt>Latest Member:</dt>
+		<dd><a href="members/@LastUser.userid/" class="username" dir="auto">@LastUser.alias</a></dd>
+	</dl>
+	<!-- slot: forum_stats_extra -->
+</div>
+				
+			</div>
+		
+	</div>
+
+	<!--<div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-5">
+		<div class="section infoBlock sharePage">
+			<div class="secondaryContent">
+				<h3>Share This Page</h3>
+
+					<div class="tweet shareControl">
+						<iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.fd774b599f565016d763dd860cb31c79.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;related=landofooo&amp;size=m&amp;text=The%20LandOfOoo&amp;time=1462350303874&amp;type=share&amp;url=https%3A%2F%2Flandofooo.com%2Fcommunity%2F" style="position: static; visibility: visible; width: 60px; height: 20px;" data-url="https://landofooo.com/community/"></iframe>
+					</div>
+						
+					<div class="facebookLike shareControl">
+						
+						<div class="fb-like fb_iframe_widget" data-href="https://landofooo.com/community/" data-layout="button_count" data-action="like" data-font="trebuchet ms" data-colorscheme="light" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=425131034358731&amp;color_scheme=light&amp;container_width=0&amp;font=trebuchet%20ms&amp;href=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey"><span style="vertical-align: bottom; width: 77px; height: 20px;"><iframe name="f2e0705dd4937a4" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:like Facebook Social Plugin" src="https://www.facebook.com/v2.4/plugins/like.php?action=like&amp;app_id=425131034358731&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D42%23cb%3Df3db664c1b889fc%26domain%3Dlandofooo.com%26origin%3Dhttps%253A%252F%252Flandofooo.com%252Ff2f7b4019b3d368%26relation%3Dparent.parent&amp;color_scheme=light&amp;container_width=0&amp;font=trebuchet%20ms&amp;href=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey" style="border: none; visibility: visible; width: 77px; height: 20px;" class=""></iframe></span></div>
+					</div>
+				
+					<div class="plusone shareControl">
+						<div id="___plusone_0" style="text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 90px; height: 20px; background: transparent;"><iframe frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 90px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 20px;" tabindex="0" vspace="0" width="100%" id="I0_1462350303750" name="I0_1462350303750" src="https://apis.google.com/u/0/se/0/_/+1/fastbutton?usegapi=1&amp;size=medium&amp;count=true&amp;hl=en-US&amp;origin=https%3A%2F%2Flandofooo.com&amp;url=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;gsrc=3p&amp;ic=1&amp;jsh=m%3B%2F_%2Fscs%2Fapps-static%2F_%2Fjs%2Fk%3Doz.gapi.en.Xr5392wdai0.O%2Fm%3D__features__%2Fam%3DAQ%2Frt%3Dj%2Fd%3D1%2Frs%3DAGLTcCPDv22tBAls6NCV0AcnP6Dm4xm7yg#_methods=onPlusOne%2C_ready%2C_close%2C_open%2C_resizeMe%2C_renderstart%2Concircled%2Cdrefresh%2Cerefresh%2Conload&amp;id=I0_1462350303750&amp;parent=https%3A%2F%2Flandofooo.com&amp;pfname=&amp;rpctoken=16034965" data-gapiattached="true" title="+1"></iframe></div>
+					</div>					
+			</div>
+		</div>
+	</div>-->
+
+	<div class="section funbox">
+		@*<div class=" funboxWrapper">
+			<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_sidebar_bottom_new -->
+<ins class="adsbygoogle" style="display:inline-block;width:250px;height:250px" data-ad-client="ca-pub-5808314520834618" data-ad-slot="7518055085"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+		</div>*@
+	</div>
+
+							</div>
+						</div>
+					</aside>

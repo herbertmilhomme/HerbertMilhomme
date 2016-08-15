@@ -1,0 +1,72 @@
+﻿@using System.Net; 
+@using System.Net.Mail;
+@{
+    //create the mail message
+	MailMessage mail = new MailMessage();
+
+	//set the addresses
+	//mail.From = new MailAddress("me@mycompany.com");
+	//mail.To.Add("you@yourcompany.com");
+	//to specify a friendly 'from' name, we use a different ctor
+	mail.From = new MailAddress("me@mycompany.com", "Steve James" );
+	//since the To,Cc, and Bcc accept addresses, we can use the same technique as the From address
+	mail.To.Add( new MailAddress( "you@yourcompany.com", "Beth Jones") );
+	mail.CC.Add(new MailAddress("donna@yourcompany.com", "Donna Summers"));
+	mail.Bcc.Add(new MailAddress("bob@yourcompany.com", "Bob Smith"));
+	//since the To,Cc, and Bcc accept addresses, we can use the same technique as the From address
+	//since the To, Cc, and Bcc properties are collections, to add multiple addreses, we simply call .Add(...) multple times
+	mail.To.Add("you@yourcompany.com");
+	mail.To.Add("you2@yourcompany.com");
+	mail.CC.Add("cc1@yourcompany.com");
+	mail.CC.Add("cc2@yourcompany.com");
+	mail.Bcc.Add("blindcc1@yourcompany.com");
+	mail.Bcc.Add("blindcc2@yourcompany.com");
+
+	//set the content
+	mail.Subject = "This is an email";
+
+	//first we create the Plain Text part
+	AlternateView plainView = AlternateView.CreateAlternateViewFromString("This is my plain text content, viewable by those clients that don't support html", null, "text/plain");
+	//then we create the Html part
+	AlternateView htmlView = AlternateView.CreateAlternateViewFromString("<b>this is bold text, and viewable by those mail clients that support html</b>", null, "text/html");
+	mail.AlternateViews.Add(plainView);
+	mail.AlternateViews.Add(htmlView);
+
+	//specify the priority of the mail message
+	mail.ReplyTo = new MailAddress("SomeOtherAddress@mycompany.com");
+	//specify the priority of the mail message
+	mail.Priority = MailPriority.High;
+	
+	//To request a read receipt, we need add a custom header named 'Disposition-Notification-To'
+	//in this example, read receipts will go back to 'someaddress@mydomain.com'
+	//it's important to note that read receipts will only be sent by those mail clients that 
+	//a) support them
+	//and
+	//b)have them enabled.
+	mail.Headers.Add("Disposition-Notification-To", "<someaddress@mydomain.com>");
+
+	//send the message
+	SmtpClient smtp = new SmtpClient("smtp.gmail.com"); //specify the mail server address
+	smtp.Send(mail);
+
+	/*
+	System.Net.Configuration.MailSettingsSectionGroup mMailSettings;
+
+	int mPort = mMailSettings.Smtp.Network.Port;
+	string mHost = mMailSettings.Smtp.Network.Host;
+	string mPassword = mMailSettings.Smtp.Network.Password;
+	string mUsername = mMailSettings.Smtp.Network.Username;
+	*/
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        
+    </body>
+</html>

@@ -1,0 +1,184 @@
+﻿@*<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@Page.Title - My ASP.NET Web Page</title>
+        <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+        <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+        <script src="~/Scripts/jquery-ui-1.8.24.js"></script>
+        <script src="~/Scripts/modernizr-2.6.2.js"></script>
+        <meta name="viewport" content="width=device-width" />
+        @RenderSection("CSS", required: false)
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title"><a href="~/">your logo here</a></p>
+                </div>
+                <div class="float-right">
+                    <section id="login">
+                        @if (WebSecurity.IsAuthenticated) {
+                            <text>
+                                Hello, <a class="email" href="~/Account/Manage" title="Manage">@WebSecurity.CurrentUserName</a>!
+                                <form id="logoutForm" action="~/Account/Logout" method="post">
+                                    @AntiForgery.GetHtml()
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">Log out</a>
+                                </form>
+                            </text>
+                        } else {
+                            <ul>
+                                <li><a href="~/Account/MemberSignUp">Register</a></li>
+                                <li><a href="~/Account/Login">Log in</a></li>
+                            </ul>
+                        }
+                    </section>
+                    <nav>
+                        <ul id="menu">
+                            <li><a href="~/">Home</a></li>
+                            <li><a href="~/About">About</a></li>
+                            <li><a href="~/Contact">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; @DateTime.Now.Year - My ASP.NET Web Page</p>
+                </div>
+            </div>
+        </footer>
+        @RenderSection("Scripts", required: false)
+    </body>
+</html>*@
+<!--*******************************************-->
+@RenderPage("~/ModuleTemplates/Forum/WhoIsOnline.cshtml")
+<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" ><!-- InstanceBegin template="/Templates/Home Page.dwt" codeOutsideHTMLIsLocked="false" --> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" >
+<!--<![endif]-->
+    <head>
+  	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <!-- InstanceBeginEditable name="doctitle" --><title>@Page.Title</title><!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="head" -->@RenderPage("~/_System/ContentHolders/_Template - Head Metatags.cshtml")<!-- InstanceEndEditable -->
+        <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+        <script src="~/Scripts/jquery-ui-1.8.24.js"></script>
+        <script src="~/Scripts/modernizr-2.6.2.js"></script>
+        <!--{module_contentholder, name="_Template - Head Scripts"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Head Scripts - WebMatrix.cshtml")
+	
+    </head>
+    <body id="top">
+    @RenderSection("googlemanager", required: false)
+    
+        <!-- Header -->	
+	    <!--{module_contentholder, name="_Template - Header"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Header.cshtml")
+	    <!-- /Header -->		
+
+        @RenderSection("featured", required: false)
+	
+	<div class="clearfix"></div>	
+
+    <!-- Top Ads Banner -->
+    @RenderSection("topbanner", required: false)
+	<!-- /Top Ads Banner -->
+
+	<!-- Content -->
+	<section @*id="content"*@ class="container page-top">
+    <!-- Content -->
+
+	    <!-- Left Ads Banner -->
+        @RenderSection("leftbanner", required: false)
+	    <!-- /Left Ads Banner -->
+		
+		
+	    <!-- MAIN Content -->
+        <div class="col-md-8 pagecontainer content-pad">  
+            @RenderBody()
+	    </div>
+		<!-- /MAIN Content -->
+		
+		<!-- Sidebar Content -->
+			<aside class="col-md-4 sidebar">
+			
+				@*<!-- Recent-Blogs Sidenav -->	
+				<div class="pagecontainer sidenav">
+					<div>
+						<span class="icon"><em class="icon-link"></em></span>
+						<h3 class="opensans">Recent Posts</h3>
+						{tag_blogrecentpost}
+					</div>
+				</div>
+				@RenderPage("~/_System/ContentHolders/_Sidebar - Blog - Recent.cshtml")
+				<!-- /Recent-Blogs Sidenav -->*@
+			
+				@*<!-- Blog-Tags Sidenav -->	
+				<div class="pagecontainer sidenav">
+					<div>
+						<span class="icon"><em class="icon-link"></em></span>
+						<h3 class="opensans">Recent Posts</h3>
+						{tag_blogrecentpost}
+					</div>
+				</div>
+				RenderPage("~/_System/ContentHolders/_Sidebar - Blog - Tags.cshtml")
+				<!-- /Blog-Tags Sidenav -->*@
+				
+				@*<!-- Archive Sidenav -->	
+				<div class="pagecontainer margtop20">
+					<div>
+						<span class="icon"><em class="icon-archive"></em></span>
+						<h3 class="opensans">Archive</h3>
+						<!--{tag_blogpostarchive}-->
+                        @RenderPage("~/Layouts/Blog/Archive.cshtml")
+					</div>
+				</div>
+				<!-- RenderPage("~/_System/ContentHolders/_Sidebar - Nav - About.cshtml")
+				/Recent-Blogs Sidenav -->*@
+			
+			<!-- Help -->	
+			<!-- {module_contentholder, name="_Sidebar - Help"} --	
+				@RenderPage("~/_System/ContentHolders/_Sidebar - Help.cshtml")
+			<!-- /Help -->
+
+        <!-- Right Ads Banner -->
+        @RenderSection("rightbanner", required: false)
+	    <!-- /Right Ads Banner -->
+
+			</aside>
+		<!-- /Sidebar Content -->
+
+	<!-- /Content -->	
+	</section><!-- #content -->
+	
+    <!-- Bottom Ads Banner -->
+    @RenderSection("bottombanner", required: false)
+	<!-- /Bottom Ads Banner -->
+		
+	    <!-- FOOTER -->
+	    <!--{module_contentholder, name="_Template - Footer"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer - WebMatrix.cshtml")
+	    <!-- /FOOTER -->
+			
+        @RenderSection("Scripts", required: false)
+	    <!--{module_contentholder, name="_Template - Footer Scripts - HomePg Only"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer Scripts.cshtml")
+	
+    <!-- #root -->
+    @*RenderPage("~/_System/ContentHolders/_Template - AdsBanner.cshtml")*@
+	<!-- // analytics -->
+	</body>
+<!-- InstanceEnd -->
+</html>

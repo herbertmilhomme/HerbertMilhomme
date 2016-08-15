@@ -1,0 +1,39 @@
+﻿@{
+    var alias = Request.Form["alias"];
+	var servername = Request.Form["servername"];
+	var serverpass = Request.Form["serverpass"];
+	var db = Database.Open("ColonielHeights");//StarterSite
+	if(IsPost){
+		// Verify the request was submitted by the user
+        //AntiForgery.Validate();
+
+		if(WebSecurity.IsAuthenticated){
+			//execute db store alias
+			db.QueryValue("UPDATE UserProfile SET alias='@0' WHERE userid=@1",alias,WebSecurity.CurrentUserId);//db.QueryValue("SELECT Username FROM UserProfile WHERE alias=@0",alias)
+		}else{
+			Response.Cookies["alias"].Value = alias;
+			Response.Cookies["alias"].Expires = DateTime.Now.AddDays(14);
+		}
+
+		var variable = db.QuerySingle("SELECT * FROM website_livechatServer WHERE LOWER(servername) = LOWER(@0)", servername);
+        if (variable == null) {//&& isJoin
+			//Send error back to page
+			ModelState.AddError("servername", "Server does not exist, cannot Join.");
+		}else{
+			//check if password is required
+			if(!string.IsNullOrEmpty(variable.password)){
+				//if does nowmatch password with form field 
+				if(variable.password!=serverpass){
+					//decline with error
+					ModelState.AddError("serverpass", "Incorrect pass, cannot Join.");
+				}//else --continue
+            }
+			//Insert email into the profile table
+			//db.Execute("INSERT INTO website_livechatServer (servername, hostid, sessionkey, member, password) VALUES (@0,@1,@2,@3,@4)","/"+servername, WebSecurity.IsAuthenticated ? WebSecurity.CurrentUserId : 0, Session["SESSION_KEY"], WebSecurity.IsAuthenticated, serverpass);
+			Context.RedirectLocal("~/features/livechat2/"+servername);//Request.Url.LocalPath
+			//Response.Redirect("~/features/livechat2/"+servername);
+		}
+	}else {
+        Response.Redirect("~/features/livechat2/");
+    }
+}

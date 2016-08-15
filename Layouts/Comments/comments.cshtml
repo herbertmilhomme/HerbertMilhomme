@@ -1,0 +1,11 @@
+@{
+	string text = PageData[0]??Page.pageid;
+}<div class="comment-container">   
+    <div class="header">       
+        <span class="name">{tag_fullname}</span> commented on <time datetime="" class="date">{tag_usagedate}</time><span class="rating">{tag_rating}</span>   
+    </div>   
+    <div class="content">    
+        {tag_feedback}   
+    </div>  
+</div>      
+@RenderPage("~/Layouts/Comments/Comments", commentid, pageid)

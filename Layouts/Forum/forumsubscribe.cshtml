@@ -1,0 +1,22 @@
+﻿@{
+    WebSecurity.RequireAuthenticatedUser();
+
+    if (IsPost && (Request.QueryString.HasKeys("forumid")||Request.QueryString.HasKeys("threadid"))) {
+        // Verify the request was submitted by the user
+        //AntiForgery.Validate();
+
+		var db = Database.Open("ColonielHeights");
+		if(Request.QueryString["forumid"]!=null){
+			bool subscribe = db.QueryValue("SELECT subscribe FROM website_forumdiscussionview WHERE forumid=@0 AND userid=@1", Request.QueryString["forumid"], WebSecurity.CurrentUserId);
+			db.Execute("UPDATE website_forumdiscussionview SET subscribe=@0 WHERE forumid=@1 AND userid=@2",!subscribe, Request.QueryString["forumid"], WebSecurity.CurrentUserId);}
+		if(Request.QueryString["thread"]!=null){
+			bool subscribe = db.QueryValue("SELECT subscribe FROM website_forumdiscussionview WHERE forumid=@0 AND userid=@1", Request.QueryString["threadid"], WebSecurity.CurrentUserId);
+			db.Execute("UPDATE website_forumdiscussionview SET subscribe=@0 WHERE threadid=@1 AND userid=@2",!subscribe, Request.QueryString["threadid"], WebSecurity.CurrentUserId);}
+
+        // Redirect back to the return URL or homepage
+        var returnUrl = Request.QueryString["ReturnUrl"];
+        Context.RedirectLocal(returnUrl);
+    } else {
+        Response.Redirect("~/");
+    }
+}

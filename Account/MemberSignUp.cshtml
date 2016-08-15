@@ -1,0 +1,938 @@
+﻿@using System.Net; 
+@using System.Net.Mail;
+@using WebMatrix.Data;
+@using WebMatrix.WebData;
+@*section Scripts{
+	<!-- Scripts // Member Templates --
+    <script src="~/_assets/bootstrap/js/bootstrapValidator.min.js"></script>
+    <script src="~/_assets/bootstrap/js/bootstrapValidator.js"></script>
+	<!-- Scripts // Member Templates --
+    <script src="~/Scripts/jquery.validate-bootstrap.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+	<!-- Scripts // Member Templates --
+    <script src="~/_assets/bootstrap/js/jquery.validate-bootstrap.min.js"></script>
+    <script src="~/_assets/bootstrap/js/jquery.validate-bootstrap.unobtrusive.min.js"></script>
+	<!-- Scripts // Member Templates --
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+	<!-- Scripts // Member Templates 
+    <script src="~/latest/jquery.validate.js"></script>-->
+    <script src="~/latest/jquery.validate.min.js"></script>
+    <script src="~/latest/jquery.validate.unobtrusive.min.js"></script>
+}*@
+@{
+    //Layout = "~/Layouts/Template/uguru.cshtml";
+    Page.Title = "Member Sign-Up";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";
+		Response.Redirect("~/Account/Register/Client");/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+
+    // Initialize general page variables
+    var email = "";
+	var username = "";
+    var password = "";
+    var confirmPassword = "";
+    var firstname = "";
+    var lastname = "";
+    var phonenumber = "";
+    var mobilenumber = "";
+    var country = "";
+    var address = "";
+    var city = "";
+    var state = "";
+    var zippostalcode = "";
+    Random randomz = new Random();
+    int rnum = randomz.Next(100000000,999999999);
+	bool userexist = false;
+
+    /*
+    // Setup validation
+    //Validation.RequireField("email", "You must specify an email address.");
+    Validation.Add("email", //"You must specify an email address.");
+        Validator.Regex(@"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$", 
+        "You must specify an email address.")
+        ); //"Invalid format for an email address" 
+    Validation.Add("username", 
+        Validator.Required("You must provide an user name"), 
+        Validator.StringLength(25, 5, "Min 5, to no more than 25 characters"),
+		Validator.Regex(@"^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9._%+-]*$", 
+        "Characters AND numbers only, please.")
+        );    
+    Validation.RequireField("password", "Password cannot be blank.");
+    Validation.Add("confirmPassword",
+        Validator.EqualsTo("password", "Password and confirmation password do not match."));
+    Validation.Add("password",
+        Validator.StringLength(
+            maxLength: Int32.MaxValue,
+            minLength: 6,
+            errorMessage: "Password must be at least 6 characters"));
+    Validation.RequireField("firstname", "You must specify your First Name.");
+    Validation.RequireField("lastname", "You must specify your Last Name.");
+    Validation.Add("phonenumber",
+        Validator.StringLength(
+            maxLength: 10,
+            minLength: 10,
+            errorMessage: "Phone number must be at 10 digits"),
+        //Validator.Integer("Numeric digits only, please.")
+        Validator.Regex("0-9", "Numerics digits only, No text or punctuations.")
+        );
+    Validation.Add("mobilenumber",
+        Validator.StringLength(
+            maxLength: 10,
+            minLength: 10,
+            errorMessage: "Phone number must be at 10 digits"),
+        //Validator.Integer("Numeric digits only, please.")
+        Validator.Regex("0-9", "Numerics digits only, No text or punctuations.")
+        );
+    Validation.RequireField("address", "You must specify a street address.");
+    Validation.RequireField("city", "You must specify a city.");
+    Validation.RequireField("state", "You must specify a state.");
+    Validation.Add("zippostalcode",
+        Validator.StringLength(
+            maxLength: 5,
+            minLength: 5,
+            errorMessage: "Zip code must be at 5 digits"),
+        //Validator.Integer("Numeric digits only, please.")
+        Validator.Regex("0-9", "Numerics digits only, No text or punctuations.")
+        );*/
+
+    // If this is a POST request, validate and process data
+    if (IsPost) {
+        //if(ModelState.IsValidField("phonenumber") || ModelState.IsValidField("mobilenumber")){ModelState.SetModelValue("phonenumber", true);ModelState.SetModelValue("mobilenumber", true);}
+        //if(country){ModelState.SetModelValue("phonenumber", true);}
+        //AntiForgery.Validate();
+        email = Request.Form["email"];
+        username = Request.Form["username"];
+        password = Request.Form["password"];
+        confirmPassword = Request.Form["confirmPassword"];
+        firstname = Request.Form["firstname"];
+        lastname = Request.Form["lastname"];
+        phonenumber = Request.Form["phonenumber"];
+        mobilenumber = Request.Form["mobilenumber"];
+        country = Request.Form["country"];
+        address = Request.Form["address"];
+        //address2 = Request.Form["address2"];
+        city = Request.Form["city"];
+        state = Request.Form["state"];
+        zippostalcode = Request.Form["zippostalcode"];
+		
+		string EncodedResponse = Request.Form["g-Recaptcha-Response"];
+        //bool IsCaptchaValid = (ReCaptchaClass.Validate(EncodedResponse) == "True");// ? true : false
+        var client = new System.Net.WebClient();
+        string PrivateKey = "6LeZhAcTAAAAAPLWCUHd4R7KSk7qVL4f-WJsyWCp";
+        var GoogleReply = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", PrivateKey, EncodedResponse));
+        bool IsCaptchaValid = GoogleReply.ToString().Contains("true");
+        /*if (!IsCaptchaValid) {
+            //Valid Request
+            ModelState.AddError("recaptcha", "Captcha response was not successful");
+        }*/
+
+        // Validate the user's captcha answer
+        // if (!ReCaptcha.Validate("PRIVATE_KEY")) {
+        //     ModelState.AddError("recaptcha", "Captcha response was not correct");
+        // }
+
+        // If all information is valid, create a new account
+        if (Validation.IsValid() && IsCaptchaValid) {
+            // Insert a new user into the database
+            var db = Database.Open("ColonielHeights");//StarterSite
+
+            // Check if user already exists
+            //var user = db.QuerySingle("SELECT Email FROM UserProfile WHERE LOWER(Email) = LOWER(@0)", email);
+            //if (user == null) {
+			var user1 = db.QuerySingle("SELECT Email FROM UserProfile WHERE LOWER(Email) = LOWER(@0)", email);
+            var user2 = db.QuerySingle("SELECT Username FROM UserProfile WHERE LOWER(username) = LOWER(@0)", username);
+            if (user1 == null && user2 == null) {
+                var idnumber = db.QuerySingle("SELECT memberid FROM business_customer WHERE memberid=@0", rnum);
+                while(idnumber == rnum){
+                    rnum = randomz.Next(100000000,999999999);
+                }
+                // Insert email into the profile table
+                db.Execute("INSERT INTO UserProfile (Email, Memberid, Username) VALUES (@0, @1, @2)", email, rnum, username);
+                //db.Execute("INSERT INTO business_Customer(memberid, firstname, lastname, email, phonenumber, mobilenumber)  VALUES (@0, UPPER(@1),UPPER(@2),@3,@4,@5)", rnum, firstname, lastname, email, phonenumber, mobilenumber/*, address, city, state, zippostalcode*/);
+                db.Execute("INSERT INTO business_Customer(memberid, firstname, lastname, email, phonenumber, mobilenumber, address, city, state, zippostalcode)  VALUES (@0, UPPER(@1),UPPER(@2),@3,@4,@5,@6,@7,@8,@9)", (int)rnum, firstname, lastname, email, string.IsNullOrEmpty(phonenumber)? (object)DBNull.Value : phonenumber, string.IsNullOrEmpty(mobilenumber)? (object)DBNull.Value : mobilenumber, string.IsNullOrEmpty(address)? (object)DBNull.Value : address, string.IsNullOrEmpty(city)? (object)DBNull.Value : city, string.IsNullOrEmpty(state)? (object)DBNull.Value : state, string.IsNullOrEmpty(zippostalcode)? (object)DBNull.Value : zippostalcode);
+                //db.Execute("INSERT INTO business_Employees (Email) VALUES (@0)", email);
+
+                // Create and associate a new entry in the membership database.
+                // If successful, continue processing the request
+                try {
+                    bool requireEmailConfirmation = false;//!WebMail.SmtpServer.IsEmpty();
+                    var token = WebSecurity.CreateAccount(email, password, requireEmailConfirmation);
+                    //var token = WebSecurity.CreateUserAndAccount(email, password, new {MemberId = rnum}, requireEmailConfirmation);
+                    if (requireEmailConfirmation) {
+                        var hostUrl = Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);
+                        var confirmationUrl = hostUrl + VirtualPathUtility.ToAbsolute("~/Account/Confirm?confirmationCode=" + HttpUtility.UrlEncode(token));
+
+                        //create the mail message
+	MailMessage mail = new MailMessage();
+
+	//set the addresses
+	//mail.From = new MailAddress("me@mycompany.com");
+	//mail.To.Add("you@yourcompany.com");
+	//to specify a friendly 'from' name, we use a different ctor
+	mail.From = new MailAddress("system@herbertmilhomme.com", "Herbert Milhomme" );
+	//since the To,Cc, and Bcc accept addresses, we can use the same technique as the From address
+	mail.To.Add( new MailAddress( email, firstname + " " + lastname) );
+	
+
+	//set the content
+	mail.Subject = "Please confirm your account"; //"This is an email";
+
+	//first we create the Plain Text part
+	AlternateView plainView = AlternateView.CreateAlternateViewFromString("Your confirmation code is: " + token + ". Visit " + confirmationUrl + " to activate your account.", null, "text/plain");
+	//then we create the Html part
+	AlternateView htmlView = AlternateView.CreateAlternateViewFromString("Your confirmation code is: " + token + ". Visit <a href=\"" + confirmationUrl + "\">" + confirmationUrl + "</a> to activate your account.", null, "text/html");
+	mail.AlternateViews.Add(plainView);
+	mail.AlternateViews.Add(htmlView);
+
+	//specify the priority of the mail message
+	mail.ReplyTo = new MailAddress("herbertmilhomme@gmail.com", "Herbert M.");
+	//specify the priority of the mail message
+	mail.Priority = MailPriority.High;
+
+	/*
+	System.Net.Configuration.MailSettingsSectionGroup mMailSettings;
+
+	int mPort = mMailSettings.Smtp.Network.Port;
+	string mHost = mMailSettings.Smtp.Network.Host;
+	string mPassword = mMailSettings.Smtp.Network.Password;
+	string mUsername = mMailSettings.Smtp.Network.Username;
+	*/
+	//send the message
+	SmtpClient smtp = new SmtpClient("smtp.gmail.com"); //specify the mail server address
+	smtp.Send(mail);
+                    }
+
+                    if (requireEmailConfirmation) {
+                        // Thank the user for registering and let them know an email is on its way
+                        Response.Redirect("~/Account/Thanks");
+                    } else {
+                        // Navigate back to the homepage and exit
+                        WebSecurity.Login(email, password);
+						AppState["TotalOnlineMembers"] = (int)AppState["TotalOnlineMembers"] + 1;  
+                        Response.Redirect("~/");
+                    }
+                } catch (System.Web.Security.MembershipCreateUserException e) {
+                    //ModelState.AddFormError(e.Message);
+                }
+            } else {
+                // User already exists
+				userexist = true;
+				
+				/*if (user1 != null){
+					ModelState.AddError("email", "Email already exists. Please enter a different email.");
+				}
+				if (user2 != null){
+					ModelState.AddError("username", "User name already exists. Please enter a different user name.");
+				}*/
+            }
+        }
+    }
+}
+
+<hgroup class="title">
+    <!--<h1>@Page.Title</h1>-->
+    <h2>Create a new account.</h2>
+</hgroup>
+
+<!--<form method="post" id="registerForm" class="" style="margin-bottom: 0em;">-->
+    @AntiForgery.GetHtml()
+	@if(userexist){
+ 	<div class="alert alert-danger alert-dismissible" role="alert">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<strong>Unsuccessful!</strong> User already exist.
+	</div>
+ }
+    @* If at least one validation error exists, notify the user 
+    @Html.ValidationSummary("Account creation was unsuccessful. Please correct the errors and try again.", excludeFieldErrors: false, htmlAttributes: new Dictionary<string, object>(){{ "class", "alert alert-danger"}, {"role","alert"}})*
+
+    <fieldset>
+        <legend>Registration Form</legend>
+        <div class="container register-forms offset-0">
+            <div class="col-md-6 username form-group">
+                <label for="username" class="control-label">Username</label>
+                @* Write any username validation errors to the page 
+                @Html.ValidationMessage("username",new Dictionary<string, object>(){{ "class", "help-block"}})*
+                <input type="text" class="form-control" id="username" name="username" value="@username" required="required" />
+            </div>
+            <div class="col-md-6 email form-group">
+                <label for="email" class="control-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" value="@email" required="required" />
+            </div>
+            <div class="col-md-6 password form-group">
+                <label for="password" class="control-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required="required" />
+            </div>
+            <div class="col-md-6 confirm-password form-group">
+                <label for="confirmPassword" class="control-label">Confirm password</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required="required" />
+            </div>
+            <div class="col-md-6 firstname form-group">
+                <label for="firstname" class="control-label">First Name</label>
+                <input type="text" class="form-control" id="firstname" name="firstname" value="@firstname" required="required" />
+            </div>
+            <div class="col-md-6 lastname form-group">
+                <label for="lastname" class="control-label">Last Name</label>
+                <input type="text" class="form-control" id="lastname" name="lastname" value="@lastname" required="required" />
+            </div>
+            <div class="col-md-6 phonenumber form-group">
+                <label for="phonenumber" class="control-label">Phone Number</label>
+                <input type="text" class="form-control" id="phonenumber" name="phonenumber" value="@phonenumber" />
+            </div>
+            <div class="col-md-6 mobilenumber form-group">
+                <label for="mobilenumber" class="control-label">Mobile Number</label>
+                <input type="text" class="form-control" id="mobilenumber" name="mobilenumber" value="@mobilenumber"  />
+            </div>
+            @*<div class="col-md-6 address form-group">
+                <label for="address" class="control-label">Street Address</label>
+                <input type="text" class="form-control" id="address" name="address" value="@address" required="required" />
+            </div>
+            <div class="col-md-6 country form-group">
+                                        <label class="col-sm-3 control-label">Select2</label>
+                                        <div class="col-sm-9">
+                                            <select class="select2" data-placeholder="Choose a Country...">
+                                              <option value="#">&nbsp;</option>
+                <label for="country" class="control-label">Country</label>
+                <input type="text" class="form-control" id="country" name="country" required="required" />
+            </div>
+            <div id="placeholder"></div><!--
+            <div class="col-md-6 city form-group @if(!ModelState.IsValidField("city")){<text>has-error has-feedback</text>}else if(ModelState.IsValidField("city") && Request.Form["city"] != null){<text>has-success has-feedback</text>}">
+                <label for="city" class="control-label @if(!ModelState.IsValidField("city")) {<text>error-label</text>}">City</label>
+                <input type="text" class="form-control" id="city" name="city" @Validation.For("city") aria-describedby="cityStatus" required="required" />
+				<span class="glyphicon @if(!ModelState.IsValidField("city")){<text>glyphicon-remove</text>}else if(ModelState.IsValidField("city") && Request.Form["city"] != null){<text>glyphicon-ok</text>} form-control-feedback" aria-hidden="true"></span>
+				<span id="cityStatus" class="sr-only">@if(!ModelState.IsValidField("city")){<text>(error)</text>}else if(ModelState.IsValidField("city") && Request.Form["city"] != null){<text>(success)</text>}</span>
+                @* Write any city validation errors to the page @
+                Html.ValidationMessage("city")
+            </div>
+            <div class="col-md-6 state form-group @if(!ModelState.IsValidField("state")){<text>has-error has-feedback</text>}else if(ModelState.IsValidField("state") && Request.Form["state"] != null){<text>has-success has-feedback</text>}">
+                <label for="state" class="control-label @if(!ModelState.IsValidField("state")) {<text>error-label</text>}">State</label>
+                <input type="text" class="form-control" id="state" name="state" @Validation.For("state") aria-describedby="stateStatus" required="required" />
+				<span class="glyphicon @if(!ModelState.IsValidField("state")){<text>glyphicon-remove</text>}else if(ModelState.IsValidField("state") && Request.Form["state"] != null){<text>glyphicon-ok</text>} form-control-feedback" aria-hidden="true"></span>
+				<span id="stateStatus" class="sr-only">@if(!ModelState.IsValidField("state")){<text>(error)</text>}else if(ModelState.IsValidField("state") && Request.Form["state"] != null){<text>(success)</text>}</span>
+                @* Write any state validation errors to the page @
+                Html.ValidationMessage("state")
+            </div>
+            <div class="col-md-6 zippostalcode form-group @if(!ModelState.IsValidField("zippostalcode")){<text>has-error has-feedback</text>}else if(ModelState.IsValidField("zippostalcode") && Request.Form["zippostalcode"] != null){<text>has-success has-feedback</text>}">
+                <label for="zippostalcode" class="control-label @if(!ModelState.IsValidField("zippostalcode")) {<text>error-label</text>}">Zip/Postal Code</label>
+                <input type="text" class="form-control" id="zippostalcode" name="zippostalcode" @Validation.For("zippostalcode") aria-describedby="postalStatus" required="required" />
+				<span class="glyphicon @if(!ModelState.IsValidField("zippostalcode")){<text>glyphicon-remove</text>}else if(ModelState.IsValidField("zippostalcode") && Request.Form["zippostalcode"] != null){<text>glyphicon-ok</text>} form-control-feedback" aria-hidden="true"></span>
+				<span id="postalStatus" class="sr-only">@if(!ModelState.IsValidField("zippostalcode")){<text>(error)</text>}else if(ModelState.IsValidField("zippostalcode") && Request.Form["zippostalcode"] != null){<text>(success)</text>}</span>
+                @* Write any postal validation errors to the page 
+                Html.ValidationMessage("zippostalcode")
+            </div>-->*
+            <div class="col-mid-12">&nbsp;</div>
+            <div class="recaptcha"><!-- Google Captcha -->
+				<div id="captcha" class="g-recaptcha" data-sitekey="6LeZhAcTAAAAAPx3LLf1H7tRH5gB_aHb0b0plFrM" @*data-stoken=""*></div>
+                <!--<div class="message-info">
+                    <p>
+                        To enable CAPTCHA verification, <a href="http://go.microsoft.com/fwlink/?LinkId=204140">install the 
+                        ASP.NET Web Helpers Library</a> and uncomment ReCaptcha.GetHtml and replace 'PUBLIC_KEY'
+                        with your public key. At the top of this page, uncomment ReCaptcha. Validate and
+                        replace 'PRIVATE_KEY' with your private key.
+                        Register for reCAPTCHA keys at <a href="http://recaptcha.net">reCAPTCHA.net</a>.
+                    </p>
+                </div>-->
+                @*
+                @ReCaptcha.GetHtml("PUBLIC_KEY", theme: "white")
+                @Html.ValidationMessage("recaptcha")*
+            </div>
+        </div>
+        <button type="submit" class="btn btn-default" >Register</button>
+    </fieldset>
+</form>
+*@
+<!-- Wizard with Validation -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default"><!--
+                            <div class="panel-heading"> 
+                                <h3 class="panel-title">Wizard with Validation</h3> 
+                            </div> -->
+                            <div class="panel-body"> 
+                                <form id="wizard-validation-form" action="/Account/MemberSignUp" method="post"><!---->
+                                    <div>
+                                        <h3>Account</h3>
+                                        <section>
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-2 control-label " for="username">Username <span class="mandatory">*</span></label>
+                                                <div class="col-lg-10"><!-- input-group
+													<span class="input-group-addon"><em class="fa fa-user"></em></span>-->
+                                                    <input id="username" name="username" type="text" class="required form-control username" value="@username" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-2 control-label " for="email">Email <span class="mandatory">*</span></label>
+                                                <div class="col-lg-10"><!-- input-group
+													<span class="input-group-addon"><em class="fa fa-user"></em></span>-->
+                                                    <input id="email" name="email" type="email" class="required email form-control" value="@email">
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-2 control-label " for="password"> Password <span class="mandatory">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <input id="password" name="password" type="password" class="required form-control password">
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-2 control-label " for="confirm-password">Confirm Password <span class="mandatory">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <input id="confirm-password" name="confirm-password" type="password" class="required form-control confirm-password">
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-12 control-label ">(<span class="mandatory">*</span>) Mandatory</label>
+                                            </div>
+                                        </section>
+                                        <h3>Contact</h3>
+                                        <section>
+
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-2 control-label" for="firstname">First name <span class="mandatory">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <input id="firstname" name="firstname" type="text" class="required form-control firstname" value="@firstname">
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-2 control-label " for="lastname">Last name <span class="mandatory">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <input id="lastname" name="lastname" type="text" class="required form-control lastname" value="@lastname">
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-2 control-label " for="phonenumber">Phone Number</label>
+                                                <div class="col-lg-10">
+                                                    <input id="phonenumber" name="phonenumber" type="text" class="form-control phonenumber" data-mask="(999) 999-9999" value="@phonenumber">
+													<!--<span class="help-inline">(999) 999-9999</span>-->
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-2 control-label " for="mobilenumber">Mobile Number</label>
+                                                <div class="col-lg-10">
+                                                    <input id="mobilenumber" name="mobilenumber" type="text" class="form-control mobilenumber" data-mask="(999) 999-9999" value="@mobilenumber">
+													<!--<span class="help-inline">(999) 999-9999</span>-->
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-12 control-label ">(<span class="mandatory">*</span>) Mandatory</label>
+                                            </div>
+
+                                        </section><!--
+                                        <h3>Personal</h3>
+                                        <section>
+                                            <!--<div class="form-group clearfix">
+                                                <div class="col-lg-12">
+                                                    <ul class="list-unstyled w-list">
+                                                        <li>First Name : Jonathan </li>
+                                                        <li>Last Name : Smith </li>
+                                                        <li>Emial: jonathan@smith.com</li>
+                                                        <li>Address: 123 Your City, Cityname. </li>
+                                                    </ul>
+                                                </div>
+                                            </div>--
+											<div class="country form-group clearfix">
+												<label class="col-lg-2 control-label">Country</label>
+												<div class="col-lg-10">
+													<select class="country select2" data-placeholder="Choose a Country...">
+														<option value="#">&nbsp;</option>
+													</select>
+												</div>
+											<!--<input type="text" class="form-control" id="country" name="country" required="required" />--
+											</div>
+            <div id="placeholder"></div>
+            <div class="city form-group clearfix">
+                <label for="city" class="col-lg-2 control-label">City</label>
+				<div class="col-lg-10">
+					<input type="text" class="form-control city" id="city" name="city" aria-describedby="cityStatus"/><!--
+				<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+				<span id="cityStatus" class="sr-only"></span>--
+				</div>
+            </div>@* 
+            <div class="col-md-6 state form-group @if(!ModelState.IsValidField("state")){<text>has-error has-feedback</text>}else if(ModelState.IsValidField("state") && Request.Form["state"] != null){<text>has-success has-feedback</text>}">
+                <label for="state" class="control-label @if(!ModelState.IsValidField("state")) {<text>error-label</text>}">State</label>
+                <input type="text" class="form-control" id="state" name="state" @Validation.For("state") aria-describedby="stateStatus" required="required" />
+				<span class="glyphicon @if(!ModelState.IsValidField("state")){<text>glyphicon-remove</text>}else if(ModelState.IsValidField("state") && Request.Form["state"] != null){<text>glyphicon-ok</text>} form-control-feedback" aria-hidden="true"></span>
+				<span id="stateStatus" class="sr-only">@if(!ModelState.IsValidField("state")){<text>(error)</text>}else if(ModelState.IsValidField("state") && Request.Form["state"] != null){<text>(success)</text>}</span>
+                @* Write any state validation errors to the page @
+                Html.ValidationMessage("state")
+            </div>
+            <div class="col-md-6 zippostalcode form-group @if(!ModelState.IsValidField("zippostalcode")){<text>has-error has-feedback</text>}else if(ModelState.IsValidField("zippostalcode") && Request.Form["zippostalcode"] != null){<text>has-success has-feedback</text>}">
+                <label for="zippostalcode" class="control-label @if(!ModelState.IsValidField("zippostalcode")) {<text>error-label</text>}">Zip/Postal Code</label>
+                <input type="text" class="form-control" id="zippostalcode" name="zippostalcode" @Validation.For("zippostalcode") aria-describedby="postalStatus" required="required" />
+				<span class="glyphicon @if(!ModelState.IsValidField("zippostalcode")){<text>glyphicon-remove</text>}else if(ModelState.IsValidField("zippostalcode") && Request.Form["zippostalcode"] != null){<text>glyphicon-ok</text>} form-control-feedback" aria-hidden="true"></span>
+				<span id="postalStatus" class="sr-only">@if(!ModelState.IsValidField("zippostalcode")){<text>(error)</text>}else if(ModelState.IsValidField("zippostalcode") && Request.Form["zippostalcode"] != null){<text>(success)</text>}</span>
+                @* Write any postal validation errors to the page 
+                Html.ValidationMessage("zippostalcode")
+            </div>-->*@
+											<div class="address form-group clearfix">
+												<label for="address" class="col-lg-2 control-label">Street Address</label>
+												<div class="col-lg-10">
+													<input type="text" class="form-control" id="address" name="address" value="@address" />
+                                                </div>
+											</div>
+                                            <div class="address form-group clearfix">
+                                                <label class="col-lg-2 control-label " for="address2">Address Line 2</label>
+                                                <div class="col-lg-10">
+                                                    <input id="address2" name="address2" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                        </section>-->
+                                        <h3>Confirm</h3>
+                                        <section><!--
+                                            <div class="form-group clearfix">
+                                                <div class="col-lg-12">
+                                                    <input id="acceptTerms" name="acceptTerms" type="checkbox" class="required">
+                                                    <label for="acceptTerms">I agree with the Terms and Conditions.</label>
+                                                </div>
+                                            </div>-->
+											<div class="form-group clearfix">
+												<div class="col-lg-12">
+													<label class="cr-styled" for="acceptAge">
+														<input id="acceptAge" name="acceptAge" type="checkbox" class="required acceptAge" checked="checked">
+														<i class="fa"></i> 
+														I am of age <strong><em><a href="#">13 or older</a></em></strong>
+														<span class="mandatory">*</span>
+													</label>
+												</div>
+											</div>
+											<div class="form-group clearfix">
+												<div class="col-lg-12">
+													<label class="cr-styled" for="acceptTerms">
+														<input id="acceptTerms" name="acceptTerms" type="checkbox" class="required acceptTerms" checked="checked">
+														<i class="fa"></i> 
+														I accept <strong><a href="/privacy" target="_blank">Terms and Conditions</a></strong>
+														<span class="mandatory">*</span>
+													</label>
+												</div>
+											</div>
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-12 control-label ">(<span class="mandatory">*</span>) Mandatory</label>
+                                            </div>
+											<div class="col-lg-12">&nbsp;</div>
+											<div class="recaptcha"><!-- Google Captcha -->
+												<div id="captcha" class="g-recaptcha" data-sitekey="6LeZhAcTAAAAAPx3LLf1H7tRH5gB_aHb0b0plFrM" @*data-stoken=""*@></div>
+												@*ReCaptcha.GetHtml("PUBLIC_KEY", theme: "white")
+												@Html.ValidationMessage("recaptcha")*@
+											</div>
+                                        </section>
+                                    </div>
+                                </form>
+                            </div>  <!-- End panel-body -->
+                        </div> <!-- End panel -->
+                    </div> <!-- end col -->
+                </div> <!-- End row -->
+
+@section HeadCSS{
+		<!-- Bootstrap core CSS -->
+        <link href="/_assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/_assets/css/bootstrap-reset.css" rel="stylesheet">
+
+        <!--Animation css-->
+        <link href="/_assets/css/animate.css" rel="stylesheet">
+
+        <!--Icon-fonts css-->
+        <link href="/_assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link href="/_assets/ionicon/css/ionicons.min.css" rel="stylesheet" />
+
+        <!--Form Wizard-->
+        <link href="/_assets/form-wizard/jquery.steps.css" rel="stylesheet" type="text/css" />
+
+		
+        <link rel="stylesheet" type="text/css" href="assets/select2/select2.css" />
+
+        <!-- Custom styles for this template --
+        <link href="/_assets/css/style.css" rel="stylesheet">
+        <link href="/_assets/css/helper.css" rel="stylesheet">
+        
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+        <!--[if lt IE 9]>
+          <script src="js/html5shiv.js"></script>
+          <script src="js/respond.min.js"></script>
+        <![endif]-->
+}
+@section FooterJS{
+		<!-- js placed at the end of the document so the pages load faster -->
+        <script src="/_assets/js/jquery.js"></script>
+        <script src="/_assets/js/bootstrap.min.js"></script>
+        <script src="/_assets/js/pace.min.js"></script>
+        <script src="/_assets/js/wow.min.js"></script>
+        <!--<script src="/_assets/js/jquery.nicescroll.js" type="text/javascript"></script>-->
+
+
+        <!--Form Validation-->
+        <script src="/_assets/form-wizard/bootstrap-validator.min.js" type="text/javascript"></script>
+
+        <!--Form Wizard-->
+        <script src="/_assets/form-wizard/jquery.steps.min.js" type="text/javascript"></script>
+        <script src="/_assets/jquery.validate/jquery.validate.min.js" type="text/javascript"></script>
+
+        <!--wizard initialization-->
+        <script src="/_assets/form-wizard/wizard-init.js" type="text/javascript"></script>
+
+
+        <script src="/_assets/js/jquery.app.js"></script>
+        <script src="/_assets/select2/select2.min.js" type="text/javascript"></script>
+        <script src="assets/bootstrap-inputmask/bootstrap-inputmask.min.js" type="text/javascript"></script>
+		<script>
+            jQuery(document).ready(function() {
+                    
+                // Select2
+                jQuery(".select2").select2({
+                    width: '100%'
+                });
+            });
+        </script>
+@*<script>
+$(document).ready(function() {
+    $('#wizard-validation-form').bootstrapValidator({//(#registerForm).formValidation
+        framework: 'bootstrap',
+        //message: 'Account creation was unsuccessful. Please correct the errors and try again.', //This value is not valid
+        excluded: [':disabled', ':hidden', ':not(:visible)'],
+        live: 'enabled',
+        trigger: null,
+        /*err: {
+            container: 'tooltip' //'popover' :pop-up
+        },*/
+        icon: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            username: {
+                validators: {
+                    /*remote: {
+                        type: 'POST',
+                        url: '/path/to/your/api/',
+                        data: {
+                            type: 'username'
+                        },
+                        message: 'The username is not available'
+                    },*/
+                    notEmpty: {
+                        message: 'You must provide an user name'
+                    },
+                    stringLength: {
+                        min: 5,
+                        max: 25,
+                        message: 'The username must be more than 5 and less than 25 characters long' //Min 5, to no more than 25 characters
+                    },
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_]+$/, //@@"^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9._%+-]*$", 
+                        message: 'The username can only consist of alphabetical, number and underscore'//"Characters AND numbers, please."
+                    }
+                }
+            },
+            email: {
+                validators: {
+                    /*remote: {
+                        type: 'POST',
+                        url: '/path/to/your/api/',
+                        data: {
+                            type: 'email'
+                        },
+                        // Send { username: 'its value', email: 'its value' } to the back-end
+                        data: function(validator, $field, value) {
+                            return {
+                                email: validator.getFieldElements('email').val()
+                            };
+                        },
+                        message: 'The email is not available'
+                    },*/
+                    notEmpty: {
+                        message: '"You must specify an email address.'
+                    }//Regex(@@"^[A-Za-z0-9._%+-]+@@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$",  //"Invalid format for an email address" 
+                }
+            },
+            password: {
+                validators: {
+                    notEmpty: {
+                        message: 'Password cannot be blank.'
+                    },
+                    stringLength: {
+                        min: 6,
+                        max: 4000, //Int32.MaxValue,
+                        message: 'Password must be at least 6 characters' 
+                    }
+                }
+            },
+            confirmPassword: {
+                validators: {
+                    notEmpty: {
+                        message: 'Password and confirmation password do not match.'
+                    }
+                }
+            },
+            firstname: {
+                validators: {
+                    notEmpty: {
+                        message: 'You must specify your First Name.'
+                    }
+                }
+            },
+            lastname: {
+                validators: {
+                    notEmpty: {
+                        message: 'You must specify your Last Name.'
+                    }
+                }
+            },
+            phonenumber: {
+                validators: {
+                    notEmpty: {
+                        message: 'You must specify your Last Name.'
+                    },
+                    stringLength: {
+                        min: 10,
+                        max: 10,
+                        message: 'Phone number must be at 10 digits' 
+                    },
+                    regexp: {
+                        regexp: /[0-9]/,
+                        message: 'Numerics digits only, No text or punctuations.'
+                    }/*,
+                    numeric: {//or digits
+                        message: 'Numeric digits only, please.' //'The phone number can contain digits only'
+                    }*/
+                }
+            },
+            mobilenumber: {
+                validators: {
+                    notEmpty: {
+                        message: 'You must specify your Last Name.'//Mobile or Phone
+                    },
+                    stringLength: {
+                        min: 10,
+                        max: 10,
+                        message: 'Phone number must be at 10 digits' 
+                    },
+                    regexp: {
+                        regexp: /[0-9]/,
+                        message: 'Numerics digits only, No text or punctuations.'
+                    }/*,
+                    numeric: {
+                        message: 'Numeric digits only, please.'
+                    }*/
+                }
+            },
+            address: {
+                validators: {
+                    notEmpty: {
+                        message: 'You must specify your street address.'
+                    }
+                }
+            },
+            country: {
+                validators: {
+                    notEmpty: {
+                        message: 'You must specify your country.'
+                    }
+                }
+            },
+            state: {
+                validators: {
+                    notEmpty: {
+                        message: 'You must specify your state.'
+                    }
+                }
+            },
+            city: {
+                validators: {
+                    notEmpty: {
+                        message: 'You must specify your city.'
+                    }
+                }
+            },
+            zippostalcode: {
+                validators: {
+                    notEmpty: {
+                        message: 'You must specify a postal zip Code.'
+                    },
+                    stringLength: {
+                        min: 5,
+                        max: 5,
+                        message: 'Zip code must be at 5 digits' 
+                    },
+                    regexp: {
+                        regexp: /[0-9]/,
+                        message: 'Numerics digits only, No text or punctuations.'
+                    }/*,
+                    numeric: {
+                        message: 'Numeric digits only, please.'
+                    }*/
+                }
+            }
+        }//end fields
+    })
+    .on('status.field.fv', function(e, data) {
+        // data.field is the field name
+        // data.status is the current status of validator
+        // data.element is the field element
+
+        if (data.field === 'username') {
+            // Assume that the form uses the Bootstrap framework
+            // and has a standard structure
+            // Each pair of field and label are placed inside a .form-group element
+
+            // Determine the field container
+            var $container = data.element.closest('.form-group');
+
+            (data.status === 'VALIDATING')
+                ? $container.addClass('custom-class')
+                : $container.removeClass('custom-class');
+                //? $('#progressBar').show()      // Show the progress bar while we are validating
+                //: $('#progressBar').hide();     // Otherwise, hide it
+        }
+    });
+});
+</script>*@
+@*
+<script>
+var form = $("#wizard-validation-form");
+form.validate({
+//jQuery.validator.addClassRules({
+    //errorPlacement: function errorPlacement(error, element) { element.before(error); },
+    rules: {
+                firstname: "required",
+                lastname: "required",
+                username: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 25
+                        //regexp: /^[a-zA-Z0-9_]+$/ //@@"^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9._%+-]*$", 
+						/*remote: {
+                        type: 'POST',
+                        url: '/path/to/your/api/',
+                        data: {
+                            type: 'email'
+                        },
+                        // Send { username: 'its value', email: 'its value' } to the back-end
+                        data: function(validator, $field, value) {
+                            return {
+                                email: validator.getFieldElements('email').val()
+                            };
+                        },
+                    },
+
+					a.ajax(a.extend(!0, {
+					url: d,
+					mode: "abort",
+					port: "validate" + c.name,
+					dataType: "json",
+					data: f,
+					context: e.currentForm,
+					success: function(d) {
+						var f, h, i, j = d === !0 || "true" === d;
+						e.settings.messages[c.name].remote = g.originalMessage,
+						j ? (i = e.formSubmitted,
+						e.prepareElement(c),
+						e.formSubmitted = i,
+						e.successList.push(c),
+						delete e.invalid[c.name],
+						e.showErrors()) : (f = {},
+						h = d || e.defaultMessage(c, "remote"),
+						f[c.name] = g.message = a.isFunction(h) ? h(b) : h,
+						e.invalid[c.name] = !0,
+						e.showErrors(f)),
+						g.valid = j,
+						e.stopRequest(c, j)
+					}
+					
+					*/	
+                },
+                password: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 4000
+                },
+                "confirm-password": {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 4000,
+                    equalTo: "#password"
+                },
+                phonenumber: {
+                    required: false,
+                    minlength: 10,
+                    maxlength: 10,
+                    digits: true
+                },
+                email: {
+                    required: true,
+                    email: true
+                },/*
+                address: "required",
+                country: "required",
+                state: "required",
+                city: "required",
+                zippostalcode: {
+                    required: false,
+                    minlength: 5,
+                    maxlength: 5,
+                    digits: true
+                },
+                topic: {
+                    required: "#newsletter:checked",
+                    minlength: 2
+                },*/
+                agree: "required"
+            },
+            messages: {
+                firstname: "Please enter your firstname",
+                lastname: "Please enter your lastname",
+                username: {
+                    required: "Please enter a username", //'You must provide an user name'
+                    minlength: "The username must be at least 5 characters long", //Min 5, to no more than 25 characters
+                    maxlength: "The username must not be more than 25 characters long" //Min 5, to no more than 25 characters
+                    //rangelength: "The username must be between 5 and 25 characters long", //Min 5, to no more than 25 characters
+                    //regexp: "The username can only consist of alphabetical, number and underscore" //"Characters AND numbers, please."
+					//remote: "The email is not available"
+                },
+                password: {
+                    required: "Please provide a password",
+                    minlength: "Your password must be at least 6 characters long",
+                    maxlength: "Your password max is 4000 characters long"
+                },
+                "confirm-password": {
+                    required: "Please provide a password",
+                    minlength: "Your password must be at least 6 characters long",
+                    maxlength: "Your password max is 4000 characters long",
+                    equalTo: "Please enter the same password as above"
+                },
+                phonenumber: {
+                    required: "Please provide a password",
+                    minlength: "Your password must be 10 digits long",
+                    maxlength: "Your password must be 10 digits long",
+                    digits: "Please enter a valid phone number" //'Numerics digits only, No text or punctuations.'
+                },
+                mobilenumber: {
+                    required: "Please provide a password",
+                    minlength: "Your password must be 10 digits long",
+                    maxlength: "Your password must be 10 digits long",
+                    digits: "Please enter a valid phone number" //'Numerics digits only, No text or punctuations.'
+                },
+                email: "Please enter a valid email address",/*
+                address: "You must specify your street address.",//Please specify
+                country: "You must specify your country.",
+                state: "You must specify your state.",
+                city: "You must specify your city.",
+                zippostalcode: {
+                    required: "You must specify a postal zip Code.",
+                    minlength: "Zip code must be at 5 digits",
+                    maxlength: 5,
+                    digits: "Numerics digits only, No text or punctuations."
+                },*/
+                agree: "Please accept our policy"
+    }
+});
+</script>*@
+}

@@ -1,0 +1,87 @@
+@{
+    //Layout = "~/Layouts/Template/about.cshtml";
+    Page.Title = "Testimonials";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+}@*<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" ><!-- InstanceBegin template="/Templates/About-Us.dwt" codeOutsideHTMLIsLocked="false" --> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" >
+<!--<![endif]-->
+  <head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- InstanceBeginEditable name="doctitle" --><title>@Page.Title</title><!-- InstanceEndEditable --><!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+	
+    <!-- {module_contentholder, name="_Template - Head Scripts"} -->	
+	@RenderPage("~/_System/ContentHolders/_Template - Head Scripts.cshtml")
+	
+  </head>
+  <body id="top" class="thebg two-column">
+    
+    <!-- Header -->	
+	<!-- {module_contentholder, name="_Template - Header"} -->	
+	@RenderPage("~/_System/ContentHolders/_Template - Header.cshtml")
+	<!-- /Header -->
+	
+	<div class="clearfix"></div>		
+
+	<!-- Content -->
+	<div class="container page-top">
+		
+		<!-- MAIN Content -->
+		<div class="col-md-8 pagecontainer content-pad">
+			
+			*@<!-- InstanceBeginEditable name="ContentArea" --><h2>Testimonials</h2>
+<div class="line3"></div>
+<p class="lato size20 slim textcenter margtop20">For us, there is nothing better than a happy customer. And we have lots of them! Here are just a few that let us know how much we meant to them.
+</p>
+<hr class="margtop20" />
+<!-- {module_webapps,Testimonials,a,,,,true,,,1,} -->	
+@RenderPage("~/Layouts/WebApps/Testimonials/list_backup.cshtml")
+<!-- InstanceEndEditable -->@*
+			
+		</div>
+		<!-- /MAIN Content -->
+		
+		<!-- Sidebar Content -->
+		<div class="col-md-4 sidebar">
+		
+			<!-- Features Sidenav -->	
+			<!-- {module_contentholder, name="_Sidebar - Nav - About"} -->	
+	        @RenderPage("~/_System/ContentHolders/_Sidebar - Nav - About.cshtml")
+			<!-- /Features Sidenav -->
+			
+			<!-- Deals -->	
+			<!-- {module_contentholder, name="_Sidebar - Deals"} -->	
+	        @RenderPage("~/_System/ContentHolders/_Sidebar - Deals.cshtml")
+			<!-- /Deals -->
+			
+			<!-- Help -->	
+			<!-- {module_contentholder, name="_Sidebar - Help"} -->	
+	        @RenderPage("~/_System/ContentHolders/_Sidebar - Help.cshtml")
+			<!-- /Help -->
+			
+		</div>
+		<!-- /Sidebar Content -->
+			
+	</div>
+	<!-- /Content -->
+				
+	<!-- FOOTER -->
+	<!-- {module_contentholder, name="_Template - Footer"} -->	
+	@RenderPage("~/_System/ContentHolders/_Template - Footer.cshtml")
+	<!-- /FOOTER -->
+			
+	<!-- {module_contentholder, name="_Template - Footer Scripts -->	
+	@RenderPage("~/_System/ContentHolders/_Template - Footer Scripts.cshtml")
+	
+  </body>
+<!-- InstanceEnd --></html>*@

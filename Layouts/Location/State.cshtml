@@ -1,0 +1,50 @@
+﻿@{
+    var db = Database.Open("Location");
+    var countries = db.Query("SELECT DISTINCT country FROM locations_zipcodes WHERE type=@0",Request.QueryString["type"]);//db.Query("SELECT * FROM locations_countries");
+    var CountryItems = countries.Select(i => new SelectListItem {
+        Value = i.code, 
+        Text = i.country,
+        //Selected = i.code == "US" ? true : false
+    });
+    var state = db.Query("SELECT DISTINCT state FROM locations_zipcodes WHERE country='US'"); //OR Type==@0, Request.Form["Type"]
+    var us_states = us_zipcodes.Select(i => new SelectListItem {
+        Value = i.state, 
+        Text = i.state,
+        //Selected = i.code == "US" ? true : false
+    });
+    /*var city = db.Query("SELECT DISTINCT state FROM locations_zipcodes WHERE country='US'"); //OR Type==@0, Request.Form["Type"]
+    var us_states = us_zipcodes.Select(i => new SelectListItem {
+        Value = i.state, 
+        Text = i.state,
+        //Selected = i.code == "US" ? true : false
+    });*/
+    //DateTime now = DateTime.Now;
+
+    /*var filter_countries = db.Query("SELECT DISTINCT country FROM locations_zipcodes WHERE type=@0",Request.QueryString["type"]);
+    var filter_state= db.Query("SELECT DISTINCT country FROM locations_zipcodes WHERE type=@0",Request.QueryString["country"]);
+    var filter_city= db.Query("SELECT DISTINCT country FROM locations_zipcodes WHERE type=@0",Request.QueryString["state"]);
+    var filter_zip= db.Query("SELECT DISTINCT country FROM locations_zipcodes WHERE type=@0",Request.QueryString["city"]);*/
+
+}
+@*<div class="col-md-6">
+        @Html.DropDownList("Country","Country",CountryItems,"US",new Dictionary<string, object>(){{ "id", "Country"}, {"class","form-control"}})
+</div>*@@if(Request.QueryString["country"]=="US"){<text>
+<div class="col-md-2">
+    @Html.DropDownList("State","State",us_states,new Dictionary<string, object>(){{ "id", "State"}, {"class","form-control"}})
+    <!--<input type="text" name="State" id="State" class="form-control" placeholder="State" />-->
+</div>
+<div class="col-md-4">
+    <input type="text" name="Zip" id="Zip" class="form-control" placeholder="Zipcode/Postcode" 
+        @if(!Request.QueryString["city"].IsEmpty()){<text>value="@db.QueryValue("SELECT * locations_zipcodes WHERE (primary_city=@0 OR acceptable_cities=@0) and decommissioned='false'",Request.QueryString["city"])"</text>} />
+</div></text>}else{<text>
+<div class="col-md-2">
+    <!--Html.DropDownList("State","State",us_states,new Dictionary<string, object>(){{ "id", "State"}, {"class","form-control"}})-->
+    <input type="text" name="State" id="State" class="form-control" placeholder="State" value="FC" type="Foreign Country" disabled="disabled" />
+</div></text>}
+<div class="col-md-6">
+    <input type="text" name="City" id="City" class="form-control" placeholder="City" />
+    @if(!Request.QueryString["state"].IsEmpty()){<datalist>
+        @foreach(var city in db.Query("SELECT DISTINCT primary_city FROM locations_zipcodes WHERE decommissioned='false' AND state=@0",Request.QueryString["state"])){
+            <option value="@city.primary_city"></option>}
+    </datalist>}
+</div>

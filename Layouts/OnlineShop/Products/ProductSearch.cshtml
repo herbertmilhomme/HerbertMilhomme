@@ -1,0 +1,34 @@
+﻿@{
+    var db = Database.Open("ColonielHeights");
+    var categories = db.Query("SELECT * FROM [taxonomy_en-US] WHERE ClassTier=1");
+    var categorylist = categories.Select(i => new SelectListItem {
+        Value = i.classid.ToString(), 
+        Text = (string)i.classname//,
+        //Selected = i.code == "US" ? true : false
+    });
+}
+<section class="hero">
+                <div class="container text-center">
+                    <h2 class="hero-title">Find something here</h2>
+                    <p class="hero-description hidden-xs">Search all things you need. A simple way given to you.</p>
+                    <div class="row hero-search-box">
+                        <form>
+                            <div class="col-md-6 col-sm-6 search-input">
+                                <input type="text" class="form-control input-lg search-first" placeholder="I&#39;m feeling lucky...">
+                            </div>
+                            <div class="col-md-5 col-sm-5 search-input">
+								@Html.DropDownList("ProductClass","All Catagories",categorylist,"0",new Dictionary<string, object>(){{ "id", "ProductClass"}, {"class","form-control input-lg search-second" }})
+                                        <!--<select class="form-control input-lg search-second">
+                                            <option selected="">All Location</option>
+                                            <option>New York</option>
+                                            <option>Washington</option>
+                                            <option>California</option>
+                                        </select>-->
+                            </div>
+                            <div class="col-md-1 col-sm-1 search-input">
+                                <button class="btn btn-custom btn-block btn-lg"><i class="fa fa-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>

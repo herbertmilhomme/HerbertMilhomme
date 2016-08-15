@@ -1,0 +1,17 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    var blogs = db.QuerySingle("SELECT * FROM website_blogs WHERE dateposted<=getdate() ORDER BY dateposted desc");
+}@*if(announcements == null){
+    <article class="announcement-list">
+	    <h2>No News</h2>
+	    <p>Nothing new to mention here, sorry.</p> 
+    </article>
+ }else{foreach(var item in announcements){
+    <article class="announcement-list">
+	    <h2>@item.subject <time datetime="@item.date" class="date">@item.date</time></h2>
+	    <p>@item.body</p> 
+    </article>}
+}*@<div class="blog-list">   
+    <h1>@blogs.title</h1>@*<a href="@item.permalink" title="@item.title">@item.title</a>*@
+    <span class="label">Last Posted:</span> <time datetime="@blogs.lastpost" class="date">@blogs.lastpost</time> | <span class="label">Total Posts:</span> {tag_totalposts}  
+</div>    

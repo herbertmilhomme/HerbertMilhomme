@@ -1,0 +1,18 @@
+﻿@{
+	var db = Database.Open("ColonielHeights");
+	string SendMsg = string.Empty;
+
+	if(IsPost){
+        // Verify the request was submitted by the user
+        //AntiForgery.Validate();
+
+		///var sql = @"INSERT INTO website_livechat (userid, userName, ipaddress, postmsg, server, alias, sent, postdate) VALUES (@0, @1, @2, @3, @4, @5, @6, CONVERT(varchar(50),@7,101))";
+		var sql = @"INSERT INTO template_pizza (name, pizza, store) VALUES (@0, @1, @2)";
+		//var alias = WebSecurity.IsAuthenticated ? db.QueryValue("SELECT Alias FROM UserProfile WHERE userid=@0",WebSecurity.CurrentUserId) : Request.Cookies["alias"].Value.ToString();
+
+		//db.Execute(sql, (int)Page.userid, (string)Page.username, (string)Page.ipAddress, (string)Request.Form["SendMsg"], (int)int.Parse(Request.QueryString["server"]), (string)alias, true, (string)DateTimeOffset.Now.ToString("yyyy'-'MM'-'dd' 'HH':'mm':'ss' 'zzz"));
+		db.Execute(sql, Request.Form["name"], Request.Form["pizza"], Request.Form["store"]);
+		
+		Context.RedirectLocal("~/Templates/Pizza/tracker?order="+PizzaTemplate.Tracker.Context.ConnectionId);
+	}
+}

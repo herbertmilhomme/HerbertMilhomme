@@ -1,0 +1,131 @@
+@RenderPage("~/ModuleTemplates/Forum/WhoIsOnline.cshtml")
+<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" ><!-- InstanceBegin template="/Templates/Contact-Us.dwt" codeOutsideHTMLIsLocked="false" --> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" >
+<!--<![endif]-->
+    <head>
+  	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <!-- InstanceBeginEditable name="doctitle" --><title>@Page.Title</title><!-- InstanceEndEditable --><!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+	
+        <!--{module_contentholder, name="_Template - Head Scripts"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Head Scripts.cshtml")
+	
+    </head>
+<body id="top">
+    @RenderSection("googlemanager", required: false)
+
+<!-- remove div#root and replace div#root with main#root or create main#content-->
+<div id="root" class="thebg two-column">
+    <!-- Header -->	
+	@RenderPage("~/_System/ContentHolders/_Template - Header.cshtml")
+	<!-- /Header -->
+	
+	<div class="clearfix"></div>	
+
+    <!-- Top Ads Banner -->
+    @RenderSection("topbanner", required: false)
+	<!-- /Top Ads Banner -->
+
+	<!-- Content -->
+	<section @*id="content"*@ class="blog-container container page-top">
+    <!-- Content -->
+
+	    <!-- Left Ads Banner -->
+        @RenderSection("leftbanner", required: false)
+	    <!-- /Left Ads Banner -->
+		
+		
+	    <!-- MAIN Content -->
+		    <div class="col-md-8 pagecontainer content-pad">
+			
+			    <!-- InstanceBeginEditable name="ContentArea" -->
+				@RenderBody()
+@*<div class="col-md-6">
+	    <h2>Visit Our Office</h2>
+	    <hr />
+	    <div class="map-container">
+		    <iframe width="500" height="340" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Miami,+FL&amp;aq=0&amp;oq=MiamiFlorida&amp;sll=26.730893,-80.870361&amp;sspn=5.439227,6.547852&amp;ie=UTF8&amp;hq=&amp;hnear=Miami,+Miami-Dade,+Florida&amp;t=m&amp;z=13&amp;iwloc=A&amp;output=embed"></iframe>
+	    </div>
+</div>
+<div class="col-md-6">
+	    <h2>Send Us a Message</h2>
+	    <hr />
+	    <form name="catwebformform11247" method="post" onsubmit="return checkWholeForm11247(this)" enctype="multipart/form-data" action="/FormProcessv2.aspx?WebFormID=10090&amp;OID={module_oid}&amp;OTYPE={module_otype}&amp;EID={module_eid}&amp;CID={module_cid}">
+		
+		    <input type="text" name="FirstName" id="FirstName" class="form-control" placeholder="First Name">
+		    <input type="text" name="LastName" id="LastName" class="form-control margtop20" placeholder="Last Name">
+		    <input type="tel"  name="HomePhone" id="HomePhone" class="form-control margtop20" placeholder="Phone">
+		    <input type="email" name="EmailAddress" id="EmailAddress" class="form-control margtop20" placeholder="Email Address">
+		    <textarea name="CAT_Custom_869" id="CAT_Custom_869" rows="4" placeholder="Comments or Questions" class="form-control margtop20"></textarea>
+		    <!--the textbox-->{module_ccsecurity}
+		    <!--the image--><p>{module_recaptcha}</p>
+		    <p><input class="btn greenbtn" type="submit" value="Submit" id="catwebformbutton" /></p>
+	
+		    <script type="text/javascript" src="/CatalystScripts/ValidationFunctions.js"></script>
+	        <script type="text/javascript">
+	        //<![CDATA[
+	        var submitcount11247 = 0;
+            function checkWholeForm11247(theForm){
+                var why = "";
+                if (theForm.FirstName) why += isEmpty(theForm.FirstName.value, "First Name"); 
+                if (theForm.LastName) why += isEmpty(theForm.LastName.value, "Last Name"); 
+                if (theForm.HomePhone) why += isEmpty(theForm.HomePhone.value, "Home Phone Number"); 
+                if (theForm.EmailAddress) why += checkEmail(theForm.EmailAddress.value); 
+                if (theForm.CaptchaV2) why += captchaIsInvalid(theForm, "Enter Word Verification in box below", "Please enter the correct Word Verification as seen in the image");
+                if(why != ""){alert(why);return false;}
+                if(submitcount11247 == 0){submitcount11247++;theForm.submit();return false;}else{alert("Form submission is in progress.");return false;}}
+	        //]]>
+	        </script>
+	    </form>
+</div>
+
+
+*@<!-- InstanceEndEditable -->
+			
+		    </div>
+		    <!-- /MAIN Content -->
+		
+		    <!-- Sidebar Content -->
+		    <aside class="col-md-4 sidebar">
+		
+			    <!-- Contact -->	
+			    <!--{module_contentholder, name="_Sidebar - Contact"}-->
+                @RenderPage("~/_System/ContentHolders/_Sidebar - Contact.cshtml")
+			    <!-- /Contact -->
+			
+			    <!-- Deals -->	
+			    <!--{module_contentholder, name="_Sidebar - Deals"}-->
+                @RenderPage("~/_System/ContentHolders/_Sidebar - Deals.cshtml")
+			    <!-- /Deals -->
+			
+			    <!-- Help -->	
+			    <!--{module_contentholder, name="_Sidebar - Help"}-->
+                @RenderPage("~/_System/ContentHolders/Sidebar - Help.cshtml")
+			    <!-- /Help -->
+
+        <!-- Right Ads Banner -->
+        @RenderSection("rightbanner", required: false)
+	    <!-- /Right Ads Banner -->
+
+			</aside>
+		<!-- /Sidebar Content -->
+
+	<!-- /Content -->	
+	</section><!-- #content -->
+	
+    <!-- Bottom Ads Banner -->
+    @RenderSection("bottombanner", required: false)
+	<!-- /Bottom Ads Banner -->
+
+		<!-- FOOTER -->
+	    <!--{module_contentholder, name="_Template - Footer"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer.cshtml")
+	    <!-- /FOOTER -->
+			
+	    <!--{module_contentholder, name="_Template - Footer Scripts"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer Scripts.cshtml")
+	
+    </body>
+<!-- InstanceEnd --></html>

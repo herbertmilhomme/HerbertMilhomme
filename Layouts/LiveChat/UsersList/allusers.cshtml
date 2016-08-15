@@ -1,0 +1,19 @@
+﻿<ul>
+				@foreach(var mu in db.Query("SELECT * FROM Userprofile")){
+					//if userid lastactivity>now-5mins "online" else "offline"
+					if(Membership.GetUser().IsOnline){<text>
+    <li>
+							@db.QueryValue("SELECT Username FROM UserProfile WHERE userid=0",WebSecurity.GetUserId(Membership.GetUser().Email))
+		<ul class="dropdown-menu">
+			<li>
+				<form id="userForm" @if(WebSecurity.IsAuthenticated){<text>action="~/Account/AddFriend?userid=@WebSecurity.GetUserId(Membership.GetUser().Email)"</text>} method="post">
+					<a href="javascript:document.getElementById('userForm').submit()">Add to friends/Unfriend</a>
+				</form>
+			</li>
+			<li>Private Msg</li>
+			<li>Block</li>
+		</ul>
+    </li>
+					</text>}else{continue;}
+				}
+</ul>

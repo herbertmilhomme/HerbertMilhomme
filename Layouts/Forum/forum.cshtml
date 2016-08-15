@@ -1,0 +1,38 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    var catagories = db.Query("SELECT * FROM website_forumcatagory ORDER BY sortorder");
+    //var discussions = db.Query("SELECT * FROM website_forumdiscussion ORDER BY");
+    //for each forum in catagory, open a table, and title the catagory
+}@foreach(var catagory in catagories){
+<h2>@catagory.catagoryname</h2>
+<table class="forum" cellpadding="0" cellspacing="0">  
+    <!--<thead>
+        <tr>
+            <th>@catagory.catagoryname</th>
+        </tr>
+    </thead>--> 
+    @foreach(var discussion in db.Query("SELECT * FROM website_forumdiscussion WHERE CatagoryID=@0 ORDER BY name", catagory.catagoryid)){
+        //var thread = db.QuerySingle("SELECT * FROM website_forumthread WHERE CatagoryID=@0 AND ForumID=@1 ORDER BY name", catagory.catagoryid, discussion.discussionid);
+        int totalposts = (int)db.QueryValue("SELECT count(*) FROM website_forumpost WHERE CatagoryID=@0 AND ForumID=@1 AND remove='false'", catagory.catagoryid, discussion.forumid);
+        int totaltopics = (int)db.QueryValue("SELECT count(threadid) FROM website_forumthread WHERE CatagoryID=@0 AND ForumID=@1 AND remove='false'", catagory.catagoryid, discussion.forumid);
+        //var lastpost = db.QuerySingle("SELECT *, (SELECT Max(LastDate) FROM (VALUES (DatePost), (LastEdit)) AS HightestDate(LastDate)) AS [MaxDate] FROM website_forumpost WHERE CatagoryID=@0 AND ForumID=@1 AND remove='false' ORDER BY maxdate desc", catagory.catagoryid, discussion.forumid);
+        //var lastpost = db.QuerySingle("SELECT postid,threadid, forumid,userid,catagoryid, postmsg, Max( DatePost) AS MaxDate FROM website_forumpost WHERE CatagoryID=@0 AND ForumID=@1 AND remove='false' GROUP BY postid,threadid, forumid,userid,catagoryid,postmsg ORDER BY maxdate desc", catagory.catagoryid, discussion.forumid);
+        var lastpost = db.QuerySingle("SELECT *, CASE WHEN DatePost < COALESCE(LastEdit,'') THEN LastEdit ELSE DatePost END AS MostRecent FROM website_forumpost WHERE CatagoryID=@0 AND ForumID=@1 AND remove='false' ORDER BY MostRecent desc", catagory.catagoryid, discussion.forumid);
+    <tr>     
+        <td class="name">      
+            <div class="icon">       
+                <img src="/CatalystImages/b32/users 1.png" alt="" />      
+            </div>      
+            <div class="forum">       
+                <h3>
+                    <a href="forum/@discussion.name.Replace(" ","-")" @*/discussion.forumid*@ title="@discussion.description">@discussion.name</a>
+                </h3>
+            </div>     
+        </td>     
+        <td class="topics">Topics: <strong>@totaltopics</strong></td>     
+        <td class="posts">Posts: <strong>@totalposts</strong></td>  
+        @if(lastpost == null){<td class="lastpost"><strong>Never</strong><br>by None</td>}else{   
+        <td class="lastpost"><strong>@lastpost.MostRecent</strong><br />by @lastpost.userid</td>}    
+    </tr>}
+</table>
+}   

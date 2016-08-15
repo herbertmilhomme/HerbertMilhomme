@@ -1,0 +1,14 @@
+﻿@{
+    //Layout = "~/Layouts/Template/mail.cshtml";
+    Page.Title = "Inbox";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+}
+@RenderPage("~/Layouts/MailService/inbox.cshtml")

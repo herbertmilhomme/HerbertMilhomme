@@ -1,0 +1,20 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    var AdminUsers = System.Web.Security.Roles.GetUsersInRole("Admin");
+}			@foreach(var admin in AdminUsers){
+    //int userid = WebMatrix.WebData.WebSecurity.GetUserId(admin);
+    var company = db.QuerySingle("SELECT * FROM business_EmployeesCompany WHERE email='@0'", admin);//WebMatrix.WebData.WebSecurity.GetUserId(admin)
+    var personal = db.QuerySingle("SELECT * FROM business_EmployeesPersonal WHERE email=@0", WebMatrix.WebData.WebSecurity.GetUserId(admin));//userid); 
+    if(company == null && personal == null){continue;}else{//(info == null ? String.Empty : info.Firstname)
+            <div class="col-md-6">
+				<div class="team-member">
+					<img src="@company.picturepath" class="fwimg" alt="@personal.FirstName @personal.LastName's Photo"/>
+					<div class="socials-container">
+						<a href="{tag_twitter link}" data-placement="top" title="Twitter" class="left"><span class="socials-twitter "></span></a>
+						<a href="{tag_facebook link}" data-placement="top" title="Facebook" class="left"><span class="socials-facebook "></span></a>
+					</div>
+					<h4>@personal.firstname @personal.lastname {nolink}</h4>
+					<p>@company.title</p>
+				</div>
+			</div>}
+    }

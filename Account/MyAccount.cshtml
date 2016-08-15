@@ -1,0 +1,254 @@
+﻿@section FooterJS{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
+
+@{
+    if (!WebSecurity.IsAuthenticated) {
+        Response.Redirect("~/Account/Login?returnUrl="
+            + Request.Url.LocalPath);
+    }
+
+    //Layout = "~/Members/_MemberSiteLayout.cshtml";
+    PageData["Title"] = "Member Profile";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+
+    var db = Database.Open("ColonielHeights");
+    var selectQueryString = "SELECT * FROM business_Customer WHERE memberid=@0";
+
+    var memberid = Database.Open("ColonielHeights").QueryValue("SELECT memberid FROM business_Customer WHERE email=@0",WebSecurity.CurrentUserName);
+}
+
+    <!--<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        <a href="Href("~/UpdateMemberProfile", row.customernumber)">Edit</a>-->
+
+
+    <style type="text/css">
+        table, th, td {
+          border: solid 1px #bbbbbb;
+          border-collapse: collapse;
+          padding: 2px;
+        }
+    </style>
+
+    @{if(UrlData[0] == "Edit"){
+
+        var email = "";
+    var firstname = "";
+    var lastname = "";
+    var phonenumber = "";
+    var mobilenumber = "";
+    var address = "";
+    var city = "";
+    var state = "";
+    var zippostalcode = "";
+
+    // Setup validation
+    //Validation.RequireField("email", "You must specify an email address.");
+    Validation.RequireField("firstname", "You must specify your First Name.");
+    Validation.RequireField("lastname", "You must specify your Last Name.");
+    Validation.Add("phonenumber",
+        Validator.StringLength(
+            maxLength: 10,
+            minLength: 10,
+            errorMessage: "Phone number must be at 10 digits"),
+        Validator.Integer("Numeric digits only, please.")
+        //Validator.Regex("0-9", "Numerics digits only, No text or punctuations.")
+        );
+    Validation.Add("mobilenumber",
+        Validator.StringLength(
+            maxLength: 10,
+            minLength: 10,
+            errorMessage: "Phone number must be at 10 digits"),
+        Validator.Integer("Numeric digits only, please.")
+        //Validator.Regex("0-9", "Numerics digits only, No text or punctuations.")
+        );
+    Validation.RequireField("address", "You must specify a street address.");
+    Validation.RequireField("city", "You must specify a city.");
+    Validation.RequireField("state", "You must specify a state.");
+    Validation.Add("zippostalcode",
+        Validator.StringLength(
+            maxLength: 5,
+            minLength: 5,
+            errorMessage: "Zip code must be at 5 digits"),
+        Validator.Integer("Numeric digits only, please.")
+        //Validator.Regex("0-9", "Numerics digits only, No text or punctuations.")
+        );
+
+    // If this is a POST request, validate and process data
+    if (IsPost) {
+        AntiForgery.Validate();
+        //email = Request.Form["email"];
+        firstname = Request.Form["firstname"];
+        lastname = Request.Form["lastname"];
+        phonenumber = Request.Form["phonenumber"];
+        mobilenumber = Request.Form["mobilenumber"];
+        address = Request.Form["address"];
+        city = Request.Form["city"];
+        state = Request.Form["state"];
+        zippostalcode = Request.Form["zippostalcode"];
+
+        // Validate the user's captcha answer
+        // if (!ReCaptcha.Validate("PRIVATE_KEY")) {
+        //     ModelState.AddError("recaptcha", "Captcha response was not correct");
+        // }
+
+        // If all information is valid, create a new account
+        if (Validation.IsValid()) {
+            // Update user in the database
+         
+                // Insert email into the profile table
+                db.Execute("UPDATE business_Customer SET firstname=@0, lastname=@1, phonenumber=@2, mobilenumber=@3, address=@4, city=@5, state=@6, zippostalcode=@7 WHERE memberid=@8", firstname, lastname, phonenumber, mobilenumber, address, city, state, zippostalcode, memberid);
+                //db.Execute("INSERT INTO business_Employees (Email) VALUES (@0)", email);  
+                
+                Response.Redirect("~/Account/MyAccount");           
+                }
+
+            }
+        
+    
+        <form method="post">
+    @AntiForgery.GetHtml()
+    @* If at least one validation error exists, notify the user *@
+    @Html.ValidationSummary("Account creation was unsuccessful. Please correct the errors and try again.", excludeFieldErrors: true, htmlAttributes: null)
+
+    <fieldset>
+        <legend>Registration Form</legend>
+        @foreach (var frow in db.Query(selectQueryString, memberid)) {
+        <ol>
+            <li class="email">
+                <label for="email" @if(!ModelState.IsValidField("email")){<text>class="error-label"</text>}>Email address</label>
+                <input type="text" id="email" name="email" @Validation.For("email") value="@frow.email" disabled="disabled" readonly="readonly"/>
+                @* Write any email validation errors to the page *@
+                @Html.ValidationMessage("email")
+            </li>
+            <li class="firstname">
+                <label for="firstname" @if(!ModelState.IsValidField("firstname")) {<text>class="error-label"</text>}>First Name</label>
+                <input type="text" id="firstname" name="firstname" @Validation.For("firstname") value="@frow.FirstName"/>
+                @* Write any password validation errors to the page *@
+                @Html.ValidationMessage("firstname")
+            </li>
+            <li class="lastname">
+                <label for="lastname" @if(!ModelState.IsValidField("lastname")) {<text>class="error-label"</text>}>Last Name</label>
+                <input type="text" id="lastname" name="lastname" @Validation.For("lastname") value="@frow.LastName"/>
+                @* Write any password validation errors to the page *@
+                @Html.ValidationMessage("lastname")
+            </li>
+            <li class="phonenumber">
+                <label for="phonenumber" @if(!ModelState.IsValidField("phonenumber")) {<text>class="error-label"</text>}>Phone Number</label>
+                <input type="text" id="phonenumber" name="phonenumber" @Validation.For("phonenumber") value="@frow.PhoneNumber"/>
+                @* Write any password validation errors to the page *@
+                @Html.ValidationMessage("phonenumber")
+            </li>
+            <li class="mobilenumber">
+                <label for="mobilenumber" @if(!ModelState.IsValidField("mobilenumber")) {<text>class="error-label"</text>}>Mobile Number</label>
+                <input type="text" id="mobilenumber" name="mobilenumber" @Validation.For("mobilenumber") value="@frow.MobileNumber"/>
+                @* Write any password validation errors to the page *@
+                @Html.ValidationMessage("mobilenumber")
+            </li>
+            <li class="address">
+                <label for="address" @if(!ModelState.IsValidField("address")) {<text>class="error-label"</text>}>Street Address</label>
+                <input type="text" id="address" name="address" @Validation.For("address") value="@frow.address"/>
+                @* Write any password validation errors to the page *@
+                @Html.ValidationMessage("address")
+            </li>
+            <li class="city">
+                <label for="city" @if(!ModelState.IsValidField("city")) {<text>class="error-label"</text>}>City</label>
+                <input type="text" id="city" name="city" @Validation.For("city") value="@frow.city"/>
+                @* Write any password validation errors to the page *@
+                @Html.ValidationMessage("city")
+            </li>
+            <li class="state">
+                <label for="state" @if(!ModelState.IsValidField("state")) {<text>class="error-label"</text>}>State</label>
+                <input type="text" id="state" name="state" @Validation.For("state") value="@frow.state"/>
+                @* Write any password validation errors to the page *@
+                @Html.ValidationMessage("state")
+            </li>
+            <li class="zippostalcode">
+                <label for="zippostalcode" @if(!ModelState.IsValidField("zippostalcode")) {<text>class="error-label"</text>}>Zip/Postal Code</label>
+                <input type="text" id="zippostalcode" name="zippostalcode" @Validation.For("zippostalcode") value="@frow.zippostalcode"/>
+                @* Write any password validation errors to the page *@
+                @Html.ValidationMessage("zippostalcode")
+            </li>
+            <!--<li class="recaptcha">
+                <div class="message-info">
+                    <p>
+                        To enable CAPTCHA verification, <a href="http://go.microsoft.com/fwlink/?LinkId=204140">install the 
+                        ASP.NET Web Helpers Library</a> and uncomment ReCaptcha.GetHtml and replace 'PUBLIC_KEY'
+                        with your public key. At the top of this page, uncomment ReCaptcha. Validate and
+                        replace 'PRIVATE_KEY' with your private key.
+                        Register for reCAPTCHA keys at <a href="http://recaptcha.net">reCAPTCHA.net</a>.
+                    </p>
+                </div>
+                @*
+                @ReCaptcha.GetHtml("PUBLIC_KEY", theme: "white")
+                @Html.ValidationMessage("recaptcha")
+                *@
+            </li>-->
+        </ol>}
+        <input type="submit" value="Update" />
+        <input type="button" value="Cancel" onclick="location.href='MyAccount.cshtml';" />
+    </fieldset>
+</form>
+    }
+    
+    else{
+
+    <h1>View My Account Profile</h1>
+    foreach (var row in db.Query(selectQueryString, memberid)) {
+    
+    <a href="@Href("MyAccount/Edit")">Edit</a>
+    <table>        
+        <tr><th>Member ID</th><td>@row.MemberID</td></tr>
+        <tr><th>First Name</th><td>@row.FirstName</td></tr>
+        <tr><th>Last Name</th><td>@row.LastName</td></tr>
+        <tr><th>Email</th><td>@row.Email</td></tr>
+        <tr><th>Phone Number</th><td>@row.PhoneNumber</td></tr>
+        <tr><th>Mobile Number</th><td>@row.MobileNumber</td></tr>
+        <tr><th>Address</th><td>@row.Address</td></tr>
+        <tr><th>City</th><td>@row.City</td></tr>
+        <tr><th>State</th><td>@row.State</td></tr>
+        <tr><th>Zip/Postal Code</th><td>@row.ZipPostalCode</td></tr>                 
+    </table>
+        var employ = "SELECT * FROM business_Employees WHERE MemberID=@0";
+        var employed = db.QuerySingle(employ, row.MemberId);
+        if(employed != null){
+            foreach (var erow in db.Query(employ, row.MemberId)){
+                var dptname = db.QueryValue("SELECT deptname FROM business_departments WHERE DeptId=@0", erow.department);
+            <table>
+                <tr><th>Employee Number</th><td>@erow.EmployeeNumber</td></tr>
+                <tr style="display: none"><th>Status</th><td>@if(erow.enddate == null){<text><span class="active">ACTIVE</span></text>} else{<text><span class="terminated">NOT ACTIVE</span></text>}</td></tr>
+                <tr><th>Start Date</th><td>@erow.startdate</td></tr>
+                <tr><th>Position</th><td>@erow.position</td></tr>
+                <tr><th>Pay Rate</th><td>@erow.payrate</td></tr>
+                <tr><th>Title</th><td>@erow.title</td></tr>
+                <tr><th>Department</th><td>@dptname</td></tr>
+                <tr><th>End Date</th><td>@erow.enddate</td></tr>
+            </table>
+        }   }
+        if(row.Organization != null){
+            var company = "SELECT * FROM business_OrganizationContact WHERE CompanyID=@0";
+            foreach (var comp in db.Query(company, row.Organization)){
+            <table>
+                <tr><th>Company ID</th><td>@comp.companyid</td></tr>
+                <tr><th>Company Name</th><td>@comp.organizationname</td></tr>
+                <tr><th>Address</th><td>@comp.address</td></tr>
+                <tr><th>Phone</th><td>@comp.phonenumber</td></tr>
+                <tr><th>Fax</th><td>@comp.faxnumber</td></tr>
+            </table>
+            }   
+        }                     
+    } 
+}
+<form action="/Account/Manage">
+	<button type="submit" class="btn btn-default" name="action" value="" title="Manage external accounts and change password">Manage Account</button>
+</form>
+    }

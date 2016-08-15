@@ -1,0 +1,78 @@
+﻿@{
+	int perpg = 20;
+	int pagenum = Request.QueryString["page"].AsInt(0) * perpg;
+	int i = Request.Form["StartCount"].AsInt(0);//string.IsNullOrEmpty(Request.Form["StartCount"])? Request.Form["StartCount"].AsInt() : 0;
+	int n = 0;
+	int max = i + perpg; 
+	//int pages = Math.Round(i / perpg);
+	//int min = i - 20;
+    var db = Database.Open("ColonielHeights");
+    var gallery = db.Query("SELECT * FROM gallery_photos");
+}
+@*<h1>Photos</h1>
+<p>The images in your gallery should be the same size for the gallery images to align properly on all screen sizes.</p>
+<hr>*@
+<!--<link type="text/css" href="/CatalystStyles/lightbox.css" rel="StyleSheet">
+<script type="text/javascript" src="/CatalystScripts/Cache/lightbox2022.js">//?vs=b1884.r475844-phase1 (css too)</script><!--
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/all.jpg" title=""></a>
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/europe1.jpg" title=""></a>
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/europe2.jpg" title=""></a>
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/europe3.jpg" title=""></a>
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/europe4.jpg" title=""></a>
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/europe5.jpg" title=""></a>
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/france1.jpg" title=""></a>
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/france2.jpg" title=""></a>
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/france3.jpg" title=""></a>
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/france4.jpg" title=""></a>
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/france5.jpg" title=""></a>
+<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/greece1.jpg" title=""></a> -->
+<input value="@pagenum" type="hidden" hidden="hidden" id="StartCount" name="StartCount" />
+<table cellspacing="0" class="photogalleryTable">
+	<tbody>
+		<tr><td class="photogalleryNavigation" colspan="2">@foreach(var photos in gallery){
+			n++;if(n < Request.Form["StartCount"].AsInt(0)){<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/photos/@photos.filename" title="@photos.title"></a>}
+		}</td></tr>
+	@foreach(var photos in gallery){
+	 i++;
+  		if(i % 2 != 0){<text><tr></text>;}
+			@:<td class="photogalleryItem"><a onclick="myLightbox.start(this);return false;" rel="lightbox[1693]" href="/_assets/images/gallery/photos/@photos.filename" title="@photos.Title">
+				@:<img src="/_assets/images/gallery/photos/@photos.filename?Action=thumbnail&amp;Width=330&amp;Height=330&amp;Algorithm=proportional" width="auto" height="330" alt="@photos.Description" border="0">
+			@:</a></td>
+		if(i % 2 == 0){
+			@:</tr>
+		}
+		if(i>=max){break;}
+	}<tr><td class="photogalleryNavigation" colspan="2">@foreach(var photos in gallery){
+		n++;if(n>max){<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/photos/@photos.filename" title="@photos.title"></a>}
+	 }</td></tr><!--
+		<tr><td class="photogalleryNavigation" colspan="2">
+			<a style="display:none;" rel="lightbox[1693]" href="/_assets/images/gallery/greece2.jpg" title=""></a>
+		</td></tr>-->
+		@*<tr>
+			<td class="photogalleryItem"><a onclick="myLightbox.start(this);return false;" rel="lightbox[1693]" href="/_assets/images/gallery/greece2.jpg" title=""><img src="/_assets/images/gallery/greece2.jpg?Action=thumbnail&amp;Width=330&amp;Height=330&amp;Algorithm=proportional" alt="" border="0"></a></td>
+			<td class="photogalleryItem"><a onclick="myLightbox.start(this);return false;" rel="lightbox[1693]" href="/_assets/images/gallery/greece3.jpg" title=""><img src="/_assets/images/gallery/greece3.jpg?Action=thumbnail&amp;Width=330&amp;Height=330&amp;Algorithm=proportional" alt="" border="0"></a></td>
+		</tr>
+		<tr>
+			<td class="photogalleryItem"><a onclick="myLightbox.start(this);return false;" rel="lightbox[1693]" href="/_assets/images/gallery/greece4.jpg" title=""><img src="/_assets/images/gallery/greece4.jpg?Action=thumbnail&amp;Width=330&amp;Height=330&amp;Algorithm=proportional" alt="" border="0"></a></td>
+			<td class="photogalleryItem"><a onclick="myLightbox.start(this);return false;" rel="lightbox[1693]" href="/_assets/images/gallery/greece5.jpg" title=""><img src="/_assets/images/gallery/greece5.jpg?Action=thumbnail&amp;Width=330&amp;Height=330&amp;Algorithm=proportional" alt="" border="0"></a></td>
+		</tr>
+		<tr>
+			<td class="photogalleryItem"><a onclick="myLightbox.start(this);return false;" rel="lightbox[1693]" href="/_assets/images/gallery/italy1.jpg" title=""><img src="/_assets/images/gallery/italy1.jpg?Action=thumbnail&amp;Width=330&amp;Height=330&amp;Algorithm=proportional" alt="" border="0"></a></td>
+			<td class="photogalleryItem"><a onclick="myLightbox.start(this);return false;" rel="lightbox[1693]" href="/_assets/images/gallery/italy2.jpg" title=""><img src="/_assets/images/gallery/italy2.jpg?Action=thumbnail&amp;Width=330&amp;Height=330&amp;Algorithm=proportional" alt="" border="0"></a></td>
+		</tr>
+		<tr>
+			<td class="photogalleryItem"><a onclick="myLightbox.start(this);return false;" rel="lightbox[1693]" href="/_assets/images/gallery/italy3.jpg" title=""><img src="/_assets/images/gallery/italy3.jpg?Action=thumbnail&amp;Width=330&amp;Height=330&amp;Algorithm=proportional" alt="" border="0"></a></td>
+			<td class="photogalleryItem"><a onclick="myLightbox.start(this);return false;" rel="lightbox[1693]" href="/_assets/images/gallery/italy4.jpg" title=""><img src="/_assets/images/gallery/italy4.jpg?Action=thumbnail&amp;Width=330&amp;Height=330&amp;Algorithm=proportional" alt="" border="0"></a></td>
+		</tr>
+		<tr>
+			<td class="photogalleryItem"><a onclick="myLightbox.start(this);return false;" rel="lightbox[1693]" href="/_assets/images/gallery/italy5.jpg" title=""><img src="/_assets/images/gallery/italy5.jpg?Action=thumbnail&amp;Width=330&amp;Height=330&amp;Algorithm=proportional" alt="" border="0"></a></td>
+			<td class="photogalleryItem"></td>
+		</tr>*@
+	</tbody>
+	<tfoot>
+		<tr><td class="photogalleryNavigation" colspan="2"><a href="?page=@((int)pagenum+1)" rel="next">Next</a> </td></tr>
+	</tfoot><!--
+	<tfoot>
+		<tr><td class="photogalleryNavigation" colspan="2"><a href="/Default.aspx?PageID=5830198&amp;Page=1&amp;A=PhotoGallery&amp;PID=1693&amp;Items=12">Previous</a> </td></tr>
+	</tfoot>-->
+</table>

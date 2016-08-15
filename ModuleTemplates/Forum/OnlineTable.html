@@ -1,0 +1,215 @@
+﻿<div class="wrapper">
+				<!-- start: nav -->
+
+<div class="navigation">
+<!-- start: nav_bit -->
+<a href="http://www.vg-resource.com/index.php">The VG Resource</a>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+<br><img src="http://www.vg-resource.com/images/nav_bit.png" alt="">
+<!-- end: nav_sep_active --><!-- start: nav_bit_active -->
+<span class="active">Who's Online</span>
+<!-- end: nav_bit_active -->
+</div>
+<!-- end: nav -->
+				<br>
+<!-- end: header -->
+	<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (52):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="online.php?page=2" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="online.php?page=3" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="online.php?page=4" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="online.php?page=5" class="pagination_page">5</a>
+<!-- end: multipage_page --><!-- start: multipage_end -->
+...  <a href="online.php?page=52" class="pagination_last">52</a>
+<!-- end: multipage_end --><!-- start: multipage_nextpage -->
+<a href="online.php?page=2" class="pagination_next">Next »</a>
+<!-- end: multipage_nextpage --><!-- start: multipage_jump_page -->
+<div class="popup_menu drop_go_page" style="display: none;" id="go_page_1_popup">
+	<form action="online.php" method="post">
+		<label for="page">Jump to page:</label> <input type="text" class="textbox" name="page" value="1" size="4">
+		<input type="submit" class="button" value="Go">
+	</form>
+</div>
+<a href="javascript:;" class="go_page" title="Jump to page" id="go_page_1"><img src="http://www.vg-resource.com/images/arrow_down.png" alt="Jump to page"></a>&nbsp;
+<script type="text/javascript">
+	var go_page = 'go_page_' + $(".go_page").length;
+	$(".go_page").last().attr('id', go_page);
+	$(".drop_go_page").last().attr('id', go_page + '_popup');
+	$('#' + go_page).popupMenu(false).click(function() {
+		var drop_go_page = $(this).prev('.drop_go_page');
+		if (drop_go_page.is(':visible')) {
+			drop_go_page.find('.textbox').focus();
+		}
+	});
+</script>
+<!-- end: multipage_jump_page -->
+</div>
+<!-- end: multipage -->
+	<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+		<thead>
+			<tr>
+				<td class="thead" colspan="3"><strong>Who's Online</strong></td>
+			</tr>
+			<tr>
+				<td class="tcat" align="center"><a href="online.php?sortby=username"><span class="smalltext"><strong>Username</strong></span></a></td>
+				<td class="tcat" align="center"><a href="online.php?sortby=time"><span class="smalltext"><strong>Time</strong></span></a></td>
+				<td class="tcat" width="50%"><a href="online.php?sortby=location"><span class="smalltext"><strong>Location</strong></span></a></td>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td class="tfoot" colspan="3" align="right"><span class="smalltext">
+					<strong><a href="online.php?action=today">Who Was Online Today</a> | <a href="online.php">Refresh this Page</a></strong></span>
+				</td>
+			</tr>
+		</tfoot>
+		<tbody>
+		@foreach(){<!-- start: online_row -->
+<tr>
+	<td class="trow username"><a href="@Href("~/")">if(User.IsInRole("Admin")){<strong class="admin">username</strong>}else{username}</a></td>
+	<td class="trow time" align="center"><time datetime="">06:14 PM</time></td>
+	<td class="trow location" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row -->}<!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-34313.html">Animaybi</a></td>
+<td align="center" class="trow2">06:14 PM</td>
+<td class="trow1" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-15693.html"><span style="color: #CC00CC;"><strong>Peardian</strong></span></a></td>
+<td align="center" class="trow2">06:14 PM</td>
+<td class="trow1" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-25182.html">psychospacecow</a></td>
+<td align="center" class="trow2">06:14 PM</td>
+<td class="trow1" width="50%">Viewing Forum <a href="forum-134.html">General Discussion</a></td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-13981.html"><span style="color: #28AD05;"><strong>Shade</strong></span></a></td>
+<td align="center" class="trow2">06:14 PM</td>
+<td class="trow1" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-32748.html">SuperTVGRFan18496</a></td>
+<td align="center" class="trow2">06:13 PM</td>
+<td class="trow1" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-31120.html">MakutaMaster962</a></td>
+<td align="center" class="trow2">06:12 PM</td>
+<td class="trow1" width="50%">Sending Private Message</td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-4709.html">ittan-momen</a></td>
+<td align="center" class="trow2">06:12 PM</td>
+<td class="trow1" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-35060.html">MasterGamePro</a></td>
+<td align="center" class="trow2">06:12 PM</td>
+<td class="trow1" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-32184.html">pragmatic</a></td>
+<td align="center" class="trow2">06:11 PM</td>
+<td class="trow1" width="50%">Reading Thread <a href="thread-18534.html">BRSAR archive extractor</a> </td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-27185.html">Murphmario</a></td>
+<td align="center" class="trow2">06:10 PM</td>
+<td class="trow1" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-31768.html">Kajabberguy</a></td>
+<td align="center" class="trow2">06:10 PM</td>
+<td class="trow1" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-35008.html">TheAngryGeometryDashNerd</a></td>
+<td align="center" class="trow2">06:08 PM</td>
+<td class="trow1" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-29850.html">PKMN Trainer Rai</a></td>
+<td align="center" class="trow2">06:08 PM</td>
+<td class="trow1" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-142.html">Lemonray</a></td>
+<td align="center" class="trow2">06:07 PM</td>
+<td class="trow1" width="50%">Reading Thread <a href="thread-28086.html">Annoying Things People Say/Do</a> </td>
+</tr>
+<!-- end: online_row --><!-- start: online_row -->
+<tr>
+<td class="trow1"><a href="http://www.vg-resource.com/user-19313.html">DurradonXylles</a></td>
+<td align="center" class="trow2">06:06 PM</td>
+<td class="trow1" width="50%">The VG Resource <a href="index.php">Main Index</a></td>
+</tr>
+<!-- end: online_row -->
+		</tbody>
+	</table>
+	<br>
+	<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (52):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="online.php?page=2" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="online.php?page=3" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="online.php?page=4" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="online.php?page=5" class="pagination_page">5</a>
+<!-- end: multipage_page --><!-- start: multipage_end -->
+...  <a href="online.php?page=52" class="pagination_last">52</a>
+<!-- end: multipage_end --><!-- start: multipage_nextpage -->
+<a href="online.php?page=2" class="pagination_next">Next »</a>
+<!-- end: multipage_nextpage --><!-- start: multipage_jump_page -->
+<div class="popup_menu drop_go_page" style="display: none;" id="go_page_2_popup">
+	<form action="online.php" method="post">
+		<label for="page">Jump to page:</label> <input type="text" class="textbox" name="page" value="1" size="4">
+		<input type="submit" class="button" value="Go">
+	</form>
+</div>
+<a href="javascript:;" class="go_page" title="Jump to page" id="go_page_2"><img src="http://www.vg-resource.com/images/arrow_down.png" alt="Jump to page"></a>&nbsp;
+<script type="text/javascript">
+	var go_page = 'go_page_' + $(".go_page").length;
+	$(".go_page").last().attr('id', go_page);
+	$(".drop_go_page").last().attr('id', go_page + '_popup');
+	$('#' + go_page).popupMenu(false).click(function() {
+		var drop_go_page = $(this).prev('.drop_go_page');
+		if (drop_go_page.is(':visible')) {
+			drop_go_page.find('.textbox').focus();
+		}
+	});
+</script>
+<!-- end: multipage_jump_page -->
+</div>
+<!-- end: multipage -->
+	<!-- start: footer -->
+
+	</div>

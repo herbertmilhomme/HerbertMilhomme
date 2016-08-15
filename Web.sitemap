@@ -1,0 +1,65 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
+
+/// <summary>
+/// Summary description for Web
+/// </summary>
+public class CustomSiteMapProvider : StaticSiteMapProvider
+    {
+        #region Members
+
+        private readonly object _siteMapLock = new object();
+        private SiteMapNode _siteMapRoot;
+
+        #endregion
+
+        #region Methods
+
+       public override SiteMapNode BuildSiteMap()
+       {
+            // Use a lock to provide thread safety
+            lock (_siteMapLock)
+            {
+                if (_siteMapRoot != null)
+                {
+                    return _siteMapRoot;
+                }
+
+                base.Clear();
+
+                CreateSiteMapRoot();
+                CreateSiteMapNodes();
+
+                return _siteMapRoot;
+            }
+        }
+
+        protected override SiteMapNode GetRootNodeCore()
+        {
+            return BuildSiteMap();
+        }
+
+        private void CreateSiteMapRoot()
+        {
+            _siteMapRoot = new SiteMapNode(this, "Root", "~/index.cshtml", "Root");
+            AddNode(_siteMapRoot);
+        }
+
+        private void CreateSiteMapNodes()
+        {
+            SiteMapNode node = null;
+            for (int i = 1; i <= 3; i++)
+            {
+                node = new SiteMapNode(this,
+                    string.Format("Child{0}", i),
+                    string.Format("~/WebForm{0}.aspx", i),
+                    string.Format("Child{0}", i));
+
+                AddNode(node, _siteMapRoot);
+            }
+        }
+
+        #endregion
+    }
+}

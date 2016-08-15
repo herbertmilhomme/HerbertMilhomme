@@ -1,0 +1,18 @@
+﻿@{
+	//int userid = WebSecurity.IsAuthenticated ? WebSecurity.CurrentUserId : 0;
+	//var username = WebSecurity.IsAuthenticated ? db.QueryValue("SELECT Username FROM UserProfile WHERE userid=@0",WebSecurity.CurrentUserId) : "Guest";
+	
+	//MembershipUserCollection muc = Membership.GetAllUsers();foreach(MembershipUser mu in muc){mu.IsOnline;}
+
+}
+@if(WebSecurity.IsAuthenticated){
+	var db = Database.Open("ColonielHeights");
+	var friendslist = db.Query("SELECT * FROM social_friendslist WHERE userid=@0 AND friends='true'", WebSecurity.CurrentUserId);
+<div id="friendslist" class="users">
+	<ul>
+		@foreach(var friend in friendslist){
+		//if userid lastactivity>now-5mins "online" else "offline"
+		string friendusername = db.QueryValue("SELECT Username FROM UserProfile WHERE userid=@0",friend.friendid);
+		@:<li class="@if(Membership.GetUser(friendusername).IsOnline){<text>online</text>}else{<text>offline</text>}">@friendusername<li>
+	}</ul>
+</div>}

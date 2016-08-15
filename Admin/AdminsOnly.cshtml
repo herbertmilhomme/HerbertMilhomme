@@ -1,0 +1,30 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    PageData["Title"] = "Administrators only";
+}
+
+@*if ( Roles.IsUserInRole("admin")) {
+    <span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+}
+else {
+     Response.Redirect("~/AdminError");
+}*@
+
+
+@{
+    if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Members/_MemberSiteLayout.cshtml";
+        if ( Roles.IsUserInRole("admin")) {
+            Layout = "~/Admin/_AdminSiteLayout.cshtml";
+            <span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }
+        else {
+            Response.Redirect("~/Admin/AdminError");
+        }
+    }else{//(!WebSecurity.IsAuthenticated)
+    //if not signed in, redirect to log in back and return to previous page
+        Layout = "~/_SiteLayout.cshtml";
+        Response.Redirect("~/Account/Login?returnUrl="
+            + Request.Url.LocalPath);
+    }
+}

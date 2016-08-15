@@ -1,0 +1,1788 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    IEnumerable<dynamic> threads=null;
+    IEnumerable<dynamic> stickie=null;
+	DateTime lastviewed = new DateTime();
+    int discussion=0; //= UrlData[0];
+    var forumname = "Forum Name";
+	bool subscribe = false;
+	string threadurl = UrlData[0];
+    if(threadurl != null && threadurl != ""){
+        if(int.TryParse(threadurl, out discussion) || int.TryParse(threadurl.Substring(0,threadurl.IndexOf("-")), out discussion)){
+            if(discussion < 1){
+                discussion = 1;
+            }
+            //tag_counter = discussion * numperpg;
+            threads = db.Query("SELECT *, userprofile.alias as authoralias FROM website_forumthread FULL JOIN userprofile ON website_forumthread.author=userprofile.userid WHERE forumid=@0 AND remove='false'", discussion);
+            forumname = db.QueryValue("SELECT name FROM website_forumdiscussion WHERE forumid=@0",discussion);
+			//forum = db.QuerySingle("SELECT * FROM website_forumdiscussion WHERE forumid=@0 ORDER BY name", discussion);
+        }else{
+            //Response.Redirect("?SearchQuery=" + SearchQuery + "/" + discussion);
+            /*threads = db.Query("SELECT * FROM website_forumdiscussion as d, website_forumthread as t WHERE d.name=@0 AND t.Forumid=d.forumid AND t.[remove]='false'",UrlData[0]);
+            forumname = db.QueryValue("SELECT name FROM website_forumdiscussion WHERE name=@0",UrlData[0]);*/
+
+			discussion = db.QueryValue("SELECT coalesce(forumid, 0) as forumid FROM website_forumdiscussion WHERE LOWER(name) LIKE LOWER(@0)",(string)threadurl.Replace("-"," "));
+            forumname = db.QueryValue("SELECT name FROM website_forumdiscussion WHERE forumid=@0",discussion);//UrllData[0] or ForumID//threadurl.Replace("-"," ");//
+			if(discussion==0){threads = db.Query("SELECT *, userprofile.alias as authoralias FROM website_forumthread FULL JOIN userprofile ON website_forumthread.author=userprofile.userid WHERE remove='false'"); forumname = "All Discussions";}
+			else{threads = db.Query("SELECT *, userprofile.alias as authoralias FROM website_forumthread FULL JOIN userprofile ON website_forumthread.author=userprofile.userid WHERE forumid=@0 AND remove='false'", discussion);}            
+        }
+		if(WebSecurity.IsAuthenticated){
+			// Check if subscribe
+			subscribe = db.QueryValue("SELECT subscribe FROM website_forumdiscussionview WHERE forumid=@0 AND userid=@1", discussion, WebSecurity.CurrentUserId)??false;
+			if (subscribe == null) {
+				// Insert into view table
+				db.Execute("INSERT INTO website_forumdiscussionview (lastview, forumid, userid, viewed) VALUES (@0, @1, @2, @3)", DateTime.Now,discussion,WebSecurity.CurrentUserId, true);
+			}else{db.Execute("UPDATE website_forumdiscussionview SET lastview=@0 WHERE forumid=@1 AND userid=@2",DateTime.Now, discussion, WebSecurity.CurrentUserId);}
+		}
+    }else{threads = db.Query("SELECT *, userprofile.alias as authoralias FROM website_forumthread FULL JOIN userprofile ON website_forumthread.author=userprofile.userid WHERE remove='false'"); forumname = "All Discussions";}
+	//int replies = 0;
+    //IEnumerable<dynamic> lastpost = null;
+
+    int numperpg = /*int.Parse(PageData[0]) ?? Request.Cookies["perpage"] ?? int.Parse(Request.QueryString["perpage"]) ?? int.Parse(Request.Form["perpage"]) ??*/ 20;
+	int totalthreads = threads==null?0:threads.Count();
+	int lastcount = 0;
+    int currentpage = threads==null? 1 : (int)Math.Ceiling((decimal)totalthreads / numperpg);//1;
+    int tag_counter = currentpage==1? 1:currentpage * numperpg;//*0;
+    if(Request.QueryString["page"] != null){
+        if(int.TryParse(Request.QueryString["page"], out currentpage)){
+            currentpage = (int)Request.QueryString["page"].AsInt();
+            if(currentpage >= (threads.Count() / numperpg)){
+                currentpage = threads.Count() / numperpg;
+            }
+            if(currentpage < 1){
+                currentpage = 1;
+            }
+            tag_counter = currentpage==1? 1:currentpage * numperpg;
+        }else{
+            Response.Redirect("?page=" + currentpage);
+        }
+    }
+	Html.Hidden("TotalTagCount",totalthreads);
+	var subForum = db.Query("SELECT * FROM website_forumdiscussion WHERE TierTree=@0 ORDER BY name", discussion);
+}<!--<div class="uix_contentFix">	
+					<div class="mainContainer">
+						<div class="mainContent">-->
+
+<div id="content" class="forum_view">
+	
+	<div class="pageWidth">
+		<div class="pageContent noBorderRadius">
+			<!-- main content area -->
+			<div class="breadBoxTop withTopCtrl ">
+				<div class="topCtrl"><a href="forums/general-discussion.30/create-thread" class="callToAction"><span>Post New Thread</span></a></div>
+				
+@*<nav>
+
+	
+	
+	
+
+	<fieldset class="breadcrumb" style="">
+		<a href="misc/quick-navigation-menu?selected=node-30" class="OverlayTrigger jumpMenuTrigger" data-cacheoverlay="true" title="Open quick navigation"><i class="uix_icon uix_icon-sitemap"></i><!--Jump to...--></a>
+			
+		<div class="boardTitle"><strong>The LandOfOoo</strong></div>
+		
+		<span class="crumbs">
+			
+				<span class="crust homeCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+					<a href="https://landofooo.com/community" class="crumb" rel="up" itemprop="url"><span itemprop="title"><i class="uix_icon uix_icon-home" title="Home"></i></span></a>
+					<span class="arrow"><span></span></span>
+				</span>
+			
+			
+			
+				<span class="crust selectedTabCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+					<a href="https://landofooo.com/community/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Forums</span></a>
+					<span class="arrow"><span>&gt;</span></span>
+				</span>
+			
+			
+			
+				
+					<span class="crust" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+						<a href="https://landofooo.com/community/.#the-cloud-kingdom.27" class="crumb" rel="up" itemprop="url"><span itemprop="title">The Cloud Kingdom</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+				
+			
+		</span>
+	</fieldset>
+</nav>*@
+				
+			</div>
+			@*<div class="breadBoxTop  ">
+<nav>
+	<fieldset class="breadcrumb" style="">
+		<a href="misc/quick-navigation-menu?selected=node-60" class="OverlayTrigger jumpMenuTrigger" data-cacheoverlay="true" title="Open quick navigation"><i class="uix_icon uix_icon-sitemap"></i><!--Jump to...--></a>
+			
+		<div class="boardTitle"><strong>The LandOfOoo</strong></div>
+		
+		<span class="crumbs">
+			
+				<span class="crust homeCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+					<a href="https://landofooo.com/community" class="crumb" rel="up" itemprop="url"><span itemprop="title"><i class="uix_icon uix_icon-home" title="Home"></i></span></a>
+					<span class="arrow"><span></span></span>
+				</span>
+			
+			
+			
+				<span class="crust selectedTabCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+					<a href="https://landofooo.com/community/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Forums</span></a>
+					<span class="arrow"><span>&gt;</span></span>
+				</span>
+			
+			
+			
+				
+					<span class="crust" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+						<a href="https://landofooo.com/community/.#adventure-time.57" class="crumb" rel="up" itemprop="url"><span itemprop="title">Adventure Time</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+				
+			
+		</span>
+	</fieldset>
+</nav>
+			</div>*@
+						
+				<div class="mainContainer_noSidebar">
+								
+						<!--[if lt IE 8]>
+							<p class="importantMessage">You are using an out of date browser. It  may not display this or other websites correctly.<br />You should upgrade or use an <a href="https://www.google.com/chrome/browser/" target="_blank">alternative browser</a>.</p>
+						<![endif]-->
+					
+<!--<div class="PanelScroller Notices" data-vertical="0" data-speed="400" data-interval="4000" style="display: block;">
+	<div class="scrollContainer">
+		<div class="PanelContainer">
+			<ol class="Panels" style="position: static;">
+				<li class="panel Notice DismissParent notice_4 " data-notice="4">
+					<div class="baseHtml noticeContent">Logging in for the first time since we switched over to XenForo? You'll need to manually reset your password before you can login. Sorry for the inconvenience.</div>
+					<a href="account/dismiss-notice?notice_id=4" class="DismissCtrl Tooltip" data-offsetx="7" data-tipclass="flipped">Dismiss Notice</a>
+				</li>
+			</ol>
+		</div>
+	</div>
+</div>-->
+						
+								<!-- h1 title, description -->
+								<div class="titleBar">
+									<!--<h1>Episode Discussion</h1>-->
+									<h1>@forumname</h1>
+									
+									<p id="pageDescription" class="muted baseHtml"></p>
+									<!--<p>Episode discussion for upcoming and previous episodes.</p>-->
+									<p>@{db.QueryValue("SELECT description FROM website_forumdiscussion WHERE forumid=@0 ORDER BY name", discussion)/*??@<text>All discussion topics listed.</text>*/;}</p>
+									<p></p>
+								</div>
+							
+	<div class="sectionMain funbox">
+		@*<div class="funboxWrapper">
+				<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_above_content -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5808314520834618" data-ad-slot="1471521488" data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+	</div>*@
+	</div>
+						<!-- main template -->
+<!--<div class="pageNavLinkGroup">
+
+	<div class="linkGroup SelectionCountContainer">
+		
+			<a href="forums/general-discussion.30/watch" class="OverlayTrigger" data-cacheoverlay="false">Watch Forum</a>
+		
+	</div>
+
+	
+
+
+<div class="PageNav" data-page="1" data-range="2" data-start="2" data-end="6" data-last="87" data-sentinel="{{sentinel}}" data-baseurl="forums/general-discussion.30/page-{{sentinel}}">
+	
+	<span class="pageNavHeader">Page 1 of 87</span>
+	
+	<nav>
+		
+		
+		<a href="forums/general-discussion.30/" class="currentPage " rel="start">1</a>
+		
+		
+			<a class="PageNavPrev hidden" style="">←</a> <span class="scrollable"><span class="items">
+		
+		
+		
+			<a href="forums/general-discussion.30/page-2" class="">2</a>
+		
+			<a href="forums/general-discussion.30/page-3" class="">3</a>
+		
+			<a href="forums/general-discussion.30/page-4" class="">4</a>
+		
+			<a href="forums/general-discussion.30/page-5" class="">5</a>
+		
+			<a href="forums/general-discussion.30/page-6" class="">6</a>
+		
+		
+		
+			</span></span> <a class="PageNavNext " style="">→</a>
+		
+		
+		<a href="forums/general-discussion.30/page-87" class="">87</a>
+		
+		
+			<a href="forums/general-discussion.30/page-2" class="text">Next &gt;</a>
+			
+		
+	</nav>	
+	
+	
+</div>
+
+
+</div>-->
+@if(subForum != null && subForum.Count()>0){
+<ol class="nodeList section uix_nodeStyle_3" id="forums">
+	@foreach(var topic in subForum){
+	int totalposts = (int)db.QueryValue("SELECT count(*) FROM website_forumpost FULL JOIN website_forumthread ON website_forumthread.forumid=website_forumpost.forumid WHERE website_forumpost.ForumID=@0 AND website_forumpost.remove='false'", topic.forumid); //merge thread; both remove thread or post
+	int totaltopics = (int)db.QueryValue("SELECT count(threadid) FROM website_forumthread WHERE ForumID=@0 AND remove='false'", topic.forumid);
+	var lastpost = db.QuerySingle("SELECT *, CASE WHEN website_forumpost.DatePost < COALESCE(website_forumpost.LastEdit,'') THEN website_forumpost.LastEdit ELSE website_forumpost.DatePost END AS MostRecent FROM website_forumpost FULL JOIN website_forumthread ON website_forumthread.forumid=website_forumpost.forumid FULL JOIN userprofile ON website_forumpost.userid=userprofile.userid WHERE website_forumpost.ForumID=@0 AND website_forumpost.remove='false' ORDER BY MostRecent desc", topic.forumid); //merge userprofile and forumthread
+	var subTopic = db.Query("SELECT * FROM website_forumdiscussion WHERE TierTree=@0 ORDER BY name", topic.forumid);
+	if(WebSecurity.IsAuthenticated){
+		// Check if subscribe
+		lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND userid=@1", topic.forumid, WebSecurity.CurrentUserId)??DateTime.MinValue;
+	}else{
+		lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND SessionID=0", topic.forumid)??DateTime.MinValue;
+	}
+<li class="node forum level_2  node_@topic.forumid">
+	<div class="nodeInfo forumNodeInfo @if(lastpost.mostrecent < lastviewed){<text>read</text>}else{<text>unread</text>} ">
+	<span class="nodeIcon hasGlyph" title="@if(lastpost.mostrecent < lastviewed){<text>Read</text>}else{<text>Unread</text>} messages"><i class="fa fa-@topic.classIcon"></i></span>
+
+		<div class="nodeText">
+			@*<h3 class="nodeTitle"><a href="forums/episode-discussion.60/" data-description="#nodeDescription-60">Episode Discussion</a></h3>*@
+			<h3 class="nodeTitle"><a href="forums/@topic.forumid-@topic.name/" data-description="#nodeDescription-@topic.forumid">@topic.name</a></h3>
+			
+				@*<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-60"><p>Episode discussion for upcoming and previous episodes.</p></blockquote>*@
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-60"><p>@topic.description</p></blockquote>
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>@totaltopics</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>@totalposts</dd></dl>
+			</div>
+			
+		</div>
+		@if(subTopic != null || subTopic.Count()>0){
+			<ol class="subForumList">
+			@foreach(var subThread in subTopic){
+			if(WebSecurity.IsAuthenticated){
+				// Check if subscribe
+				lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND userid=@1", subThread.forumid, WebSecurity.CurrentUserId)??DateTime.MinValue;
+			}else{
+				lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND SessionID=0", subThread.forumid)??DateTime.MinValue;
+			}
+				<li class="node forum level-n node_@subThread.forumid">
+	<div class="@if(lastpost.mostrecent < lastviewed){<text>read</text>}else{<text>unread</text>}">
+		<h4 class="nodeTitle">
+			@*<a href="forums/season-7-2015.67/" class="menuRow">*@
+			<a href="forums/@subThread.forumid-@subThread.name" class="menuRow">
+				<span class="subForumIcon hasGlyph" title="@if(lastpost.mostrecent < lastviewed){<text>Read</text>}else{<text>Unread</text>} messages"><i class="fa fa-@subThread.classIcon"></i></span>
+				@*Season 7 (2015)*@
+				@subThread.name
+			</a>
+		</h4>
+	</div>
+</li>}
+				@*<li class="node forum level-n node_66">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-6-2014-2015.66/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 6 (2014-2015)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_63">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-5-2012-2014.63/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 5 (2012-2014)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_61">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-4-2012.61/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 4 (2012)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_62">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-3-2011-2012.62/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 3 (2011-2012)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_65">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-2-2010-2011.65/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 2 (2010-2011)</a></h4>
+	</div>
+	
+</li>
+			
+				<li class="node forum level-n node_64">
+	<div class="unread">
+		<h4 class="nodeTitle"><a href="forums/season-1-2010.64/" class="menuRow">
+		
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="subForumIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+		Season 1 (2010)</a></h4>
+	</div>
+	
+</li>*@
+			</ol>}
+
+		<div class="nodeLastPost secondaryContent">
+			@if(lastpost == null){<span class="lastThreadTitle"><span>Latest:</span> None</span>}else{   
+				//<td class="lastpost"><strong>@lastpost.MostRecent</strong><br />by @lastpost.userid</td>
+				if(lastpost.userid==0/*||string.IsNullOrEmpty(lastpost.userid)*/){<img src="/_assets/images/users/avatar-guest.jpg" width="48" height="48" alt="Anonymous Guest" />}
+				else{
+					<a href="members/@lastpost.postid-@lastpost.alias" class="avatar Av5949s" data-avatarhtml="true">
+						@*<img src="data/avatars/s/5/5949.jpg?1459703928" width="48" height="48" alt="casus" />*@
+						@if(File.Exists(Href("/_assets/images/users/avatar-"+lastpost.userid+".jpg"))){<text><img src="@Href("/_assets/images/users/avatar-"+lastpost.userid+".jpg")" alt="@lastpost.alias's avatar image" width="48" height="48" /></text>}
+						else{<img src="/_assets/images/users/avatar-guest.jpg" alt="No avatar image set" width="48" height="48" />}
+					</a>
+					<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/@lastpost.postid/" title="@lastpost.topicname">@lastpost.topicname</a></span>
+					<span class="lastThreadMeta">@*thread id should replace post id*@
+						<span class="lastThreadUser"><a href="members/@lastpost.postid-@lastpost.alias" class="user-name" dir="auto">@lastpost.alias</a>,</span>
+						<a href="posts/@lastpost.postid/" title="@lastpost.topicname"><time datetime="@lastpost.mostrecent">@lastpost.mostrecent.ToString("MMM d',' yyyy 'at' h':'mm T")</time>@*<abbr class="DateTime muted lastThreadDate" data-latest="Latest: " data-time="1462335812" data-diff="4415" data-datestring="May 4, 2016" data-timestring="12:23 AM">May 4, 2016 at 12:23 AM</abbr>*@</a>
+					</span>}
+				}			
+		</div>
+
+		<div class="nodeControls">
+			@*<a href="forums/episode-discussion.60/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>*@
+			<a href="forums/@topic.forumid-@topic.name/rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+	
+</li>}
+	
+@*<li class="node forum level_2  node_66">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/season-6-2014-2015.66/" data-description="#nodeDescription-66">Season 6 (2014-2015)</a>
+				
+			</h3>
+
+			
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-66"><p>Episode threads&nbsp;from season 6.</p></blockquote>
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>43</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>9,044</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/gunterfan.2727/" class="avatar Av2727s" data-avatarhtml="true"><img src="data/avatars/s/2/2727.jpg?1453420072" width="48" height="48" alt="GunterFan" /></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/271539/" title="S06E38: You Forgot Your Floaties">S06E38: You Forgot Your Floaties</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/gunterfan.2727/" class="username" dir="auto">GunterFan</a>,</span>
+					
+						<a href="posts/271539/" title="S06E38: You Forgot Your Floaties"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Mar 11, 2016 at 12:46 AM">Mar 11, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/season-6-2014-2015.66/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_63">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/season-5-2012-2014.63/" data-description="#nodeDescription-63">Season 5 (2012-2014)</a>
+				
+			</h3>
+
+			
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-63"><p>Episode threads from season 5.</p></blockquote>
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>50</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>36,495</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/cernunnos.6923/" class="avatar Av6923s" data-avatarhtml="true"><img src="data/avatars/s/6/6923.jpg?1461703719" width="48" height="48" alt="Cernunnos" /></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/273699/" title="S5E19: James Baxter the Horse">S5E19: James Baxter the Horse</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/cernunnos.6923/" class="username" dir="auto">Cernunnos</a>,</span>
+					
+						<a href="posts/273699/" title="S5E19: James Baxter the Horse"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Apr 30, 2016 at 7:21 AM">Apr 30, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/season-5-2012-2014.63/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_61">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/season-4-2012.61/" data-description="#nodeDescription-61">Season 4 (2012)</a>
+				
+			</h3>
+
+			
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-61"><p>Episode threads from season 4.</p></blockquote>
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>25</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>2,212</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/burritodetodo.6539/" class="avatar Av6539s" data-avatarhtml="true"><img src="data/avatars/s/6/6539.jpg?1458569735" width="48" height="48" alt="burritodetodo" /></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/265070/" title="S4E25: I Remember You">S4E25: I Remember You</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/burritodetodo.6539/" class="username" dir="auto">burritodetodo</a>,</span>
+					
+						<a href="posts/265070/" title="S4E25: I Remember You"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Sep 29, 2015 at 8:24 PM">Sep 29, 2015</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/season-4-2012.61/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_62">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/season-3-2011-2012.62/" data-description="#nodeDescription-62">Season 3 (2011-2012)</a>
+				
+			</h3>
+
+			
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-62"><p>Episode threads from season 3.</p></blockquote>
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>25</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>1,517</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/gunterfan.2727/" class="avatar Av2727s" data-avatarhtml="true"><img src="data/avatars/s/2/2727.jpg?1453420072" width="48" height="48" alt="GunterFan" /></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/270194/" title="S3E21: Marceline&#039;s Closet">S3E21: Marceline&#039;s Closet</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/gunterfan.2727/" class="username" dir="auto">GunterFan</a>,</span>
+					
+						<a href="posts/270194/" title="S3E21: Marceline&#039;s Closet"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Jan 23, 2016 at 11:10 PM">Jan 23, 2016</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/season-3-2011-2012.62/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_65">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/season-2-2010-2011.65/" data-description="#nodeDescription-65">Season 2 (2010-2011)</a>
+				
+			</h3>
+
+			
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-65"><p>Episode threads from season 2.</p></blockquote>
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>25</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>1,509</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/a-blob.6230/" class="avatar Av6230s" data-avatarhtml="true"><img src="data/avatars/s/6/6230.jpg?1462246104" width="48" height="48" alt="A Blob" /></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/29606/" title="S2E1: It Came from the Nightosphere">S2E1: It Came from the Nightosphere</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/a-blob.6230/" class="username" dir="auto">A Blob</a>,</span>
+					
+						<a href="posts/29606/" title="S2E1: It Came from the Nightosphere"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Mar 15, 2015 at 10:54 PM">Mar 15, 2015</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/season-2-2010-2011.65/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>
+
+
+<li class="node forum level_2  node_64">
+	
+
+	<div class="nodeInfo forumNodeInfo unread ">
+	
+		
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+	<span class="nodeIcon hasGlyph" title="Unread messages"><i class="fa fa-calendar"></i></span>
+
+
+		<div class="nodeText">
+			<h3 class="nodeTitle"><a href="forums/season-1-2010.64/" data-description="#nodeDescription-64">Season 1 (2010)</a>
+				
+			</h3>
+
+			
+				<blockquote class="nodeDescription nodeDescriptionTooltip baseHtml" id="nodeDescription-64"><p>Episode threads from season 1.</p></blockquote>
+			
+
+			<div class="nodeStats pairsInline">
+				<dl><dt><i class="uix_icon uix_icon-statsDiscussions"></i></dt> <dd>26</dd></dl>
+				<dl><dt><i class="uix_icon uix_icon-statsMessages"></i></dt> <dd>642</dd></dl>
+				
+			</div>
+			
+			
+		</div>
+
+		
+		
+		
+
+		<div class="nodeLastPost secondaryContent">
+			
+				
+					<a href="members/robuk1981.6382/" class="avatar Av6382s" data-avatarhtml="true"><img src="styles/uix/xenforo/avatars/avatar_s.png" width="48" height="48" alt="Robuk1981" /></a>
+				
+				<span class="lastThreadTitle"><span>Latest:</span> <a href="posts/30125/" title="E8: Business Time">E8: Business Time</a></span>
+				<span class="lastThreadMeta">
+					<span class="lastThreadUser"><a href="members/robuk1981.6382/" class="username" dir="auto">Robuk1981</a>,</span>
+					
+						<a href="posts/30125/" title="E8: Business Time"><span class="DateTime muted lastThreadDate" data-latest="Latest: " title="Apr 17, 2015 at 5:30 AM">Apr 17, 2015</span></a>
+					
+				</span>
+			
+		</div>
+
+		<div class="nodeControls">
+			<a href="forums/season-1-2010.64/index.rss" class="tinyIcon feedIcon" title="RSS">RSS</a>
+		</div>
+		
+	</div>
+
+	
+
+</li>*@
+	
+</ol>}
+
+<div class="pageNavLinkGroup">
+	<div class="linkGroup SelectionCountContainer">@if(WebSecurity.IsAuthenticated){}else{}</div>
+</div>
+
+<div class="discussionList section sectionMain">
+	<form action="inline-mod/thread/switch" method="post"
+		class="DiscussionList InlineModForm"
+		data-cookieName="threads"
+		data-controls="#InlineModControls"
+		data-imodOptions="#ModerationSelect option">
+		
+	<dl class="sectionHeaders">
+		<dt class="posterAvatar"><a><span>Sort By:</span></a></dt>
+		<dd class="main">
+			<a href="forums/@discussion-@forumname/?order=title" class="title"><span>Title</span></a>
+			<a href="forums/@discussion-@forumname/?order=post_date" class="postDate"><span>Start Date</span></a>
+		</dd>
+		<dd class="stats">
+			<a href="forums/@discussion-@forumname/?order=reply_count" class="major"><span>Replies</span></a>
+			<a href="forums/@discussion-@forumname/?order=view_count" class="minor"><span>Views</span></a>
+		</dd>
+		<dd class="lastPost"><a href="forums/@discussion-@forumname/?direction=asc"><span>Last Message &darr;</span></a></dd>
+	</dl>
+
+	<ol class="discussionListItems">
+		@if(stickie!=null){
+			<div class="uix_stickyThreadWrapper node ">
+				
+					<li class="threadListSeparator sticky">
+						<span class="js-collapseNodeTrigger float_right" title="Toggle Visibility"><i class="uix_icon js-collapseIcon uix_icon-collapse"></i></span>
+						Sticky Threads
+					</li>			
+				
+				<div class="uix_stickyThreads">
+					@foreach(var sticky in stickie){//for each topic in stickies; where sticky = true
+			if(WebSecurity.IsAuthenticated){
+				// Check if subscribe
+				lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND userid=@1", sticky.forumid, WebSecurity.CurrentUserId)??DateTime.MinValue;
+			}else{
+				lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND SessionID=0", sticky.forumid)??DateTime.MinValue;
+			}
+	int replies = (int)db.QueryValue("SELECT count(*) FROM website_forumpost WHERE threadid=@0", sticky.threadid)-1;
+	//var lastpost = db.QuerySingle("SELECT *, Max(LastEdit AND PostDate) AS MaxDate FROM website_forumpost WHERE threadID=@0 ORDER BY date desc", sticky.threadid);//(SELECT Max(v) FROM (VALUES (LastEdit), (PostDate)) AS value(v)) as [MaxDate]
+	var lastpost = db.QuerySingle("SELECT *, CASE WHEN DatePost < COALESCE(LastEdit,'') THEN LastEdit ELSE DatePost END AS MostRecent FROM website_forumpost WHERE threadID=@0 ORDER BY MostRecent desc", sticky.threadid);
+	//DateTime firstpost = db.QueryValue("SELECT website_forumpost.DatePost FROM website_forumpost FULL JOIN website_forumthread ON website_forumthread.threadid=website_forumpost.threadid WHERE website_forumpost.threadid=@0 ORDER BY DatePost ASC", sticky.threadid);//DateTime.SpecifyKind(firstpost, DateTimeKind.Utc).ToLocalTime()
+	DateTime firstpost = db.QueryValue("SELECT datepost FROM website_forumpost WHERE threadid=@0 ORDER BY datepost ASC", sticky.threadid).LocalDateTime;
+	//int stickypages = db.QueryValue("SELECT count(*) FROM website_forumpost WHERE threadid=@0", sticky.threadid);
+<li id="thread-@sticky.threadid" class="discussionListItem visible sticky  " data-author="@sticky.authoralias">
+
+	<div class="listBlock posterAvatar">
+		<span class="avatarContainer">
+			<a href="members/@sticky.author/" class="avatar Av-@sticky.author" data-avatarhtml="true">
+				<!--<img src="data/avatars/s/1/1566.jpg?1441218033" width="48" height="48" alt="Mordecai626" />-->
+				@if(File.Exists(Href("/_assets/images/users/avatar-"+sticky.author+".jpg"))){<text><img src="@Href("/_assets/images/users/avatar-"+sticky.author+".jpg")" alt="@sticky.alias's avatar image" width="48" height="48" /></text>}
+				else{<img src="/_assets/images/users/avatar-guest.jpg" alt="No avatar image set" width="48" height="48" />}
+			</a>
+		</span>
+	</div>
+
+	<div class="listBlock main">
+		<div class="titleText">			
+				<div class="iconKey">
+					<span class="sticky" title="Sticky">Sticky</span>
+				</div>			
+			<h3 class="title">												
+				<a href="threads/@sticky.threadid-@sticky.topicname/"
+					title=""
+					class="PreviewTooltip"
+					data-previewUrl="threads/@sticky.threadid-@sticky.topicname/preview">@sticky.topicname</a>		
+				@if(lastpost.mostrecent < lastviewed){<a href="threads/@sticky.threadid-@sticky.topicname/unread" class="unreadLink" title="Go to first unread message"></a>}		
+			</h3>
+			
+			<div class="secondRow">
+				<div class="posterDate muted">
+					<a href="members/@sticky.author/" class="user-name" dir="auto" title="Thread starter">@sticky.authoralias</a>
+					<span class="startDate">,
+						<a href="threads/@sticky.threadid-@sticky.topicname/" class="faint">						
+							<time class="DateTime" datetime="@firstpost" title="@firstpost.ToString("MMM d',' yyyy 'at' h':'mm t")">@firstpost.ToString("MMM d',' yyyy")@*first post datetime or thread open date*@</time>						
+						</a>
+					</span>
+										
+						<span class="itemPageNav">@*top three, then foreach*@
+							@if((replies+1)/numperpg>3||(replies+1)/numperpg>1){<span>...</span>}@for(int i = 3; i > 0 && i <= (replies+1)/numperpg; i--){
+								<a href="threads/@sticky.threadid-@sticky.topicname?page=@((replies+1)/numperpg-i)">@((replies+1)/numperpg-i)</a>}
+								@*<a href="threads/miss-an-episode-get-the-link-for-it-here.2364/page-11">11</a>
+								<a href="threads/miss-an-episode-get-the-link-for-it-here.2364/page-12">12</a>*@
+						</span>					
+				</div>
+
+				<div class="controls faint"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="listBlock stats pairsJustified" title="Members who liked the first message: 0">
+		<dl class="major"><dt>Replies:</dt> <dd>@replies</dd></dl>
+		<dl class="minor"><dt>Views:</dt> <dd>@sticky.views</dd></dl>
+	</div>
+
+	<div class="listBlock lastPost">
+			<dl class="lastPostInfo">
+				@if(lastpost == null){/*<dt><a href="#" class="username" dir="auto">@lastpost.alias</a></dt><dd class="muted"><a class="dateTime"></a></dd>*/}else{   
+				//<td class="lastpost"><strong>@lastpost.MostRecent</strong><br />by @lastpost.userid</td>
+				if(lastpost.userid==0/*||string.IsNullOrEmpty(lastpost.userid)*/){<img src="/_assets/images/users/avatar-guest.jpg" width="48" height="48" alt="Anonymous Guest" />}
+				else{
+					<a href="/members/@lastpost.userid" class="avatar Av-@lastpost.userid" data-avatarhtml="true">
+						@*<img src="data/avatars/s/5/5949.jpg?1459703928" width="48" height="48" alt="casus" />*@
+						@if(File.Exists(Href("/_assets/images/users/avatar-"+lastpost.userid+".jpg"))){<text><img src="@Href("/_assets/images/users/avatar-"+lastpost.userid+".jpg")" alt="@lastpost.alias's avatar image" width="48" height="48" /></text>}
+						else{<img src="/_assets/images/users/avatar-guest.jpg" alt="No avatar image set" width="48" height="48" />}
+					</a>
+				<dt><a href="/members/@lastpost.userid/" class="user-name" dir="auto">@lastpost.alias</a></dt>
+				<dd class="muted">
+					<a class="dateTime">
+						@*<span class="DateTime" title="Dec 5, 2015 at 9:07 PM">Dec 5, 2015</span>*@
+						<time class="DateTime" datetime="@lastpost.mostrecent" title="@lastpost.mostrecent">@lastpost.mostrecent.ToString("MMM d',' yyyy")</time>
+					</a>
+				</dd>}
+				}
+			</dl>
+	</div>
+</li>}
+				</div>
+			</div>}
+
+	<div class="funbox">
+		@*<div class="funboxWrapper">
+				<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_thread_list_below_stickies -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5808314520834618"
+     data-ad-slot="5901721081"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+	</div>*@
+	</div>
+
+		<li class="threadListSeparator">Normal Threads</li>
+			@for(int i = tag_counter-1; i < totalthreads && i < (numperpg+tag_counter); i++){lastcount = i+1;
+			if(WebSecurity.IsAuthenticated){
+				// Check if subscribe
+				lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND userid=@1", threads.ElementAt(i).forumid, WebSecurity.CurrentUserId)??DateTime.MinValue;
+			}else{
+				lastviewed = db.QueryValue("SELECT lastview FROM website_forumdiscussionview WHERE forumid=@0 AND SessionID=0", threads.ElementAt(i).forumid)??DateTime.MinValue;
+			}
+	   //foreach(var topic in threads){//for each topic in stickies; where sticky = true
+	int replies = (int)db.QueryValue("SELECT count(*) FROM website_forumpost WHERE threadid=@0", threads.ElementAt(i).threadid)-1;//minus original post
+	//var lastpost = db.QuerySingle("SELECT *, Max(LastEdit AND PostDate) AS MaxDate FROM website_forumpost WHERE threadID=@0 ORDER BY date desc", topic.threadid);//(SELECT Max(v) FROM (VALUES (LastEdit), (PostDate)) AS value(v)) as [MaxDate]
+	//var lastpost = db.QuerySingle("SELECT *, CASE WHEN DatePost < COALESCE(LastEdit,'') THEN LastEdit ELSE DatePost END AS MostRecent FROM website_forumpost WHERE threadID=@0 ORDER BY MostRecent desc", threads.ElementAt(i).threadid);
+	var lastpost = db.QuerySingle("SELECT *, CASE WHEN website_forumpost.DatePost < COALESCE(website_forumpost.LastEdit,'') THEN website_forumpost.LastEdit ELSE website_forumpost.DatePost END AS MostRecent FROM website_forumpost FULL JOIN website_forumthread ON website_forumthread.forumid=website_forumpost.forumid FULL JOIN userprofile ON website_forumpost.userid=userprofile.userid WHERE website_forumpost.ForumID=@0 AND website_forumpost.remove='false' ORDER BY MostRecent desc", threads.ElementAt(i).threadid);
+	DateTime ThreadStart = db.QueryValue("SELECT datepost FROM website_forumpost WHERE threadid=@0 ORDER BY datepost ASC",threads.ElementAt(i).threadid).LocalDateTime;
+	//DateTime ThreadStart = db.QueryValue("SELECT website_forumpost.DatePost FROM website_forumpost FULL JOIN website_forumthread ON website_forumthread.threadid=website_forumpost.threadid WHERE website_forumpost.threadid=@0 ORDER BY DatePost ASC",threads.ElementAt(i).threadid);//DateTime.SpecifyKind(ThreadStart, DateTimeKind.Utc).ToLocalTime()
+<li id="thread-@threads.ElementAt(i).threadid" class="discussionListItem visible  " data-author="@if(threads.ElementAt(i).author==0){<text>SystemServer</text>}else{@threads.ElementAt(i).authoralias}">
+	
+	<div class="listBlock posterAvatar">
+		<span class="avatarContainer">
+			<a href="members/@threads.ElementAt(i).author" class="avatar Av4733s" data-avatarhtml="true">
+				@if(File.Exists(Href("/_assets/images/users/avatar-"+threads.ElementAt(i).author+".jpg"))){<text><img src="@Href("/_assets/images/users/avatar-"+threads.ElementAt(i).author+".jpg")" alt="@threads.ElementAt(i).alias's avatar image" width="48" height="48" /></text>}
+				else{<img src="/_assets/images/users/avatar-guest.jpg" alt="No avatar image set" width="48" height="48" />}
+			</a>			
+		</span>
+	</div>
+
+	<div class="listBlock main">
+		<div class="titleText">	
+			@if((bool)threads.ElementAt(i).closed){<div class="iconKey">
+					<span class="locked" title="Locked">Locked</span>
+				</div>}	
+			<h3 class="title">				
+				<a href="threads/@threads.ElementAt(i).threadid-@threads.ElementAt(i).topicname/"
+					title=""
+					class="PreviewTooltip"
+					data-previewUrl="threads/@threads.ElementAt(i).threadid-@threads.ElementAt(i).topicname/preview">@threads.ElementAt(i).topicname</a>
+				@if(lastpost.mostrecent < lastviewed){<a href="threads/@threads.ElementAt(i).threadid-@threads.ElementAt(i).topicname/unread" class="unreadLink" title="Go to first unread message"></a>}
+			</h3>
+			
+			<div class="secondRow">
+				<div class="posterDate muted">
+					<a href="members/@threads.ElementAt(i).author/" class="user-name" dir="auto" title="Thread starter">@if(threads.ElementAt(i).author==0){<text>SystemServer</text>}else{@threads.ElementAt(i).authoralias}</a><span class="startDate">, <a class="faint"><time class="DateTime" datetime="@ThreadStart" title="@ThreadStart.ToString("MMM d',' yyyy 'at' h':'mm t")">@*first post datetime or thread open date|Dec 4, 2015*@@ThreadStart.ToString("MMM d',' yyyy")</time></a></span>
+				</div>
+
+				<div class="controls faint"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="listBlock stats pairsJustified" title="Members who liked the first message: 0">
+		<dl class="major"><dt>Replies:</dt> <dd>@replies</dd></dl>
+		<dl class="minor"><dt>Views:</dt> <dd>@threads.ElementAt(i).views</dd></dl>
+	</div>
+
+	<div class="listBlock lastPost">
+		
+			<dl class="lastPostInfo">
+				@if(lastpost == null){/*<dt><a href="#" class="user-name" dir="auto">@lastpost.alias</a></dt><dd class="muted"><a class="dateTime"></a></dd>*/}else{   
+				//<td class="lastpost"><strong>@lastpost.MostRecent</strong><br />by @lastpost.userid</td>
+				if(lastpost.userid==0/*||string.IsNullOrEmpty(lastpost.userid)*/){//<img src="/_assets/images/users/avatar-guest.jpg" width="48" height="48" alt="Anonymous Guest" />
+					<a href="/members/@lastpost.userid" class="avatar Av-@lastpost.userid" data-avatarhtml="true">
+						@*<img src="data/avatars/s/5/5949.jpg?1459703928" width="48" height="48" alt="casus" />*@
+						@if(File.Exists(Href("/_assets/images/users/avatar-"+lastpost.userid+".jpg"))){<text><img src="@Href("/_assets/images/users/avatar-"+lastpost.userid+".jpg")" alt="ServerSystem's avatar image" width="48" height="48" /></text>}
+						else{<img src="/_assets/images/users/avatar-guest.jpg" alt="No avatar image set" width="48" height="48" />}
+					</a>
+				<dt><a href="/members/@lastpost.userid/" class="user-name" dir="auto">ServerSystem</a></dt>
+				<dd class="muted">
+					<a class="dateTime">
+						@*<span class="DateTime" title="Dec 5, 2015 at 9:07 PM">Dec 5, 2015</span>*@
+						<time class="DateTime" datetime="@lastpost.mostrecent" title="@lastpost.mostrecent">@lastpost.mostrecent.ToString("MMM d',' yyyy")</time>
+					</a>
+				</dd>}
+				else{
+					<a href="/members/@lastpost.userid" class="avatar Av-@lastpost.userid" data-avatarhtml="true">
+						@*<img src="data/avatars/s/5/5949.jpg?1459703928" width="48" height="48" alt="casus" />*@
+						@if(File.Exists(Href("/_assets/images/users/avatar-"+lastpost.userid+".jpg"))){<text><img src="@Href("/_assets/images/users/avatar-"+lastpost.userid+".jpg")" alt="@lastpost.alias's avatar image" width="48" height="48" /></text>}
+						else{<img src="/_assets/images/users/avatar-guest.jpg" alt="No avatar image set" width="48" height="48" />}
+					</a>
+				<dt><a href="/members/@lastpost.userid/" class="user-name" dir="auto">@lastpost.alias</a></dt>
+				<dd class="muted">
+					<a class="dateTime">
+						@*<span class="DateTime" title="Dec 5, 2015 at 9:07 PM">Dec 5, 2015</span>*@
+						<time class="DateTime" datetime="@lastpost.mostrecent" title="@lastpost.mostrecent">@lastpost.mostrecent.ToString("MMM d',' yyyy")</time>
+					</a>
+				</dd>}
+				}
+			</dl>
+	</div>
+</li>if(i == (numperpg+tag_counter)){lastcount = i;/*break;*/}else{lastcount = i+1;}
+	}
+	</ol>
+				
+		<div class="sectionFooter InlineMod SelectionCountContainer">
+			<span class="contentSummary">Showing threads @tag_counter to @lastcount of @totalthreads</span>
+		</div>
+	<!--Validation-Auth Token-->
+	<!--<input type="hidden" name="_xfToken" value="" />-->
+</form>
+
+<h3 id="DiscussionListOptionsHandle" class="JsOnly"><a href="#" onclick="toggle()">Thread Display Options</a></h3>
+
+<form action="forums/@discussion-@forumname/" method="post" id="DiscussionListOptionsForm" class="DiscussionListOptions secondaryContent">
+	<div class="controlGroup">
+		<label for="ctrl_order">Sort threads by:</label>
+		<select name="order" id="ctrl_order" class="textCtrl">
+			<option value="last_post_date"  selected="selected">Last message time</option>
+			<option value="post_date" >Thread creation time</option>
+			<option value="title" >Title (alphabetical)</option>
+			<option value="reply_count" >Number of replies</option>
+			<option value="view_count" >Number of views</option>
+			<option value="first_post_likes" >First message likes</option>
+		</select>
+	</div>
+
+	<div class="controlGroup">
+		<label for="ctrl_direction">Order threads in:</label>
+		<select name="direction" id="ctrl_direction" class="textCtrl">
+			<option value="desc"  selected="selected">Descending order</option>
+			<option value="asc" >Ascending order</option>
+		</select>
+	</div>
+	
+	
+		<div class="controlGroup">
+			<label for="ctrl_prefix_id">Prefix:</label>
+			<select name="prefix_id" id="ctrl_prefix_id" class="textCtrl">
+				<option value="0"  selected="selected">(Any)</option>
+						<!--<optgroup label="Adventure Time Threads">
+							<option value="1" >THEORY</option>
+						</optgroup>-->
+			</select>
+		</div>
+	
+
+	<div class="buttonGroup">
+		<input type="submit" class="button primary" value="Set Options" />
+		<input type="reset" class="button" value="Cancel" />
+	</div>
+	
+
+	<input type="hidden" name="_xfToken" value="" />
+</form>
+
+<div id="PreviewTooltip">
+	<span class="arrow"><span></span></span>
+	<div class="section">
+		<div class="primaryContent previewContent">
+			<span class="PreviewContents">Loading...</span>
+		</div>
+	</div>
+</div>
+</div>
+
+<div class="pageNavLinkGroup afterDiscussionListHandle">
+	<div class="linkGroup">
+		@if(WebSecurity.IsAuthenticated){
+			if(WebSecurity.IsConfirmed(WebSecurity.CurrentUserName)){<a href="forums/general-discussion.30/create-thread" class="callToAction"><span>Post New Thread</span></a>}
+			else{<a href="/account/login" class="concealed element OverlayTrigger">(You must log in or sign up to post here.)</a>}
+		}
+	</div>
+	<div class="linkGroup" style="display: none"><a href="javascript:" class="muted JsOnly DisplayIgnoredContent Tooltip" title="Show hidden content by ">Show Ignored Content</a></div>
+		
+<!--<div class="PageNav" data-page="1" data-range="2" data-start="2" data-end="6" data-last="87" data-sentinel="{{sentinel}}" data-baseurl="forums/general-discussion.30/page-{{sentinel}}">
+	
+	<span class="pageNavHeader">Page 1 of 87</span>
+	
+	<nav>
+		
+		
+		<a href="forums/general-discussion.30/" class="currentPage " rel="start">1</a>
+		
+		
+			<a class="PageNavPrev hidden" style="">←</a> <span class="scrollable"><span class="items">
+		
+		
+		
+			<a href="forums/general-discussion.30/page-2" class="">2</a>
+		
+			<a href="forums/general-discussion.30/page-3" class="">3</a>
+		
+			<a href="forums/general-discussion.30/page-4" class="">4</a>
+		
+			<a href="forums/general-discussion.30/page-5" class="">5</a>
+		
+			<a href="forums/general-discussion.30/page-6" class="">6</a>
+		
+		
+		
+			</span></span> <a class="PageNavNext " style="">→</a>
+		
+		
+		<a href="forums/general-discussion.30/page-87" class="">87</a>
+		
+		
+			<a href="forums/general-discussion.30/page-2" class="text">Next &gt;</a>
+			
+		
+	</nav>	
+	
+	
+</div>-->
+
+</div>	
+	<div class="sectionMain funbox">
+	@*<div class="funboxWrapper">
+				<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_below_content -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5808314520834618" data-ad-slot="2948254682" data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+	</div>*@
+	</div>
+							<!-- login form, to be moved to the upper drop-down -->
+				</div>
+@*<div class="breadBoxBottom">
+	<nav>
+		<fieldset class="breadcrumb" style="">
+			<a href="misc/quick-navigation-menu?selected=node-60" class="OverlayTrigger jumpMenuTrigger" data-cacheoverlay="true" title="Open quick navigation"><i class="uix_icon uix_icon-sitemap"></i><!--Jump to...--></a>
+			<div class="boardTitle"><strong>The LandOfOoo</strong></div>
+				<span class="crumbs">
+			
+				<span class="crust homeCrumb">
+					<a href="https://landofooo.com/community" class="crumb"><span><i class="uix_icon uix_icon-home" title="Home"></i></span></a>
+					<span class="arrow"><span></span></span>
+				</span>
+
+				<span class="crust selectedTabCrumb">
+					<a href="https://landofooo.com/community/" class="crumb"><span>Forums</span></a>
+					<span class="arrow"><span>&gt;</span></span>
+				</span>
+			
+					<span class="crust">
+						<a href="https://landofooo.com/community/.#adventure-time.57" class="crumb"><span>Adventure Time</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+
+			</span>
+		</fieldset>
+	</nav>
+</div>*@		
+			</div>
+
+					<!-- sidebar -->
+					@*<aside class="uix_mainSidebar">
+						<div class="inner_wrapper" style="transition: top 0s;">
+							<div class="sidebar">
+
+								<div class="section widget-group-no-name widget-container">						
+<div class="secondaryContent widget side-block side-login">
+			<h3 class="side-block-head"><a href="#Login">Login</a><!--&nbsp; • &nbsp;<a href="#Register">Register</a>--></h3>
+			<div class="side-block-body">
+		<form method="post" action="#Login">
+				<fieldset>
+					<input type="text" name="username" id="username" size="10" class="inputbox" title="Username" placeholder="Username"><input type="password" name="password" id="password" size="10" class="inputbox" title="Password" placeholder="Password">
+					<br>
+											<a href="#Password">I forgot my password</a>
+																<label for="autologin" id="remember-me"><input type="checkbox" name="autologin" id="autologin">Remember me</label>
+										<br>
+					<input type="submit" name="login" value="Login" class="button2">
+					<!--<input type="hidden" name="redirect" value="./index.php?style=9&amp;style=9&amp;sid=9c9ac014a4afc9fe18b57c2e3fea57f7">-->
+
+				</fieldset>
+		</form>
+			</div>
+	</div>
+<!--</div>
+
+<div class="section loginButton">		-->
+	<div class="secondaryContent">
+		<label id="SignupButton"><a href="login/" class="inner OverlayTrigger" data-cacheoverlay="false">Sign up now!</a></label>
+	</div>
+</div>
+
+								<div class="section widget-group-no-name widget-container">
+		
+			<div class="secondaryContent widget WidgetFramework_WidgetRenderer_Threads" id="widget-15">
+				
+					<h3>
+						
+							Latest Replies
+						
+					</h3>
+					<div class="avatarList">
+			<ul>
+				
+					
+
+						
+							<li class="thread-6392 thread-node-67">
+	<a href="members/casus.5949/" class="avatar Av5949s" data-avatarhtml="true"><img src="data/avatars/s/5/5949.jpg?1459703928" width="48" height="48" alt="casus"></a>
+
+	
+
+	<a href="posts/273876/">
+		S7E34: Elemental
+	</a>
+
+	<div class="userTitle">
+									<a href="members/casus.5949/" class="username">casus</a> replied <abbr class="DateTime" data-time="1462335812" data-diff="4213" data-datestring="May 4, 2016" data-timestring="12:23 AM" title="May 4, 2016 at 12:23 AM">Today at 12:23 AM</abbr>
+								</div>
+	
+	
+</li>
+
+						
+							<li class="thread-6388 thread-node-67">
+	<a href="members/casus.5949/" class="avatar Av5949s" data-avatarhtml="true"><img src="data/avatars/s/5/5949.jpg?1459703928" width="48" height="48" alt="casus"></a>
+
+	
+
+	<a href="posts/273874/">
+		S07E33: Normal Man
+	</a>
+
+	<div class="userTitle">
+									<a href="members/casus.5949/" class="username">casus</a> replied <abbr class="DateTime" data-time="1462335386" data-diff="4639" data-datestring="May 4, 2016" data-timestring="12:16 AM" title="May 4, 2016 at 12:16 AM">Today at 12:16 AM</abbr>
+								</div>
+	
+	
+</li>
+
+						
+							<li class="thread-6386 thread-node-67">
+	<a href="members/gunterfan.2727/" class="avatar Av2727s" data-avatarhtml="true"><img src="data/avatars/s/2/2727.jpg?1453420072" width="48" height="48" alt="GunterFan"></a>
+
+	
+
+	<a href="posts/273871/">
+		S07E32: Bun Bun
+	</a>
+
+	<div class="userTitle">
+									<a href="members/gunterfan.2727/" class="username">GunterFan</a> replied <abbr class="DateTime" data-time="1462331220" data-diff="8805" data-datestring="May 3, 2016" data-timestring="11:07 PM" title="May 3, 2016 at 11:07 PM">Yesterday at 11:07 PM</abbr>
+								</div>
+	
+	
+</li>
+
+						
+
+					
+				
+			</ul>
+		</div>
+
+		<div id="PreviewTooltip">
+	<span class="arrow"><span></span></span>
+	
+	<div class="section">
+		<div class="primaryContent previewContent">
+			<span class="PreviewContents">Loading...</span>
+		</div>
+	</div>
+</div>
+				
+			</div>
+		
+	</div>
+
+	<div class="section widget-group-no-name widget-container">
+		
+			<div class="secondaryContent widget WidgetFramework_WidgetRenderer_OnlineUsers" id="widget-3">
+				
+					<h3>
+						
+							<a href="online/">Members Online Now</a>
+						
+					</h3>
+					<div class="userList WidgetFramework_WidgetRenderer_OnlineUsers">
+	
+		
+		
+		<ol class="listInline">
+			
+				
+					<li class="user-6151">
+					
+						<a href="members/kephri.6151/" class="username" dir="auto">Kephri</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-5887">
+					
+						<a href="members/bread-lady.5887/" class="username" dir="auto">Bread Lady</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6060">
+					
+						<a href="members/mrhathead.6060/" class="username" dir="auto">mrhathead</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-5044">
+					
+						<a href="members/biggerboot.5044/" class="username" dir="auto"><span class="style14">Biggerboot</span></a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6964">
+					
+						<a href="members/ponderingcat.6964/" class="username" dir="auto">PonderingCat</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6230">
+					
+						<a href="members/a-blob.6230/" class="username" dir="auto">A Blob</a>,
+					
+					</li>
+				
+			
+				
+					<li class="user-6968">
+					
+						<a href="members/qcmd.6968/" class="username" dir="auto">qcmd</a>
+					
+					</li>
+				
+			
+			
+		</ol>
+	
+	
+	<div class="footnote">
+		
+			Total: 30 (members: 7, guests: 19, robots: 4)
+		
+	</div>
+</div>
+				
+			</div>
+		
+	</div>
+
+	<div class="section widget-group-no-name widget-container">
+		
+			<div class="secondaryContent widget WidgetFramework_WidgetRenderer_ProfilePosts" id="widget-6">
+				
+					<h3>
+						
+							<a href="find-new/profile-posts">Status Updates</a>
+						
+					</h3>
+					<ul class="WidgetFramework_WidgetRenderer_ProfilePosts_ProfilePostList">
+	
+</ul>
+				
+			</div>
+		
+	</div>
+
+	<div class="section widget-group-no-name widget-container">
+		
+			<div class="secondaryContent widget WidgetFramework_WidgetRenderer_Stats" id="widget-4">
+				
+					<h3>
+						
+							Forum Statistics
+						
+					</h3>
+					<div class="pairsJustified">
+	<dl class="discussionCount"><dt>Discussions:</dt>
+		<dd>6,258</dd></dl>
+	<dl class="messageCount"><dt>Messages:</dt>
+		<dd>273,045</dd></dl>
+	<dl class="memberCount"><dt>Members:</dt>
+		<dd>6,843</dd></dl>
+	<dl><dt>Latest Member:</dt>
+		<dd><a href="members/qcmd.6968/" class="username" dir="auto">qcmd</a></dd></dl>
+	<!-- slot: forum_stats_extra -->
+</div>
+				
+			</div>
+		
+	</div>
+
+<div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-5">
+			
+	
+	<div class="section infoBlock sharePage">
+		<div class="secondaryContent">
+			<h3>Share This Page</h3>
+			
+				
+				
+					<div class="tweet shareControl">
+						<iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="https://platform.twitter.com/widgets/tweet_button.fd774b599f565016d763dd860cb31c79.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;related=landofooo&amp;size=m&amp;text=The%20LandOfOoo&amp;time=1462350303874&amp;type=share&amp;url=https%3A%2F%2Flandofooo.com%2Fcommunity%2F" style="position: static; visibility: visible; width: 60px; height: 20px;" data-url="https://landofooo.com/community/"></iframe>
+					</div>
+						
+				
+					<div class="facebookLike shareControl">
+						
+						<div class="fb-like fb_iframe_widget" data-href="https://landofooo.com/community/" data-layout="button_count" data-action="like" data-font="trebuchet ms" data-colorscheme="light" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=425131034358731&amp;color_scheme=light&amp;container_width=0&amp;font=trebuchet%20ms&amp;href=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey"><span style="vertical-align: bottom; width: 77px; height: 20px;"><iframe name="f2e0705dd4937a4" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:like Facebook Social Plugin" src="https://www.facebook.com/v2.4/plugins/like.php?action=like&amp;app_id=425131034358731&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D42%23cb%3Df3db664c1b889fc%26domain%3Dlandofooo.com%26origin%3Dhttps%253A%252F%252Flandofooo.com%252Ff2f7b4019b3d368%26relation%3Dparent.parent&amp;color_scheme=light&amp;container_width=0&amp;font=trebuchet%20ms&amp;href=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey" style="border: none; visibility: visible; width: 77px; height: 20px;" class=""></iframe></span></div>
+					</div>
+				
+				
+					<div class="plusone shareControl">
+						<div id="___plusone_0" style="text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 90px; height: 20px; background: transparent;"><iframe frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 90px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 20px;" tabindex="0" vspace="0" width="100%" id="I0_1462350303750" name="I0_1462350303750" src="https://apis.google.com/u/0/se/0/_/+1/fastbutton?usegapi=1&amp;size=medium&amp;count=true&amp;hl=en-US&amp;origin=https%3A%2F%2Flandofooo.com&amp;url=https%3A%2F%2Flandofooo.com%2Fcommunity%2F&amp;gsrc=3p&amp;ic=1&amp;jsh=m%3B%2F_%2Fscs%2Fapps-static%2F_%2Fjs%2Fk%3Doz.gapi.en.Xr5392wdai0.O%2Fm%3D__features__%2Fam%3DAQ%2Frt%3Dj%2Fd%3D1%2Frs%3DAGLTcCPDv22tBAls6NCV0AcnP6Dm4xm7yg#_methods=onPlusOne%2C_ready%2C_close%2C_open%2C_resizeMe%2C_renderstart%2Concircled%2Cdrefresh%2Cerefresh%2Conload&amp;id=I0_1462350303750&amp;parent=https%3A%2F%2Flandofooo.com&amp;pfname=&amp;rpctoken=16034965" data-gapiattached="true" title="+1"></iframe></div>
+					</div>
+					
+						
+			
+		</div>
+	</div>
+
+	</div>
+
+	<div class="section funbox">
+		<div class=" funboxWrapper">
+		
+		
+			
+				
+									
+					
+					
+					<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_sidebar_bottom_new -->
+<ins class="adsbygoogle" style="display:inline-block;width:250px;height:250px" data-ad-client="ca-pub-5808314520834618" data-ad-slot="7518055085"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+					
+					
+				
+			
+		
+		
+		</div>
+	</div>
+
+							</div>
+						</div>
+					</aside>*@
+		</div>
+	</div>

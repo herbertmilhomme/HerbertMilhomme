@@ -1,0 +1,155 @@
+﻿@* Remove this section if you are using bundling *@
+@section FooterJS{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
+
+@{
+    //Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Register";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+
+    string email = "";
+	string username = "";
+    string loginData = "";
+    string providerDisplayName = "";
+    Random randomz = new Random();
+    int rnum = randomz.Next(100000000,999999999);
+
+    var returnUrl = Request.QueryString["ReturnUrl"];
+    if (returnUrl.IsEmpty()) {
+        // Some external login providers always require a return URL value
+        returnUrl = Href("~/");
+    }
+
+    // Setup validation
+    //Validation.RequireField("email", "You must specify an email address.");
+    Validation.Add("email", //"You must specify an email address.");
+        Validator.Regex(@"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$", 
+        "You must specify an email address.")
+        ); //"Invalid format for an email address" 
+    Validation.Add("username", 
+        Validator.Required("You must provide an user name"), 
+        Validator.StringLength(25, 5, "Min 5, to no more than 25 characters"),
+		Validator.Regex(@"^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9._%+-]*$", 
+        "Characters AND numbers only, please.")
+        );  
+
+    if (IsPost && Request.Form["newAccount"].AsBool()) {
+        // Handle new account registration form
+        AntiForgery.Validate();
+        email = Request.Form["email"];
+        username = Request.Form["username"];
+        loginData = Request.Form["loginData"];
+
+        string provider = "";
+        string providerUserId = "";
+        if (WebSecurity.IsAuthenticated || !OAuthWebSecurity.TryDeserializeProviderUserId(loginData, out provider, out providerUserId)) {
+            Response.Redirect("~/Account/Manage");
+            return;
+        }
+
+        providerDisplayName = OAuthWebSecurity.GetOAuthClientData(provider).DisplayName;
+        if (Validation.IsValid()) {
+            // Insert a new user into the database
+            var db = Database.Open("ColonielHeights");//StarterSite
+
+            // Check if user already exists
+            //var user = db.QuerySingle("SELECT Email FROM UserProfile WHERE LOWER(Email) = LOWER(@0)", email);
+            //if (user == null) {
+			var user1 = db.QuerySingle("SELECT Email FROM UserProfile WHERE LOWER(Email) = LOWER(@0)", email);
+            var user2 = db.QuerySingle("SELECT Username FROM UserProfile WHERE LOWER(username) = LOWER(@0)", username);
+            if (user1 == null && user2 == null) {
+                var idnumber = db.QuerySingle("SELECT memberid FROM business_customer WHERE memberid=@0", rnum);
+                while(idnumber == rnum){
+                    rnum = randomz.Next(100000000,999999999);
+                }
+                // Insert email into the profile table
+                db.Execute("INSERT INTO UserProfile (Email, Memberid, Username) VALUES (@0, @1, @2)", email, rnum, username);
+                OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, email);
+
+                OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
+
+                Context.RedirectLocal(returnUrl);
+                return;
+            } else {
+				if (user1 != null){
+					ModelState.AddError("email", "Email already exists. Please enter a different email.");
+				}
+				if (user2 != null){
+					ModelState.AddError("username", "User name already exists. Please enter a different user name.");
+				}
+            }
+        }
+    } else {
+        // Handle callbacks from the external login provider
+
+        var result = OAuthWebSecurity.VerifyAuthentication(Href("~/Account/RegisterService", new { returnUrl }));
+        if (result.IsSuccessful) {
+            bool registered = OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false);
+			AppState["TotalOnlineMembers"] = (int)AppState["TotalOnlineMembers"] + 1;  
+            if (registered) {
+                Context.RedirectLocal(returnUrl);
+                return;
+            }
+
+            if (WebSecurity.IsAuthenticated) {
+                // If the current user is logged in add the new account
+                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, WebSecurity.CurrentUserName);
+                Context.RedirectLocal(returnUrl);
+                return;
+            } else {
+                // User is new, set default user name to the value obtained from external login provider
+                email = result.UserName;
+                loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
+                providerDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
+            }
+        } else {
+            Response.Redirect("~/Account/ExternalLoginFailure");
+            return;
+        }
+    }
+}
+<!--<hgroup class="title">
+    <h1>@Page.Title.</h1>-->
+    <h2>Associate your @providerDisplayName account.</h2>
+<!--</hgroup>-->
+
+<form method="post">
+    @AntiForgery.GetHtml()
+    <input type="hidden" name="loginData" value="@loginData" />
+    @* If at least one validation error exists, notify the user *@
+    @Html.ValidationSummary(excludeFieldErrors: true)
+
+    <fieldset>
+        <legend>Registration Form</legend>
+        <p>
+            You've successfully authenticated with <strong>@providerDisplayName</strong>. Please
+            enter a user name for this site below and click the Confirm button to finish logging
+            in.
+        </p>
+        <ol>
+            <li class="email">
+                <label for="email" @if (!ModelState.IsValidField("email")) {<text>class="error-label"</text>}>Email address</label>
+                <input type="text" id="email" name="email" value="@email" @Validation.For("email")  required="required"/>
+                @* Write any email validation errors to the page *@
+                @Html.ValidationMessage("email")
+            </li>
+            <li class="username">
+                <label for="username" @if (!ModelState.IsValidField("username")) {<text>class="error-label"</text>}>Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="@username" @Validation.For("username") aria-describedby="usernameStatus" required="required" />
+                @* Write any username validation errors to the page *@
+                @Html.ValidationMessage("username",new Dictionary<string, object>(){{ "class", "help-block"}})
+            </li>
+        </ol>
+        <button type="submit" name="newAccount" value="true">Register</button>
+    </fieldset>
+</form>

@@ -1,0 +1,1125 @@
+﻿@{
+    //Layout = "~/Layouts/Template/index.cshtml";
+    Page.Title = "Forum";
+	/*if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}*/
+	//put a hidden value "view != true"{execute view +1; set view = true}
+}
+@if(UrlData.Count == 0){//<p>Total number of items in UrlData: @UrlData.Count</p>
+    @RenderPage("~/Layouts/Forum/forum2_0/layout_tier1_cover-discussionlist.cshtml")
+@section HeadCSS{
+<link rel="stylesheet" href="/_assets/css/facebook_css.css" />
+<link rel="stylesheet" href="/_assets/css/xenforo_css.css" />
+<link rel="stylesheet" href="/_assets/css/uix_css.css" />
+<style>
+	.uix_mainSidebar {
+    float: right;
+}
+	.container .section {
+    margin: 16px auto;
+    padding: unset;
+}
+</style>}
+@section FooterJS{
+<script>
+	uix = {
+		elm: {},
+		fn:{},
+		init: function(){
+			if (uix.betaMode) {
+				console.group('uix.%cinit()', 'color:#3498DB');
+			}
+			for(var x=0;x<uix.events.init.length;x++){
+				uix.events.init[x]()
+		  	}
+		  	console.groupEnd('uix.%cinit()','color:#3498DB')
+		},
+	  	events: {init:[]},
+	  	on: function(event, fn){
+	  		if(event=='init'){
+	  			uix.events.init.push(fn)
+	  		}
+	  	},
+	  
+		betaMode				: parseInt('0'),
+		jsPathUsed				: 'uix_style',
+		jsGlobal				: parseInt('0'),
+		
+	  
+	  	version					: '1.5.6.0',
+	  	jsHeadVersion				: '1.5.6.0',
+	  	addonVersion				: '1000970',
+	  	contentTemplate				: 'forum_list',
+	  
+		globalPadding 				: parseInt('16px'),
+		sidebarWidth				: parseInt('250px'),
+		mainContainerMargin  	        	: '266px',
+		maxResponsiveWideWidth   		: parseInt('800px'),
+		maxResponsiveMediumWidth 		: parseInt('610px'),
+		maxResponsiveNarrowWidth 		: parseInt('480px'),
+		sidebarMaxResponsiveWidth		: parseInt('800px'),
+		
+			responsiveMessageBreakpoint		: parseInt('610px'),
+		
+		sidebarMaxResponsiveWidthStr		: '800px',
+		
+		
+			offCanvasRightTriggerWidth	: parseInt('800px'),
+		
+		
+		
+			offCanvasLeftTriggerWidth	: parseInt('800px'),
+		
+		
+		
+			
+				offCanvasNavTriggerWidth	: parseInt('800px'),
+			
+		
+		
+			
+				offCanvasVisitorTriggerWidth	: parseInt('800px'),
+			
+		
+		
+		offcanvasTriggerAnimationDuration	: parseInt('300ms'),
+		
+		
+		
+		
+		dropdownMenuAnimationSpeed		: parseInt('0ms'),
+		inlineAlertBalloons			: (parseInt('1') && !parseInt('1')) || parseInt('1'),
+	  
+		jumpToFixedDelayHide			: parseInt('1'),
+	  
+		stickyNavigationMinWidth 		: parseInt('0'),
+		stickyNavigationMinHeight		: parseInt('600'),
+		stickyNavigationMaxWidth 		: parseInt('0'),
+		stickyNavigationMaxHeight		: parseInt('0'),
+		stickyNavigationPortraitMinWidth 	: parseInt('320'),
+		stickyNavigationPortraitMinHeight	: parseInt('500'),
+		stickyNavigationPortraitMaxWidth 	: parseInt('0'),
+		stickyNavigationPortraitMaxHeight	: parseInt('0'),
+		stickySidebar 				: 1,
+		
+			sidebarInnerFloat		: "right",
+		
+		RTL					: 0,
+		stickyItems 				: {},
+		stickyGlobalMinimumPosition		: parseInt('200px'),
+		stickyGlobalScrollUp			: parseInt('0'),
+		stickyDisableIOSThirdParty		: parseInt('1'),
+		preventAlwaysSticky			: parseInt('0'),
+		
+		searchMinimalSize			: parseInt('610px'),
+		
+		searchPosition				: parseInt('2'),
+		
+		nodeStyle				: parseInt('3'),
+		pageStyle				: parseInt('0'),
+		
+		enableBorderCheck			: parseInt('1'),
+		enableULManager				: parseInt('1'),
+		
+		threadSlidingAvatar			: parseInt('0'),
+		threadSlidingExtra			: parseInt('0'),
+		threadSlidingHover			: parseInt('0'),
+		threadSlidingStaffShow			: parseInt('0'),
+		threadSlidingGlobalEnable		: parseInt('1'),
+		
+		signatureHidingEnabled			: parseInt('0'),
+		signatureHidingEnabledAddon		: parseInt('1'),
+		signatureMaxHeight			: parseInt('100px'),
+		signatureHoverEnabled			: parseInt('0'),
+		
+		enableStickyFooter 			: parseInt('1'),
+		stickyFooterBottomOffset 		: parseInt('16px') * 2,
+		
+		
+			sidebarStickyBottomOffset	: parseInt('4'),
+		
+	  
+	  	
+			offCanvasSidebar			: 1,
+
+			
+				offCanvasSidebarVisitorTabs		: 1,
+			
+		
+		
+		
+		offcanvasLeftStatic			: 1 && parseInt('0') && parseInt('1'),
+		offcanvasRightStatic			: 0 && parseInt('0') && parseInt('1'),
+		offcanvasLeftStaticBreakpoint		: parseInt('1300px'),
+		offcanvasRightStaticBreakpoint		: parseInt('1300px'),
+	  
+		reinsertWelcomeBlock			: parseInt('0'),
+	  
+		sidebarCookieExpire			: '',
+		canCollapseSidebar			: '',
+		
+		cookiePrefix				: 'xf_',
+		sidebarLocation 			: parseInt('0'),
+		
+		collapsibleSidebar			: parseInt('0'),
+		collapsedNodesDefault			: '',
+		widthToggleUpper			: '100%',
+		widthToggleLower			: '1170px',
+		
+			toggleWidthEnabled		: parseInt('1'),
+		
+		toggleWidthBreakpoint			: parseInt('1202'),
+		collapsibleNodes			: parseInt('1'),
+		collapsibleSticky			: parseInt('1'),
+		ajaxWidthToggleLink			: 'uix/toggle-width',
+		ajaxStickyThreadToggleLink		: 'uix/toggle-sticky-threads',
+		ajaxStickyThreadExpandLink		: 'uix/expand-sticky-threads',
+		ajaxStickyThreadCollapseLink		: 'uix/collapse-sticky-threads',
+		ajaxSidebarToggleLink			: 'uix/toggle-sidebar',
+		
+		stickySidebarDelayInit			: parseInt('1'),
+		
+		user					: {
+								'themeName'		: 'The LandOfOoo - UI.X',
+								'-themeParents'		: '12,11,0',
+								'-themeModified'	: '1459971631',
+								'-themeSelectable'	: '1',
+								languageName		: 'English (US)',
+								stickyEnableUserbar	: (parseInt('') == parseInt('')) ? parseInt('') : true,
+								stickyEnableNav		: (parseInt('') == parseInt('')) ? parseInt('') : true,
+								stickyEnableSidebar	: (parseInt('') == parseInt('')) ? parseInt('') : true,
+								widthToggleState	: (parseInt('0') == parseInt('0')) ? parseInt('0') : parseInt('0'),
+								stickyThreadsState	: (parseInt('') == parseInt('')) ? (parseInt('') > 0) : 0,
+								
+									sidebarState	: 0,
+								
+								
+									collapseUserInfo : 1,
+								
+								
+									signatureHiding : 1,
+								
+								isAdmin			: parseInt('0"')
+							}
+	};
+	
+	if(uix.stickyNavigationMaxWidth == 0){uix.stickyNavigationMaxWidth = 999999}
+	if(uix.stickyNavigationMaxHeight == 0){uix.stickyNavigationMaxHeight = 999999}
+	if(uix.stickyNavigationPortraitMaxWidth == 0){uix.stickyNavigationPortraitMaxWidth = 999999}
+	if(uix.stickyNavigationPortraitMaxHeight == 0){uix.stickyNavigationPortraitMaxHeight = 999999}
+	
+	
+		uix.stickyItems['#navigation'] = {normalHeight:parseInt('48'), stickyHeight:parseInt('40')}
+		
+		var subElement = null;
+		
+			//if tablinks are visible
+			uix.stickyItems['#navigation'].options = {subElement: '#navigation .tabLinks', subNormalHeight: parseInt('41'), subStickyHeight: parseInt('40'), subStickyHide: 1 == 1 , scrollSticky: uix.stickyGlobalScrollUp }
+		
+		
+	
+	
+	
+	$(document).ready(function() {
+		if ( $('#userBar').length ) {
+			uix.stickyItems['#userBar']= {normalHeight:parseInt('40'), stickyHeight:parseInt('40')}
+			
+			uix.stickyItems['#userBar'].options = {scrollSticky: uix.stickyGlobalScrollUp }
+		}
+	});
+	
+	
+	$(document).ready(function(){
+	
+	//put jquery code here
+	
+
+});
+	
+	uix.debug = function() {
+		result = "\n\n############============   Begin Copying Here   ============############\n\n";
+		result += "Error: the functions file was not found.";
+		result += "\n\n############============   End Copying Here   ============############\n\n";
+
+		console.log(result);
+	}
+
+</script>
+
+<script src="/_assets/js/audentio/uix_style/functions.min.js"></script>
+
+<script>
+	uix.adminJsError = function(errMsg) {
+		console.error(errMsg);
+		
+		
+	}
+	
+	uix.fixJsVisibility = function() {
+		var userBar = $('.hasJs #userBar');
+		var nodeList = $('.hasJs #forums, .hasJs .category_view .nodeList, .hasJs .watch_forums .nodeList');
+		var panels = $('.js-uix_panels')
+		if (userBar.length) userBar.css('display', 'block');
+		if (nodeList.length) nodeList.css('visibility', 'visible');
+		if (panels.length) $('.js-uix_panels').removeClass('needsInit');
+	}
+	
+	uix.catchJsError = function(err) {
+		console.log("\n\n############============   Begin Copying Here   ============############\n\n")
+		var errMsg = "Uh Oh!  It looks like there's an error in your page's javascript.  There will likely be significant issues with the use of the forum until this is corrected.  If you are unable to resolve this and believe it is due to a bug in your Audentio Design theme, contact Audentio support and include a copy of the text between the designated areas from your javascript console.  This is the error: \n\n" + err ;
+		uix.fixJsVisibility();	
+		uix.adminJsError(errMsg);
+		console.log("\n\n");
+		console.log(err);
+		console.log("\n\n");
+		try {
+			uix.debug(true);
+		} catch (err) {
+			console.log("Unable to include uix.debug();");
+		}
+		
+		console.log("\n\n############============   End Copying Here   ============############\n\n");
+	}
+
+	$(document).ready(function(){
+		if (typeof(audentio) === 'undefined') {
+			var errMsg = 'Uh Oh!  It looks like the javascript for your theme was not found in /js/audentio/uix_style/.\n\n';
+			if (uix.jsGlobal) {
+				errMsg += 'Your forum is set to use the same javascript directory for all your themes.  Consider disabling this or modifying the directory.  Options are located under Options > [UI.X] General.\n\n'
+			} else {
+				errMsg += 'Your theme has set the location of its javascript directory.  You may need to modify the javascript directory location style property located under [UI.X] Global Settings > Javascript Path.\n\n'
+			}
+			errMsg += 'If your files are in the directory specified, ensure that your file permissions allow them to be read.  There will likely be significant issues with the use of the forum until this is corrected.  If you are unable to resolve this, contact Audentio support.  This error has also been logged to the javascript console.';
+			
+			uix.fixJsVisibility();
+			
+			uix.adminJsError(errMsg);
+		} else if (uix.jsHeadVersion != uix.jsVersion) {
+			var errMsg = 'Uh Oh! It looks like the version of your javascript functions file does not match the version of your page_container_js_head template.  \n\nYour javascript functions file is version "' + uix.jsVersion + '". \nYour page_container_js_head is version "' + uix.jsHeadVersion + '".  \n\nIf your functions file version number is higher, ensure that you have merged all templates (especially page_container_js_head).  If your page_container_js_head version number is higher, ensure that you have correctly uploaded the latest version of the javascript functions file and that you have cleared anything that could cache an old version of the javascript (CDN / Cloudflare / etc.). \n\nThis issue could cause parts of your forum to not display or function correctly.  If this does not resolve the issue contact Audentio support.  This error has also been logged to the javascript console.';
+			uix.adminJsError(errMsg);
+		}
+	});
+</script>
+
+<script>
+	try {
+		uix.dateHelper.phrase = {
+			now: 'now',
+			second: 's',
+			minute: 'm',
+			hour: 'h',
+			day: 'd',
+			week: 'w',
+			year: 'y',
+			century: 'c',
+			ago: '{time} ago'
+		}
+		
+		
+		uix.sticky.stickyMinDist = parseInt('50');
+		
+		$(document).ready(function(){
+			try {
+				
+					audentio.grid.parse('{"default":{"maximum_columns":{"value":"6"},"minimum_column_width":{"value":"330"},"fill_last_row":{"value":"0"},"column_widths":{"value":"0"},"custom_column_widths":{"count":"","layouts":{"1":{"1":""},"2":{"1":"","2":""},"3":{"1":"","2":"","3":""},"4":{"1":"","2":"","3":"","4":""},"5":{"1":"","2":"","3":"","4":"","5":""},"6":{"1":"","2":"","3":"","4":"","5":"","6":""}}},"separator":true},"category":{"maximum_columns":{"value":"1"},"minimum_column_width":{"value":""},"fill_last_row":{"value":"0"},"column_widths":{"value":"0"},"custom_column_widths":{"count":"","layouts":{"1":{"1":""}}},"separator":true}}');
+					
+
+audentio.grid.addSizeListener('global', 'audentio_grid_xs', 200, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_sm', 300, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_md', 400, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_lg', 600, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_xl', 10000, 0);
+
+audentio.grid.addSizeListener('global', 'below-xs', 200, 0);
+audentio.grid.addSizeListener('global', 'below-sm', 300, 0);
+audentio.grid.addSizeListener('global', 'below-md', 400, 0);
+audentio.grid.addSizeListener('global', 'below-lg', 600, 0);
+audentio.grid.addSizeListener('global', 'below-xl', 10000, 0);
+
+audentio.grid.addSizeListener('global', 'above-xs', 99999, 201);
+audentio.grid.addSizeListener('global', 'above-sm', 99999, 301);
+audentio.grid.addSizeListener('global', 'above-md', 99999, 401);
+audentio.grid.addSizeListener('global', 'above-lg', 99999, 601);
+audentio.grid.addSizeListener('global', 'above-xl', 99999, 10001);
+
+audentio.grid.addSizeListener('global', 'node--xs', 300, 0);
+audentio.grid.addSizeListener('global', 'node--sm', 400, 301);
+audentio.grid.addSizeListener('global', 'node--md', 600, 401);
+audentio.grid.addSizeListener('global', 'node--lg', 10000, 601);
+audentio.grid.addSizeListener('global', 'node--xl', 99999, 10001);
+				
+																				
+					audentio.pagination.enabled = true;
+					
+						audentio.grid.parentEle = 'navigation';
+					
+					audentio.pagination.outOfPhrase = '<span id="audentio_postPaginationCurrent" class="uix_postPagination_x"></span> / <span id="audentio_postPaginationTotal" class="uix_postPagination_y"></span>';
+					audentio.pagination.enterIndexPhrase = 'Enter Index';
+					audentio.pagination.offset = parseInt('0px');
+				
+				
+				uix.initFunc();
+			} catch (err) {
+				uix.catchJsError(err);
+			}
+		});
+	} catch (err) {
+		uix.catchJsError(err);
+	}
+</script>}
+}else if(UrlData.Count == 1){
+    @RenderPage("~/Layouts/Forum/forum2_0/layout_tier2_threadlist.cshtml")
+@section HeadCSS{
+<!--<link rel="stylesheet" href="/_assets/css/facebook_css.css" />-->
+<link rel="stylesheet" href="/_assets/css/dark_postrating_css.css" />
+<link rel="stylesheet" href="/_assets/css/xenforo_css.css" />
+<link rel="stylesheet" href="/_assets/css/uix_css.css" />
+<style>	.listBlock dt {
+		font-weight:100;
+	}
+	.discussionListItem .lastPostInfo .user-name {
+	line-height: 20px;
+	display: block;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	text-align: inherit;
+}
+</style>}
+@section FooterJS{
+<script>
+	uix = {
+		elm: {},
+		fn:{},
+		init: function(){
+			if (uix.betaMode) {
+				console.group('uix.%cinit()', 'color:#3498DB');
+			}
+			for(var x=0;x<uix.events.init.length;x++){
+				uix.events.init[x]()
+		  	}
+		  	console.groupEnd('uix.%cinit()','color:#3498DB')
+		},
+	  	events: {init:[]},
+	  	on: function(event, fn){
+	  		if(event=='init'){
+	  			uix.events.init.push(fn)
+	  		}
+	  	},
+	  
+		betaMode				: parseInt('0'),
+		jsPathUsed				: 'uix_style',
+		jsGlobal				: parseInt('0'),
+		
+	  
+	  	version					: '1.5.6.0',
+	  	jsHeadVersion				: '1.5.6.0',
+	  	addonVersion				: '1000970',
+	  	contentTemplate				: 'forum_list',
+	  
+		globalPadding 				: parseInt('16px'),
+		sidebarWidth				: parseInt('250px'),
+		mainContainerMargin  	        	: '266px',
+		maxResponsiveWideWidth   		: parseInt('800px'),
+		maxResponsiveMediumWidth 		: parseInt('610px'),
+		maxResponsiveNarrowWidth 		: parseInt('480px'),
+		sidebarMaxResponsiveWidth		: parseInt('800px'),
+		
+			responsiveMessageBreakpoint		: parseInt('610px'),
+		
+		sidebarMaxResponsiveWidthStr		: '800px',
+		
+		
+			offCanvasRightTriggerWidth	: parseInt('800px'),
+		
+		
+		
+			offCanvasLeftTriggerWidth	: parseInt('800px'),
+		
+		
+		
+			
+				offCanvasNavTriggerWidth	: parseInt('800px'),
+			
+		
+		
+			
+				offCanvasVisitorTriggerWidth	: parseInt('800px'),
+			
+		
+		
+		offcanvasTriggerAnimationDuration	: parseInt('300ms'),
+		
+		
+		
+		
+		dropdownMenuAnimationSpeed		: parseInt('0ms'),
+		inlineAlertBalloons			: (parseInt('1') && !parseInt('1')) || parseInt('1'),
+	  
+		jumpToFixedDelayHide			: parseInt('1'),
+	  
+		stickyNavigationMinWidth 		: parseInt('0'),
+		stickyNavigationMinHeight		: parseInt('600'),
+		stickyNavigationMaxWidth 		: parseInt('0'),
+		stickyNavigationMaxHeight		: parseInt('0'),
+		stickyNavigationPortraitMinWidth 	: parseInt('320'),
+		stickyNavigationPortraitMinHeight	: parseInt('500'),
+		stickyNavigationPortraitMaxWidth 	: parseInt('0'),
+		stickyNavigationPortraitMaxHeight	: parseInt('0'),
+		stickySidebar 				: 1,
+		
+			sidebarInnerFloat		: "right",
+		
+		RTL					: 0,
+		stickyItems 				: {},
+		stickyGlobalMinimumPosition		: parseInt('200px'),
+		stickyGlobalScrollUp			: parseInt('0'),
+		stickyDisableIOSThirdParty		: parseInt('1'),
+		preventAlwaysSticky			: parseInt('0'),
+		
+		searchMinimalSize			: parseInt('610px'),
+		
+		searchPosition				: parseInt('2'),
+		
+		nodeStyle				: parseInt('3'),
+		pageStyle				: parseInt('0'),
+		
+		enableBorderCheck			: parseInt('1'),
+		enableULManager				: parseInt('1'),
+		
+		threadSlidingAvatar			: parseInt('0'),
+		threadSlidingExtra			: parseInt('0'),
+		threadSlidingHover			: parseInt('0'),
+		threadSlidingStaffShow			: parseInt('0'),
+		threadSlidingGlobalEnable		: parseInt('1'),
+		
+		signatureHidingEnabled			: parseInt('0'),
+		signatureHidingEnabledAddon		: parseInt('1'),
+		signatureMaxHeight			: parseInt('100px'),
+		signatureHoverEnabled			: parseInt('0'),
+		
+		enableStickyFooter 			: parseInt('1'),
+		stickyFooterBottomOffset 		: parseInt('16px') * 2,
+		
+		
+			sidebarStickyBottomOffset	: parseInt('4'),
+		
+	  
+	  	
+			offCanvasSidebar			: 1,
+
+			
+				offCanvasSidebarVisitorTabs		: 1,
+			
+		
+		
+		
+		offcanvasLeftStatic			: 1 && parseInt('0') && parseInt('1'),
+		offcanvasRightStatic			: 0 && parseInt('0') && parseInt('1'),
+		offcanvasLeftStaticBreakpoint		: parseInt('1300px'),
+		offcanvasRightStaticBreakpoint		: parseInt('1300px'),
+	  
+		reinsertWelcomeBlock			: parseInt('0'),
+	  
+		sidebarCookieExpire			: '',
+		canCollapseSidebar			: '',
+		
+		cookiePrefix				: 'xf_',
+		sidebarLocation 			: parseInt('0'),
+		
+		collapsibleSidebar			: parseInt('0'),
+		collapsedNodesDefault			: '',
+		widthToggleUpper			: '100%',
+		widthToggleLower			: '1170px',
+		
+			toggleWidthEnabled		: parseInt('1'),
+		
+		toggleWidthBreakpoint			: parseInt('1202'),
+		collapsibleNodes			: parseInt('1'),
+		collapsibleSticky			: parseInt('1'),
+		ajaxWidthToggleLink			: 'uix/toggle-width',
+		ajaxStickyThreadToggleLink		: 'uix/toggle-sticky-threads',
+		ajaxStickyThreadExpandLink		: 'uix/expand-sticky-threads',
+		ajaxStickyThreadCollapseLink		: 'uix/collapse-sticky-threads',
+		ajaxSidebarToggleLink			: 'uix/toggle-sidebar',
+		
+		stickySidebarDelayInit			: parseInt('1'),
+		
+		user					: {
+								'themeName'		: 'The LandOfOoo - UI.X',
+								'-themeParents'		: '12,11,0',
+								'-themeModified'	: '1459971631',
+								'-themeSelectable'	: '1',
+								languageName		: 'English (US)',
+								stickyEnableUserbar	: (parseInt('') == parseInt('')) ? parseInt('') : true,
+								stickyEnableNav		: (parseInt('') == parseInt('')) ? parseInt('') : true,
+								stickyEnableSidebar	: (parseInt('') == parseInt('')) ? parseInt('') : true,
+								widthToggleState	: (parseInt('0') == parseInt('0')) ? parseInt('0') : parseInt('0'),
+								stickyThreadsState	: (parseInt('') == parseInt('')) ? (parseInt('') > 0) : 0,
+								
+									sidebarState	: 0,
+								
+								
+									collapseUserInfo : 1,
+								
+								
+									signatureHiding : 1,
+								
+								isAdmin			: parseInt('0"')
+							}
+	};
+	
+	if(uix.stickyNavigationMaxWidth == 0){uix.stickyNavigationMaxWidth = 999999}
+	if(uix.stickyNavigationMaxHeight == 0){uix.stickyNavigationMaxHeight = 999999}
+	if(uix.stickyNavigationPortraitMaxWidth == 0){uix.stickyNavigationPortraitMaxWidth = 999999}
+	if(uix.stickyNavigationPortraitMaxHeight == 0){uix.stickyNavigationPortraitMaxHeight = 999999}
+	
+	
+		uix.stickyItems['#navigation'] = {normalHeight:parseInt('48'), stickyHeight:parseInt('40')}
+		
+		var subElement = null;
+		
+			//if tablinks are visible
+			uix.stickyItems['#navigation'].options = {subElement: '#navigation .tabLinks', subNormalHeight: parseInt('41'), subStickyHeight: parseInt('40'), subStickyHide: 1 == 1 , scrollSticky: uix.stickyGlobalScrollUp }
+		
+		
+	
+	
+	
+	$(document).ready(function() {
+		if ( $('#userBar').length ) {
+			uix.stickyItems['#userBar']= {normalHeight:parseInt('40'), stickyHeight:parseInt('40')}
+			
+			uix.stickyItems['#userBar'].options = {scrollSticky: uix.stickyGlobalScrollUp }
+		}
+	});
+	
+	
+	$(document).ready(function(){
+	
+	//put jquery code here
+	
+
+});
+	
+	uix.debug = function() {
+		result = "\n\n############============   Begin Copying Here   ============############\n\n";
+		result += "Error: the functions file was not found.";
+		result += "\n\n############============   End Copying Here   ============############\n\n";
+
+		console.log(result);
+	}
+
+</script>
+
+<script src="/_assets/js/xenforo/discussion_list.js"></script>
+<script src="/_assets/js/audentio/uix_style/functions.min.js"></script>
+
+<script>
+	uix.adminJsError = function(errMsg) {
+		console.error(errMsg);
+		
+		
+	}
+	
+	uix.fixJsVisibility = function() {
+		var userBar = $('.hasJs #userBar');
+		var nodeList = $('.hasJs #forums, .hasJs .category_view .nodeList, .hasJs .watch_forums .nodeList');
+		var panels = $('.js-uix_panels')
+		if (userBar.length) userBar.css('display', 'block');
+		if (nodeList.length) nodeList.css('visibility', 'visible');
+		if (panels.length) $('.js-uix_panels').removeClass('needsInit');
+	}
+	
+	uix.catchJsError = function(err) {
+		console.log("\n\n############============   Begin Copying Here   ============############\n\n")
+		var errMsg = "Uh Oh!  It looks like there's an error in your page's javascript.  There will likely be significant issues with the use of the forum until this is corrected.  If you are unable to resolve this and believe it is due to a bug in your Audentio Design theme, contact Audentio support and include a copy of the text between the designated areas from your javascript console.  This is the error: \n\n" + err ;
+		uix.fixJsVisibility();	
+		uix.adminJsError(errMsg);
+		console.log("\n\n");
+		console.log(err);
+		console.log("\n\n");
+		try {
+			uix.debug(true);
+		} catch (err) {
+			console.log("Unable to include uix.debug();");
+		}
+		
+		console.log("\n\n############============   End Copying Here   ============############\n\n");
+	}
+
+	$(document).ready(function(){
+		if (typeof(audentio) === 'undefined') {
+			var errMsg = 'Uh Oh!  It looks like the javascript for your theme was not found in /js/audentio/uix_style/.\n\n';
+			if (uix.jsGlobal) {
+				errMsg += 'Your forum is set to use the same javascript directory for all your themes.  Consider disabling this or modifying the directory.  Options are located under Options > [UI.X] General.\n\n'
+			} else {
+				errMsg += 'Your theme has set the location of its javascript directory.  You may need to modify the javascript directory location style property located under [UI.X] Global Settings > Javascript Path.\n\n'
+			}
+			errMsg += 'If your files are in the directory specified, ensure that your file permissions allow them to be read.  There will likely be significant issues with the use of the forum until this is corrected.  If you are unable to resolve this, contact Audentio support.  This error has also been logged to the javascript console.';
+			
+			uix.fixJsVisibility();
+			
+			uix.adminJsError(errMsg);
+		} else if (uix.jsHeadVersion != uix.jsVersion) {
+			var errMsg = 'Uh Oh! It looks like the version of your javascript functions file does not match the version of your page_container_js_head template.  \n\nYour javascript functions file is version "' + uix.jsVersion + '". \nYour page_container_js_head is version "' + uix.jsHeadVersion + '".  \n\nIf your functions file version number is higher, ensure that you have merged all templates (especially page_container_js_head).  If your page_container_js_head version number is higher, ensure that you have correctly uploaded the latest version of the javascript functions file and that you have cleared anything that could cache an old version of the javascript (CDN / Cloudflare / etc.). \n\nThis issue could cause parts of your forum to not display or function correctly.  If this does not resolve the issue contact Audentio support.  This error has also been logged to the javascript console.';
+			uix.adminJsError(errMsg);
+		}
+	});
+</script>
+
+<script>
+	try {
+		uix.dateHelper.phrase = {
+			now: 'now',
+			second: 's',
+			minute: 'm',
+			hour: 'h',
+			day: 'd',
+			week: 'w',
+			year: 'y',
+			century: 'c',
+			ago: '{time} ago'
+		}
+		
+		
+		uix.sticky.stickyMinDist = parseInt('50');
+		
+		$(document).ready(function(){
+			try {
+				
+					audentio.grid.parse('{"default":{"maximum_columns":{"value":"6"},"minimum_column_width":{"value":"330"},"fill_last_row":{"value":"0"},"column_widths":{"value":"0"},"custom_column_widths":{"count":"","layouts":{"1":{"1":""},"2":{"1":"","2":""},"3":{"1":"","2":"","3":""},"4":{"1":"","2":"","3":"","4":""},"5":{"1":"","2":"","3":"","4":"","5":""},"6":{"1":"","2":"","3":"","4":"","5":"","6":""}}},"separator":true},"category":{"maximum_columns":{"value":"1"},"minimum_column_width":{"value":""},"fill_last_row":{"value":"0"},"column_widths":{"value":"0"},"custom_column_widths":{"count":"","layouts":{"1":{"1":""}}},"separator":true}}');
+					
+
+audentio.grid.addSizeListener('global', 'audentio_grid_xs', 200, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_sm', 300, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_md', 400, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_lg', 600, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_xl', 10000, 0);
+
+audentio.grid.addSizeListener('global', 'below-xs', 200, 0);
+audentio.grid.addSizeListener('global', 'below-sm', 300, 0);
+audentio.grid.addSizeListener('global', 'below-md', 400, 0);
+audentio.grid.addSizeListener('global', 'below-lg', 600, 0);
+audentio.grid.addSizeListener('global', 'below-xl', 10000, 0);
+
+audentio.grid.addSizeListener('global', 'above-xs', 99999, 201);
+audentio.grid.addSizeListener('global', 'above-sm', 99999, 301);
+audentio.grid.addSizeListener('global', 'above-md', 99999, 401);
+audentio.grid.addSizeListener('global', 'above-lg', 99999, 601);
+audentio.grid.addSizeListener('global', 'above-xl', 99999, 10001);
+
+audentio.grid.addSizeListener('global', 'node--xs', 300, 0);
+audentio.grid.addSizeListener('global', 'node--sm', 400, 301);
+audentio.grid.addSizeListener('global', 'node--md', 600, 401);
+audentio.grid.addSizeListener('global', 'node--lg', 10000, 601);
+audentio.grid.addSizeListener('global', 'node--xl', 99999, 10001);
+				
+																				
+					audentio.pagination.enabled = true;
+					
+						audentio.grid.parentEle = 'navigation';
+					
+					audentio.pagination.outOfPhrase = '<span id="audentio_postPaginationCurrent" class="uix_postPagination_x"></span> / <span id="audentio_postPaginationTotal" class="uix_postPagination_y"></span>';
+					audentio.pagination.enterIndexPhrase = 'Enter Index';
+					audentio.pagination.offset = parseInt('0px');
+				
+				
+				uix.initFunc();
+			} catch (err) {
+				uix.catchJsError(err);
+			}
+		});
+	} catch (err) {
+		uix.catchJsError(err);
+	}
+</script>
+
+<script>
+	document.getElementsByTagName("BODY")[0].onpageshow = function() {toggle()};
+	function toggle() {
+
+	var el = document.getElementById("DiscussionListOptionsForm");
+	//var el = document.getElementsByClassName("discussionList section sectionMain").getElementsByTagName("form").getElementsByClassName("DiscussionListOptions secondaryContent");//*[@@id="content"]/div/div/div/div[4]/form[2]
+	//#content > div > div > div > div.discussionList.section.sectionMain > form.DiscussionListOptions.secondaryContent//
+
+	if ( el.style.display != 'none' ) {
+
+		el.style.display = 'none';//display: none;
+		el.style.opacity = 0;//opacity: 0;
+
+	}
+
+	else {
+
+		el.style.display = 'block';//display: block;
+		el.style.opacity = 1;//opacity: 1;
+	
+	}
+
+}</script>}     
+}else if(UrlData.Count == 2){
+    @RenderPage("~/Layouts/Forum/forum2_0/layout_tier3_postlist.cshtml") 
+@section HeadCSS{
+<link rel="stylesheet" href="/_assets/css/facebook_css.css" />
+<link rel="stylesheet" href="/_assets/css/xenforo_css.css" />
+<link rel="stylesheet" href="/_assets/css/uix_css.css" />}
+@section FooterJS{
+<script>
+	uix = {
+		elm: {},
+		fn:{},
+		init: function(){
+			if (uix.betaMode) {
+				console.group('uix.%cinit()', 'color:#3498DB');
+			}
+			for(var x=0;x<uix.events.init.length;x++){
+				uix.events.init[x]()
+		  	}
+		  	console.groupEnd('uix.%cinit()','color:#3498DB')
+		},
+	  	events: {init:[]},
+	  	on: function(event, fn){
+	  		if(event=='init'){
+	  			uix.events.init.push(fn)
+	  		}
+	  	},
+	  
+		betaMode				: parseInt('0'),
+		jsPathUsed				: 'uix_style',
+		jsGlobal				: parseInt('0'),
+		
+	  
+	  	version					: '1.5.6.0',
+	  	jsHeadVersion				: '1.5.6.0',
+	  	addonVersion				: '1000970',
+	  	contentTemplate				: 'forum_list',
+	  
+		globalPadding 				: parseInt('16px'),
+		sidebarWidth				: parseInt('250px'),
+		mainContainerMargin  	        	: '266px',
+		maxResponsiveWideWidth   		: parseInt('800px'),
+		maxResponsiveMediumWidth 		: parseInt('610px'),
+		maxResponsiveNarrowWidth 		: parseInt('480px'),
+		sidebarMaxResponsiveWidth		: parseInt('800px'),
+		
+			responsiveMessageBreakpoint		: parseInt('610px'),
+		
+		sidebarMaxResponsiveWidthStr		: '800px',
+		
+		
+			offCanvasRightTriggerWidth	: parseInt('800px'),
+		
+		
+		
+			offCanvasLeftTriggerWidth	: parseInt('800px'),
+		
+		
+		
+			
+				offCanvasNavTriggerWidth	: parseInt('800px'),
+			
+		
+		
+			
+				offCanvasVisitorTriggerWidth	: parseInt('800px'),
+			
+		
+		
+		offcanvasTriggerAnimationDuration	: parseInt('300ms'),
+		
+		
+		
+		
+		dropdownMenuAnimationSpeed		: parseInt('0ms'),
+		inlineAlertBalloons			: (parseInt('1') && !parseInt('1')) || parseInt('1'),
+	  
+		jumpToFixedDelayHide			: parseInt('1'),
+	  
+		stickyNavigationMinWidth 		: parseInt('0'),
+		stickyNavigationMinHeight		: parseInt('600'),
+		stickyNavigationMaxWidth 		: parseInt('0'),
+		stickyNavigationMaxHeight		: parseInt('0'),
+		stickyNavigationPortraitMinWidth 	: parseInt('320'),
+		stickyNavigationPortraitMinHeight	: parseInt('500'),
+		stickyNavigationPortraitMaxWidth 	: parseInt('0'),
+		stickyNavigationPortraitMaxHeight	: parseInt('0'),
+		stickySidebar 				: 1,
+		
+			sidebarInnerFloat		: "right",
+		
+		RTL					: 0,
+		stickyItems 				: {},
+		stickyGlobalMinimumPosition		: parseInt('200px'),
+		stickyGlobalScrollUp			: parseInt('0'),
+		stickyDisableIOSThirdParty		: parseInt('1'),
+		preventAlwaysSticky			: parseInt('0'),
+		
+		searchMinimalSize			: parseInt('610px'),
+		
+		searchPosition				: parseInt('2'),
+		
+		nodeStyle				: parseInt('3'),
+		pageStyle				: parseInt('0'),
+		
+		enableBorderCheck			: parseInt('1'),
+		enableULManager				: parseInt('1'),
+		
+		threadSlidingAvatar			: parseInt('0'),
+		threadSlidingExtra			: parseInt('0'),
+		threadSlidingHover			: parseInt('0'),
+		threadSlidingStaffShow			: parseInt('0'),
+		threadSlidingGlobalEnable		: parseInt('1'),
+		
+		signatureHidingEnabled			: parseInt('0'),
+		signatureHidingEnabledAddon		: parseInt('1'),
+		signatureMaxHeight			: parseInt('100px'),
+		signatureHoverEnabled			: parseInt('0'),
+		
+		enableStickyFooter 			: parseInt('1'),
+		stickyFooterBottomOffset 		: parseInt('16px') * 2,
+		
+		
+			sidebarStickyBottomOffset	: parseInt('4'),
+		
+	  
+	  	
+			offCanvasSidebar			: 1,
+
+			
+				offCanvasSidebarVisitorTabs		: 1,
+			
+		
+		
+		
+		offcanvasLeftStatic			: 1 && parseInt('0') && parseInt('1'),
+		offcanvasRightStatic			: 0 && parseInt('0') && parseInt('1'),
+		offcanvasLeftStaticBreakpoint		: parseInt('1300px'),
+		offcanvasRightStaticBreakpoint		: parseInt('1300px'),
+	  
+		reinsertWelcomeBlock			: parseInt('0'),
+	  
+		sidebarCookieExpire			: '',
+		canCollapseSidebar			: '',
+		
+		cookiePrefix				: 'xf_',
+		sidebarLocation 			: parseInt('0'),
+		
+		collapsibleSidebar			: parseInt('0'),
+		collapsedNodesDefault			: '',
+		widthToggleUpper			: '100%',
+		widthToggleLower			: '1170px',
+		
+			toggleWidthEnabled		: parseInt('1'),
+		
+		toggleWidthBreakpoint			: parseInt('1202'),
+		collapsibleNodes			: parseInt('1'),
+		collapsibleSticky			: parseInt('1'),
+		ajaxWidthToggleLink			: 'uix/toggle-width',
+		ajaxStickyThreadToggleLink		: 'uix/toggle-sticky-threads',
+		ajaxStickyThreadExpandLink		: 'uix/expand-sticky-threads',
+		ajaxStickyThreadCollapseLink		: 'uix/collapse-sticky-threads',
+		ajaxSidebarToggleLink			: 'uix/toggle-sidebar',
+		
+		stickySidebarDelayInit			: parseInt('1'),
+		
+		user					: {
+								'themeName'		: 'The LandOfOoo - UI.X',
+								'-themeParents'		: '12,11,0',
+								'-themeModified'	: '1459971631',
+								'-themeSelectable'	: '1',
+								languageName		: 'English (US)',
+								stickyEnableUserbar	: (parseInt('') == parseInt('')) ? parseInt('') : true,
+								stickyEnableNav		: (parseInt('') == parseInt('')) ? parseInt('') : true,
+								stickyEnableSidebar	: (parseInt('') == parseInt('')) ? parseInt('') : true,
+								widthToggleState	: (parseInt('0') == parseInt('0')) ? parseInt('0') : parseInt('0'),
+								stickyThreadsState	: (parseInt('') == parseInt('')) ? (parseInt('') > 0) : 0,
+								
+									sidebarState	: 0,
+								
+								
+									collapseUserInfo : 1,
+								
+								
+									signatureHiding : 1,
+								
+								isAdmin			: parseInt('0"')
+							}
+	};
+	
+	if(uix.stickyNavigationMaxWidth == 0){uix.stickyNavigationMaxWidth = 999999}
+	if(uix.stickyNavigationMaxHeight == 0){uix.stickyNavigationMaxHeight = 999999}
+	if(uix.stickyNavigationPortraitMaxWidth == 0){uix.stickyNavigationPortraitMaxWidth = 999999}
+	if(uix.stickyNavigationPortraitMaxHeight == 0){uix.stickyNavigationPortraitMaxHeight = 999999}
+	
+	
+		uix.stickyItems['#navigation'] = {normalHeight:parseInt('48'), stickyHeight:parseInt('40')}
+		
+		var subElement = null;
+		
+			//if tablinks are visible
+			uix.stickyItems['#navigation'].options = {subElement: '#navigation .tabLinks', subNormalHeight: parseInt('41'), subStickyHeight: parseInt('40'), subStickyHide: 1 == 1 , scrollSticky: uix.stickyGlobalScrollUp }
+		
+		
+	
+	
+	
+	$(document).ready(function() {
+		if ( $('#userBar').length ) {
+			uix.stickyItems['#userBar']= {normalHeight:parseInt('40'), stickyHeight:parseInt('40')}
+			
+			uix.stickyItems['#userBar'].options = {scrollSticky: uix.stickyGlobalScrollUp }
+		}
+	});
+	
+	
+	$(document).ready(function(){
+	
+	//put jquery code here
+	
+
+});
+	
+	uix.debug = function() {
+		result = "\n\n############============   Begin Copying Here   ============############\n\n";
+		result += "Error: the functions file was not found.";
+		result += "\n\n############============   End Copying Here   ============############\n\n";
+
+		console.log(result);
+	}
+
+</script>
+
+<script src="/_assets/js/audentio/uix_style/functions.min.js"></script>
+
+<script>
+	uix.adminJsError = function(errMsg) {
+		console.error(errMsg);
+		
+		
+	}
+	
+	uix.fixJsVisibility = function() {
+		var userBar = $('.hasJs #userBar');
+		var nodeList = $('.hasJs #forums, .hasJs .category_view .nodeList, .hasJs .watch_forums .nodeList');
+		var panels = $('.js-uix_panels')
+		if (userBar.length) userBar.css('display', 'block');
+		if (nodeList.length) nodeList.css('visibility', 'visible');
+		if (panels.length) $('.js-uix_panels').removeClass('needsInit');
+	}
+	
+	uix.catchJsError = function(err) {
+		console.log("\n\n############============   Begin Copying Here   ============############\n\n")
+		var errMsg = "Uh Oh!  It looks like there's an error in your page's javascript.  There will likely be significant issues with the use of the forum until this is corrected.  If you are unable to resolve this and believe it is due to a bug in your Audentio Design theme, contact Audentio support and include a copy of the text between the designated areas from your javascript console.  This is the error: \n\n" + err ;
+		uix.fixJsVisibility();	
+		uix.adminJsError(errMsg);
+		console.log("\n\n");
+		console.log(err);
+		console.log("\n\n");
+		try {
+			uix.debug(true);
+		} catch (err) {
+			console.log("Unable to include uix.debug();");
+		}
+		
+		console.log("\n\n############============   End Copying Here   ============############\n\n");
+	}
+
+	$(document).ready(function(){
+		if (typeof(audentio) === 'undefined') {
+			var errMsg = 'Uh Oh!  It looks like the javascript for your theme was not found in /js/audentio/uix_style/.\n\n';
+			if (uix.jsGlobal) {
+				errMsg += 'Your forum is set to use the same javascript directory for all your themes.  Consider disabling this or modifying the directory.  Options are located under Options > [UI.X] General.\n\n'
+			} else {
+				errMsg += 'Your theme has set the location of its javascript directory.  You may need to modify the javascript directory location style property located under [UI.X] Global Settings > Javascript Path.\n\n'
+			}
+			errMsg += 'If your files are in the directory specified, ensure that your file permissions allow them to be read.  There will likely be significant issues with the use of the forum until this is corrected.  If you are unable to resolve this, contact Audentio support.  This error has also been logged to the javascript console.';
+			
+			uix.fixJsVisibility();
+			
+			uix.adminJsError(errMsg);
+		} else if (uix.jsHeadVersion != uix.jsVersion) {
+			var errMsg = 'Uh Oh! It looks like the version of your javascript functions file does not match the version of your page_container_js_head template.  \n\nYour javascript functions file is version "' + uix.jsVersion + '". \nYour page_container_js_head is version "' + uix.jsHeadVersion + '".  \n\nIf your functions file version number is higher, ensure that you have merged all templates (especially page_container_js_head).  If your page_container_js_head version number is higher, ensure that you have correctly uploaded the latest version of the javascript functions file and that you have cleared anything that could cache an old version of the javascript (CDN / Cloudflare / etc.). \n\nThis issue could cause parts of your forum to not display or function correctly.  If this does not resolve the issue contact Audentio support.  This error has also been logged to the javascript console.';
+			uix.adminJsError(errMsg);
+		}
+	});
+</script>
+
+<script>
+	try {
+		uix.dateHelper.phrase = {
+			now: 'now',
+			second: 's',
+			minute: 'm',
+			hour: 'h',
+			day: 'd',
+			week: 'w',
+			year: 'y',
+			century: 'c',
+			ago: '{time} ago'
+		}
+		
+		
+		uix.sticky.stickyMinDist = parseInt('50');
+		
+		$(document).ready(function(){
+			try {
+				
+					audentio.grid.parse('{"default":{"maximum_columns":{"value":"6"},"minimum_column_width":{"value":"330"},"fill_last_row":{"value":"0"},"column_widths":{"value":"0"},"custom_column_widths":{"count":"","layouts":{"1":{"1":""},"2":{"1":"","2":""},"3":{"1":"","2":"","3":""},"4":{"1":"","2":"","3":"","4":""},"5":{"1":"","2":"","3":"","4":"","5":""},"6":{"1":"","2":"","3":"","4":"","5":"","6":""}}},"separator":true},"category":{"maximum_columns":{"value":"1"},"minimum_column_width":{"value":""},"fill_last_row":{"value":"0"},"column_widths":{"value":"0"},"custom_column_widths":{"count":"","layouts":{"1":{"1":""}}},"separator":true}}');
+					
+
+audentio.grid.addSizeListener('global', 'audentio_grid_xs', 200, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_sm', 300, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_md', 400, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_lg', 600, 0);
+audentio.grid.addSizeListener('global', 'audentio_grid_xl', 10000, 0);
+
+audentio.grid.addSizeListener('global', 'below-xs', 200, 0);
+audentio.grid.addSizeListener('global', 'below-sm', 300, 0);
+audentio.grid.addSizeListener('global', 'below-md', 400, 0);
+audentio.grid.addSizeListener('global', 'below-lg', 600, 0);
+audentio.grid.addSizeListener('global', 'below-xl', 10000, 0);
+
+audentio.grid.addSizeListener('global', 'above-xs', 99999, 201);
+audentio.grid.addSizeListener('global', 'above-sm', 99999, 301);
+audentio.grid.addSizeListener('global', 'above-md', 99999, 401);
+audentio.grid.addSizeListener('global', 'above-lg', 99999, 601);
+audentio.grid.addSizeListener('global', 'above-xl', 99999, 10001);
+
+audentio.grid.addSizeListener('global', 'node--xs', 300, 0);
+audentio.grid.addSizeListener('global', 'node--sm', 400, 301);
+audentio.grid.addSizeListener('global', 'node--md', 600, 401);
+audentio.grid.addSizeListener('global', 'node--lg', 10000, 601);
+audentio.grid.addSizeListener('global', 'node--xl', 99999, 10001);
+				
+																				
+					audentio.pagination.enabled = true;
+					
+						audentio.grid.parentEle = 'navigation';
+					
+					audentio.pagination.outOfPhrase = '<span id="audentio_postPaginationCurrent" class="uix_postPagination_x"></span> / <span id="audentio_postPaginationTotal" class="uix_postPagination_y"></span>';
+					audentio.pagination.enterIndexPhrase = 'Enter Index';
+					audentio.pagination.offset = parseInt('0px');
+				
+				
+				uix.initFunc();
+			} catch (err) {
+				uix.catchJsError(err);
+			}
+		});
+	} catch (err) {
+		uix.catchJsError(err);
+	}
+</script>}
+}@*else if(UrlData.Count == 4){
+    @RenderPage("~/Layouts/Forum/post.cshtml") 
+}else{
+    <p>Problem loading page.</p>
+}*@

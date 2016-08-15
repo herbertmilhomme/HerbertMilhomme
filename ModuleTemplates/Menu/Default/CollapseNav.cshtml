@@ -1,0 +1,59 @@
+﻿@{
+    var db = Database.Open("ColonielHeights");
+    var topnav = db.Query("SELECT * FROM website_pages WHERE parentD = 0 AND header = 'true'");
+    //var botnav = db.Query("SELECT * FROM website_pages WHERE parentD = 0 AND footer = 'true'");
+	//~/Layouts/WebApps/NavHeader/newmsgs.cshtml
+}
+<!-- White Nav Menu @@ Top -->
+        <!--<nav id="nav-collapse">-->	
+			<ul class="nav navbar-nav navbar-right">@if (WebSecurity.IsAuthenticated) {
+                            <text>
+                                <li><span>Hello, <a class="email" href="~/Account/MyAccount" title="My Account">@WebSecurity.CurrentUserName</a>!</span></li>&nbsp;
+                                <li>
+                                    <form id="logoutForm" action="~/Account/Logout" method="post">
+                                        @AntiForgery.GetHtml()
+                                        <a href="javascript:document.getElementById('logoutForm').submit()">Log out</a>
+                                    </form>
+                                </li>
+				@RenderPage("~/ModuleTemplates/Menu/Default/newmsgs.cshtml")
+                            </text>
+                        } else {                            
+                                <li><a href="~/Account/MemberSignUp">Register</a></li>
+                                <li><a href="~/Account/Login">Log in</a></li>                            
+                        }<!-- Collapse Navigation Menu -->@foreach(var item in topnav){
+                        var navmenu = (int)db.QueryValue("SELECT count(*) FROM website_pages WHERE parentD = @0 AND header = 'true'", item.pageID); //item.pageID == parentD
+                <li id="@item.name" class="responsemenu @item.cssCLASS @if(navmenu != null && navmenu > 0){<text>nav-collapse dropdown</text>} visible-xs-block ">
+                    <a href="@Href("~/" + item.UrlPath + item.filename)">@item.Name</a>@if(navmenu != null && navmenu > 0){
+                    <ul>@foreach(var dropdown in db.Query("SELECT * FROM website_pages WHERE parentD = @0 AND header = 'true'", item.pageID)){
+                        <li id="@dropdown.IDname" class="@dropdown.cssCLASS">
+                            <a href="@Href("~/" + dropdown.UrlPath + dropdown.filename)">@dropdown.Name</a>
+                        </li>}
+                    </ul>}
+                </li>}
+            </ul>
+        <!--</nav>-->
+@*}
+<!-- Nav Menu -->
+						<ul>
+                            <li  >
+                                <a href="/">Home</a>
+                            </li>
+                            <li  >
+                                <a href="/travel-tours/">Travel Tours</a>
+                            </li>
+                            <li  class="dropdown">
+                                <a href="/about-us/">About Us</a>
+                                <ul>
+                                    <li  >
+                                        <a href="/about-us/">Main</a>
+                                    </li>
+                                    <li  >
+                                        <a href="/about-us/testimonials">Testimonials</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li  class="dropdown">
+                                <a href="/features/">Features</a>
+                                <ul>
+                                    <li  ><a href="/features/">Main</a></li><li  ><a href="/features/faqs">FAQs</a></li><li  ><a href="/features/forum">Forum</a></li><li  ><a href="/features/events">Events</a></li><li  ><a href="/features/gallery">Gallery</a></li><li  ><a href="/features/media-downloads">Media Downloads</a></li><li  ><a href="/features/news">News</a></li></ul></li><li  ><a href="/travel-blog/">Blog</a></li><li  ><a href="/contact-us">Contact Us</a></li></ul>
+						<!-- Nav Menu -->*@

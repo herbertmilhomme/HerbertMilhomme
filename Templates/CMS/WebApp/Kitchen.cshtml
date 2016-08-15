@@ -1,0 +1,104 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Kitchen";
+    
+    var db = Database.Open("House");
+    var pantry = db.Query("SELECT * FROM Inventory ORDER BY Brand DESC"); 
+
+    if(IsPost){
+        //var db = Database.Open("PetCare");
+        var sql = @"INSERT INTO Inventory (Brand, Name, Class, Qty, Location, Size, Expiration) 
+                    VALUES (@0, @1, @2, @3, @4, @5, @6)";
+        /*var title = Request["title"];
+        var isbn = Request["isbn"];
+        var description = Request["description"];
+        var authorId = Request["authorId"];
+        var categoryId = Request["categoryId"];
+        var datePublished = Request["datePublished"];*/
+        
+        //var NewsKey;
+        var Brand = Request["Brand"];
+        var Name = Request["Name"];
+        var Class = Request["Class"];
+        var Qty = Request["Qty"];
+        var Location = Request["Location"];
+        var Size = Request["Size"];
+        //var Expiration = null;
+        //Nullable <DateTime> Expiration = Request["Expiration"];
+        //if(!String.IsNullOrEmpty(Request["Expiration"])){
+        //Expiration = DateTime.Parse(Request["Expiration"]).ToString();}
+        //Nullable <DateTime> Expiration = (Request["Expiration"] == "") ? (DateTime?)null : ((DateTime)Request["Expiration"]);
+        //(Request["Expiration"] == null) ? "NULL" : (DateTime.Parse(Request["Expiration"]))
+        
+
+        //if(NewsDay.ToString("d") == null || NewsTime.ToString("T") == null){
+        
+        
+        db.Execute(sql, Brand, Name, Class, Qty, Location, Size, String.IsNullOrEmpty(Request["Expiration"]) ? (DateTime?)null : (DateTime.Parse(Request["Expiration"])));
+
+        //Page.Response.Redirect(Page.Request.Url.ToString(), true);
+        Response.Redirect(Request.RawUrl);
+    }
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <form method="post">
+        <ul class="form">
+            <li><label>Brand</label>
+                <input type="text" id="Brand" name="Brand" spellcheck="true" /></li>
+            <li><label>Name</th></label>
+                <input type="text" id="Name" name="Name" spellcheck="true" /></li>
+            <li><label>Class</th></label>
+                <input type="text" id="Class" name="Class" spellcheck="true" /></li>
+            <li><label>Qty</th></label>
+                <input type="number" id="Qty" name="Qty" spellcheck="false" /></li>
+            <li><label>Location</th></label>
+                <input type="text" id="Location" name="Location" spellcheck="true" /></li>
+            <li><label>Size</th></label>
+                <input type="text" id="Size" name="Size" spellcheck="false" /></li>
+            <li><label>Expiration</th></label>
+                <input type="date" id="Expiration" name="Expiration" spellcheck="false" value="NULL"  /></li>
+        </ul>
+            <input type="submit" value="Add" />
+</form>
+            <h1>View Pantry Inventory</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Brand</hd>
+          <th>Name</th>
+          <th>Class</th>
+          <th>Qty</th>
+          <th>Location</th>
+          <th>Size</th>
+          <th>Expiration</th>
+          <th>Last Checked</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var row in pantry) {
+          <tr>
+            <td><a href="@Href("~/EditPantry", row.ItemId)">@row.ItemId</a></td>
+            <td>@row.Brand</td>
+            <td>@row.Name</td>
+            <td>@row.Class</td>
+            <td>@row.Qty</td>
+            <td>@row.Location</td>
+            <td>@row.Size</td>
+            <td>@row.Expiration</td>
+            <td>@row.LastCheck</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    </body>
+</html>
+

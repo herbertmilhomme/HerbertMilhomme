@@ -1,0 +1,130 @@
+﻿@{
+    var db = Database.Open("ColonielHeights");
+	string userroles = "";
+	if (Roles.IsUserInRole("admin")) {
+		userroles += " OR admin='true'";
+    }
+    var topnav = db.Query("SELECT * FROM website_pages WHERE parentD = 0 AND header = 'true'"); //AND members='true' @0", userroles
+    //var botnav = db.Query("SELECT * FROM website_pages WHERE parentD = 0 AND footer = 'true'");
+}
+<!-- Aside Start-->
+        <aside class="left-panel">
+
+            <!-- brand -->
+            <div class="logo">
+                <a href="/" class="logo-expanded">
+                    <!--<img src="img/single-logo.png" alt="logo">-->
+                    <span class="nav-label nav-label2">H.M</span>
+                    <span class="nav-label">Herbert<br/>Milhomme</span>
+                </a>
+            </div>
+            <!-- / brand -->
+        
+            <!-- Navbar Start -->
+            <nav class="navigation">
+                <ul class="list-unstyled">@foreach(var item in topnav){
+					var navmenu = (int)db.QueryValue("SELECT count(*) FROM website_pages WHERE parentD = @0 AND header = 'true' AND members='true'", item.pageID); //item.pageID == parentD
+					<li id="@item.name" class="@item.cssCLASS @if(navmenu != null && navmenu > 0){<text>has-submenu</text>} @if(UrlData[0]==item.urlpath.Replace("/","") /*&& item.parentD==0*/){<text>active</text>}">
+						<a href="@Href("~/" + item.UrlPath + item.filename)"><i class="@item.velonic"></i> <span class="nav-label">@item.Name</span></a>@if(navmenu != null && navmenu > 0){
+						<ul class="list-unstyled @{@*if(/*System.Web.VirtualPathUtility.GetFileName()*/HttpContext.Current.Handler==item.filename){<text>active</text>}*@}">
+							<li id="@item.name-Main" class="@item.cssCLASS">
+								<a href="@Href("~/" + item.UrlPath + item.filename)">@*Main*@@item.title</a>
+							</li>
+							@foreach(var dropdown in db.Query("SELECT * FROM website_pages WHERE parentD = @0 AND header = 'true' AND members='true'", item.pageID)){
+							<li id="@dropdown.IDname" class="@dropdown.cssCLASS">
+								<a href="@Href("~/" + dropdown.UrlPath + dropdown.filename)">@dropdown.Name</a>
+							</li>}
+						</ul>}
+					</li>}@*
+                    <li class="has-submenu active"><a href="#"><i class="ion-home"></i> <span class="nav-label">Dashboard</span></a>
+                        <ul class="list-unstyled">
+                            <li class="active"><a href="index.html">Dashboard v1</a></li>
+                            <li><a href="dashboard2.html">Dashboard v2</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu"><a href="#"><i class="ion-flask"></i> <span class="nav-label">UI Elements</span></a>
+                        <ul class="list-unstyled">
+                            <li><a href="typography.html">Typography</a></li>
+                            <li><a href="buttons.html">Buttons</a></li>
+                            <li><a href="icons.html">Icons</a></li>
+                            <li><a href="panels.html">Panels</a></li>
+                            <li><a href="tabs-accordions.html">Tabs &amp; Accordions</a></li>
+                            <li><a href="modals.html">Modals</a></li>
+                            <li><a href="bootstrap-ui.html">BS Elements</a></li>
+                            <li><a href="progressbars.html">Progress Bars</a></li>
+                            <li><a href="notification.html">Notification</a></li>
+                            <li><a href="sweet-alert.html">Sweet-Alert</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu"><a href="#"><i class="ion-settings"></i> <span class="nav-label">Components</span></a>
+                        <ul class="list-unstyled">
+                            <li><a href="grid.html">Grid</a></li>
+                            <li><a href="portlets.html">Portlets</a></li>
+                            <li><a href="widgets.html">Widgets</a></li>
+                            <li><a href="nestable-list.html">Nesteble</a></li>
+                            <li><a href="calendar.html">Calendar</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu"><a href="#"><i class="ion-compose"></i> <span class="nav-label">Forms</span></a>
+                        <ul class="list-unstyled">
+                            <li><a href="form-elements.html">General Elements</a></li>
+                            <li><a href="form-validation.html">Form Validation</a></li>
+                            <li><a href="form-advanced.html">Advanced Form</a></li>
+                            <li><a href="form-wizard.html">Form Wizard</a></li>
+                            <li><a href="form-editor.html">WYSIWYG Editor</a></li>
+                            <li><a href="code-editor.html">Code Editors</a></li>
+                            <li><a href="form-uploads.html">Multiple File Upload</a></li>
+                            <li><a href="image-crop.html">Image Crop</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu"><a href="#"><i class="ion-grid"></i> <span class="nav-label">Data Tables</span></a>
+                        <ul class="list-unstyled">
+                            <li><a href="tables.html">Basic Tables</a></li>
+                            <li><a href="table-datatable.html">Data Table</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu"><a href="#"><i class="ion-stats-bars"></i> <span class="nav-label">Charts</span></a>
+                        <ul class="list-unstyled">
+                            <li><a href="morris-chart.html">Morris Chart</a></li>
+                            <li><a href="chartjs.html">Chartjs</a></li>
+                            <li><a href="flot-chart.html">Flot Chart</a></li>
+                            <li><a href="rickshaw-chart.html">Rickshaw Chart</a></li>
+                            <li><a href="c3-chart.html">C3 Chart</a></li>
+                            <li><a href="other-chart.html">Other Chart</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="has-submenu"><a href="#"><i class="ion-email"></i> <span class="nav-label">Mail</span></a>
+                        <ul class="list-unstyled">
+                            <li><a href="inbox.html">Inbox</a></li>
+                            <li><a href="email-compose.html">Compose Mail</a></li>
+                            <li><a href="email-read.html">View Mail</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="has-submenu"><a href="#"><i class="ion-location"></i> <span class="nav-label">Maps</span></a>
+                        <ul class="list-unstyled">
+                            <li><a href="gmap.html"> Google Map</a></li>
+                            <li><a href="vector-map.html"> Vector Map</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu"><a href="#"><i class="ion-document"></i> <span class="nav-label">Pages</span></a>
+                        <ul class="list-unstyled">
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="timeline.html">Timeline</a></li>
+                            <li><a href="invoice.html">Invoice</a></li>
+                            <li><a href="contact.html">Contact-list</a></li>
+                            <li><a href="login.html">Login</a></li>
+                            <li><a href="register.html">Register</a></li>
+                            <li><a href="recoverpw.html">Recover Password</a></li>
+                            <li><a href="lock-screen.html">Lock Screen</a></li>
+                            <li><a href="blank.html">Blank Page</a></li>
+                            <li><a href="404.html">404 Error</a></li>
+                            <li><a href="404_alt.html">404 alt</a></li>
+                            <li><a href="500.html">500 Error</a></li>
+                        </ul>
+                    </li>*@
+                </ul>
+            </nav>
+        </aside>
+        <!-- Aside Ends-->

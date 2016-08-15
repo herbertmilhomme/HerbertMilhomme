@@ -1,0 +1,20 @@
+﻿@{
+    
+}
+
+<thead>
+                <tr>
+                    @*Where value = placeholder of date in form
+                    if null or empty... ignore that, i'm incorrect
+                    date value shouldnt affect database query*@
+                    <th class="first_column">Departments<br />Employees</th>
+                    <th class="day1 @if(day1.Date==DateTime.Today){<text>today</text>}">Sunday<br /><input name="day1" class="day day1" type="text" value="@day1.ToString("d")" readonly="" /></th>
+                    <th class="day2 @if(day2.Date==DateTime.Today){<text>today</text>}">Monday<br /><input name="day2" class="day day2" type="text" value="@day2.ToString("d")" readonly="" /></th>
+                    <th class="day3 @if(day3.Date==DateTime.Today){<text>today</text>}">Tuesday<br /><input name="day3" class="day day3" type="text" value="@day3.ToString("d")" readonly="" /></th>
+                    <th class="day4 @if(day4.Date==DateTime.Today){<text>today</text>}">Wednesday<br /><input name="day4" class="day day4" type="text" value="@day4.ToString("d")" readonly="" /></th>
+                    <th class="day5 @if(day5.Date==DateTime.Today){<text>today</text>}">Thursday<br /><input name="day5" class="day day5" type="text" value="@day5.ToString("d")" readonly="" /></th>
+                    <th class="day6 @if(day6.Date==DateTime.Today){<text>today</text>}">Friday<br /><input name="day6" class="day day6" type="text" value="@day6.ToString("d")" readonly="" /></th>
+                    <th class="day7 @if(day7.Date==DateTime.Today){<text>today</text>}">Saturday<br /><input name="day7" class="day day7" type="text" value="@day7.ToString("d")" readonly="" /></th>
+                    <th class="last_column">Hours</th>
+                </tr>
+            </thead>

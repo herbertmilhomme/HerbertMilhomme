@@ -1,0 +1,409 @@
+﻿@{
+    Page.Title = "Product Categories";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic_dlapak.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru_dlapak.cshtml";
+	}
+	//var db = Database.Open("eCommerce");
+    //var catalogues = db.QuerySingle("SELECT * FROM catalog"); //product, services, or all
+    var db = Database.Open("ColonielHeights");
+    var catalogues = db.Query("SELECT * FROM [taxonomy_en-US] WHERE ClassTier=1");
+}<style>.bs-header{margin-bottom: 0;}</style>
+@RenderPage("~/Layouts/OnlineShop/Products/ProductSearch.cshtml")
+            <section class="main">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="row">
+								@foreach(var catalog in catalogues){
+                                <div class="col-xs-4 col-sm-3 col-md-2">
+                                    <div class="shortcut">
+                                        <a href="/shop/products/category/@catalog.classname"><i class="fa @catalog.CSSicon shortcut-icon @catalog.csscolor"></i></a>
+                                        <a href="/shop/products/category/@catalog.classname"><h3>@catalog.classname.Replace(',',' ').Split(' ')[0]</h3></a>@*.Substring(0,catalog.classname.IndexOf(" "))*@
+                                        <span class="total-items">234,567@*Database.Open("eCommerce")QueryValue("SELECT count(*) FROM inventory_products WHERE class=0",catalog.classid)*@</span>
+                                    </div>
+                                </div>
+								}<!--
+                                <div class="col-xs-4 col-sm-3">
+                                    <div class="shortcut">
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-car shortcut-icon icon-blue"></i></a>
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><h3>Car</h3></a>
+                                        <span class="total-items">234,567</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3">
+                                    <div class="shortcut">
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-motorcycle shortcut-icon icon-green"></i></a>
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><h3>Motorcycle</h3></a>
+                                        <span class="total-items">25,366</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3">
+                                    <div class="shortcut">
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-home shortcut-icon icon-brown"></i></a>
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><h3>Property</h3></a>
+                                        <span class="total-items">252,546</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3">
+                                    <div class="shortcut">
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-female shortcut-icon icon-violet"></i></a>
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><h3>Fashion</h3></a>
+                                        <span class="total-items">52,546</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3">
+                                    <div class="shortcut">
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-mobile-phone shortcut-icon icon-dark-blue"></i></a>
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><h3>Gadget</h3></a>
+                                        <span class="total-items">215,546</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3">
+                                    <div class="shortcut">
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-soccer-ball-o shortcut-icon icon-orange"></i></a>
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><h3>Sport</h3></a>
+                                        <span class="total-items">415,546</span>
+                                    </div>  
+                                </div>
+                                <div class="col-xs-4 col-sm-3">
+                                    <div class="shortcut">
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-gears shortcut-icon icon-light-blue"></i></a>
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><h3>Industry</h3></a>
+                                        <span class="total-items">15,546</span>
+                                    </div>  
+                                </div>
+                                <div class="col-xs-4 col-sm-3">
+                                    <div class="shortcut">
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-wrench shortcut-icon icon-light-green"></i></a>
+                                        <a href="http://themes.gie-art.com/dlapak/category.html"><h3>Job</h3></a>
+                                        <span class="total-items">152,546</span>
+                                    </div>  
+                                </div>-->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="section-header">
+                                        <h2>Featured</h2>
+                                    </div>
+                                    <div id="featured-products" class="owl-carousel owl-carousel-featured owl-theme" style="opacity: 1; display: block;">
+                                        <div class="owl-wrapper-outer">
+											<div class="owl-wrapper" style="width: 2500px; left: 0px; display: block; transition: all 800ms ease; transform: translate3d(-500px, 0px, 0px);">
+												<div class="owl-item" style="width: 250px;">@*5 owl items, but can do as many as i want*@
+													<div class="item">
+                                            <div class="item-ads-grid">
+                                                <div class="item-badge-grid featured-ads">
+                                                    <a href="index.html">Featured Ads</a>@*Ribbon*@
+                                                </div>
+                                                <div class="item-img-grid">
+                                                    <img alt="" src="product-1.jpg" class="img-responsive img-center">
+                                                </div>
+                                                <div class="item-title">
+                                                    <a href="http://themes.gie-art.com/dlapak/detail.html"><h4>Lenovo A326 Black 4GB RAM</h4></a>@*name and id-url*@
+                                                </div>
+                                                <div class="item-meta">
+                                                    <ul>
+                                                        <li class="item-date"><i class="fa fa-clock-o"></i> Today 10.35 am</li>@*"Unitl" Sale End*@
+                                                        <li class="item-cat"><i class="fa fa-bars"></i> <a href="">Electronics</a>@*BASE*@ , <a href="">Smartphone</a>@*CURRENT*@</li>
+                                                        <!--<li class="item-location"><a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-map-marker"></i> Manchester</a></li>-->@*No Location*@
+                                                        <li class="item-type"><i class="fa fa-bookmark"></i> New</li>@*Status*@
+                                                    </ul>
+                                                </div>
+                                                <div class="product-footer">
+                                                    <div class="item-price-grid pull-left">
+                                                        <h3>$ 100</h3>@*price*@
+                                                        <!--<span>Negotiable</span>-->
+                                                    </div>
+                                                    <div class="item-action-grid pull-right">
+                                                        <ul>
+                                                            <li><a href="index.html" data-toggle="tooltip" data-placement="top" title="Save Favorite" class="btn btn-default btn-sm"><i class="fa fa-heart"></i></a></li>@*Log-in, if not logged*@
+                                                            <li><a href="http://themes.gie-art.com/dlapak/detail.html" data-toggle="tooltip" data-placement="top" title="Show Details" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a></li>@*item detail page*@
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>   
+                                        </div>
+										</div>
+												<!--<div class="owl-item" style="width: 250px;"><div class="item">
+                                            <div class="item-ads-grid">
+                                                <div class="item-badge-grid premium-ads">
+                                                    <a href="index.html">Featured Ads</a>
+                                                </div>
+                                                <div class="item-img-grid">
+                                                    <img alt="" src="product-6.jpg" class="img-responsive img-center">
+                                                </div>
+                                                <div class="item-title">
+                                                    <a href="http://themes.gie-art.com/dlapak/detail.html"><h4>Samsung Tab 3 V 116</h4></a>
+                                                </div>
+                                                <div class="item-meta">
+                                                    <ul>
+                                                        <li class="item-date"><i class="fa fa-clock-o"></i> Today 10.35 am</li>
+                                                        <li class="item-cat"><i class="fa fa-bars"></i> <a href="http://themes.gie-art.com/dlapak/category.html">Electronics</a> , <a href="http://themes.gie-art.com/dlapak/category.html">Smartphone</a></li>
+                                                        <li class="item-location"><a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-map-marker"></i> Manchester</a></li>
+                                                        <li class="item-type"><i class="fa fa-bookmark"></i> New</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="product-footer">
+                                                    <div class="item-price-grid pull-left">
+                                                        <h3>$ 100</h3>
+                                                        <span>Negotiable</span>
+                                                    </div>
+                                                    <div class="item-action-grid pull-right">
+                                                        <ul>
+                                                            <li><a href="index.html" data-toggle="tooltip" data-placement="top" title="Save Favorite" class="btn btn-default btn-sm"><i class="fa fa-heart"></i></a></li>
+                                                            <li><a href="http://themes.gie-art.com/dlapak/detail.html" data-toggle="tooltip" data-placement="top" title="Show Details" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div></div>
+												<div class="owl-item" style="width: 250px;"><div class="item">
+                                            <div class="item-ads-grid highlight-ads">
+                                                <div class="item-img-grid">
+                                                    <img alt="" src="product-7.jpg" class="img-responsive img-center">
+                                                </div>
+                                                <div class="item-title">
+                                                    <a href="http://themes.gie-art.com/dlapak/detail.html"><h4>Sony Experia Z2 LTE</h4></a>
+                                                </div>
+                                                <div class="item-meta">
+                                                    <ul>
+                                                        <li class="item-date"><i class="fa fa-clock-o"></i> Today 10.35 am</li>
+                                                        <li class="item-cat"><i class="fa fa-bars"></i> <a href="http://themes.gie-art.com/dlapak/category.html">Electronics</a> , <a href="http://themes.gie-art.com/dlapak/category.html">Smartphone</a></li>
+                                                        <li class="item-location"><a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-map-marker"></i> Manchester</a></li>
+                                                        <li class="item-type"><i class="fa fa-bookmark"></i> New</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="product-footer">
+                                                    <div class="item-price-grid pull-left">
+                                                        <h3>$ 100</h3>
+                                                        <span>Negotiable</span>
+                                                    </div>
+                                                    <div class="item-action-grid pull-right">
+                                                        <ul>
+                                                            <li><a href="index.html" data-toggle="tooltip" data-placement="top" title="Save Favorite" class="btn btn-default btn-sm"><i class="fa fa-heart"></i></a></li>
+                                                            <li><a href="http://themes.gie-art.com/dlapak/detail.html" data-toggle="tooltip" data-placement="top" title="Show Details" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+											</div>
+												<div class="owl-item" style="width: 250px;">
+													<div class="item">
+                                            <div class="item-ads-grid">
+                                                <div class="item-badge-grid hot-ads">
+                                                    <a href="index.html">Featured Ads</a>
+                                                </div>
+                                                <div class="item-img-grid">
+                                                    <img alt="" src="product-1.jpg" class="img-responsive img-center">
+                                                </div>
+                                                <div class="item-title">
+                                                    <a href="http://themes.gie-art.com/dlapak/detail.html"><h4>Lenovo A326 Black 4GB RAM</h4></a>
+                                                </div>
+                                                <div class="item-meta">
+                                                    <ul>
+                                                        <li class="item-date"><i class="fa fa-clock-o"></i> Today 10.35 am</li>
+                                                        <li class="item-cat"><i class="fa fa-bars"></i> <a href="http://themes.gie-art.com/dlapak/category.html">Electronics</a> , <a href="http://themes.gie-art.com/dlapak/category.html">Smartphone</a></li>
+                                                        <li class="item-location"><a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-map-marker"></i> Manchester</a></li>
+                                                        <li class="item-type"><i class="fa fa-bookmark"></i> New</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="product-footer">
+                                                    <div class="item-price-grid pull-left">
+                                                        <h3>$ 100</h3>
+                                                        <span>Negotiable</span>
+                                                    </div>
+                                                    <div class="item-action-grid pull-right">
+                                                        <ul>
+                                                            <li><a href="index.html" data-toggle="tooltip" data-placement="top" title="Save Favorite" class="btn btn-default btn-sm"><i class="fa fa-heart"></i></a></li>
+                                                            <li><a href="http://themes.gie-art.com/dlapak/detail.html" data-toggle="tooltip" data-placement="top" title="Show Details" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+												</div>
+												<div class="owl-item" style="width: 250px;">
+													<div class="item">
+                                            <div class="item-ads-grid">
+                                                <div class="item-badge-grid featured-ads">
+                                                    <a href="index.html">Featured Ads</a>
+                                                </div>
+                                                <div class="item-img-grid">
+                                                    <img alt="" src="product-1.jpg" class="img-responsive img-center">
+                                                </div>
+                                                <div class="item-title">
+                                                    <a href="http://themes.gie-art.com/dlapak/detail.html"><h4>Lenovo A326 Black 4GB RAM</h4></a>
+                                                </div>
+                                                <div class="item-meta">
+                                                    <ul>
+                                                        <li class="item-date"><i class="fa fa-clock-o"></i> Today 10.35 am</li>
+                                                        <li class="item-cat"><i class="fa fa-bars"></i> <a href="http://themes.gie-art.com/dlapak/category.html">Electronics</a> , <a href="http://themes.gie-art.com/dlapak/category.html">Smartphone</a></li>
+                                                        <li class="item-location"><a href="http://themes.gie-art.com/dlapak/category.html"><i class="fa fa-map-marker"></i> Manchester</a></li>
+                                                        <li class="item-type"><i class="fa fa-bookmark"></i> New</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="product-footer">
+                                                    <div class="item-price-grid pull-left">
+                                                        <h3>$ 100</h3>
+                                                        <span>Negotiable</span>
+                                                    </div>
+                                                    <div class="item-action-grid pull-right">
+                                                        <ul>
+                                                            <li><a href="index.html" data-toggle="tooltip" data-placement="top" title="Save Favorite" class="btn btn-default btn-sm"><i class="fa fa-heart"></i></a></li>
+                                                            <li><a href="http://themes.gie-art.com/dlapak/detail.html" data-toggle="tooltip" data-placement="top" title="Show Details" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div></div>-->
+											</div>
+										</div>
+
+                                        
+										<div class="owl-controls clickable">
+											<div class="owl-pagination"><!--
+												<div class="owl-page"><span class=""></span></div>
+												<div class="owl-page active"><span class=""></span></div>-->
+											</div>
+										</div>
+									</div>
+                                </div>
+                            </div>
+                        </div>@*
+                        <div class="col-md-4 col-sm-4">
+                            <!--<div class="widget"> @*maybe an ad banner*
+                                <div class="widget-header">
+                                    <h3>Quick Signup</h3>
+                                </div>
+                                <div class="widget-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control input-lg" placeholder="Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control input-lg" placeholder="Email">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control input-lg" placeholder="Password">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox">
+                                                <label class="string optional" for="terms">
+                                                    <input type="checkbox" id="terms" style="">
+                                                    <a href="index.html">I Agree with Term and Conditions</a>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-block btn-custom">Sign Up</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>-->
+                            <div class="widget">
+                                <div class="widget-header">
+                                    <h3>Trends</h3>
+                                </div>
+                                <div class="widget-body">
+                                    <ul class="trends">
+                                        <li><a href="index.html">Smartphone &nbsp;<span class="item-numbers">(2,342)</span></a></li>
+                                        <li><a href="index.html">Watch &amp; Jewelry &nbsp;<span class="item-numbers">(2,342)</span></a></li>
+                                        <li><a href="index.html">Clothes &nbsp;<span class="item-numbers">(2,342)</span></a></li>
+                                        <li><a href="index.html">Shoes &nbsp;<span class="item-numbers">(2,342)</span></a></li>
+                                        <li><a href="index.html">Music &nbsp;<span class="item-numbers">(2,342)</span></a></li>
+                                        <li><a href="index.html">Furniture &nbsp;<span class="item-numbers">(2,342)</span></a></li>
+                                        <li><a href="index.html">Photography &nbsp;<span class="item-numbers">(242)</span></a></li>
+                                        <li><a href="index.html">Web Development &nbsp;<span class="item-numbers">(2,342)</span></a></li>
+                                    </ul>
+                                </div>
+                            </div><!--
+                            <div class="banner-widget">
+                                <img src="600x275" alt="banner" class="img-responsive">
+                            </div>-->
+                        </div>*@
+                    </div>
+                </div>
+            </section>
+            <div class="counter">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="item-counter">
+                                <span class="item-icon"><i class="fa fa-database"></i></span>
+                                <div data-refresh-interval="100" data-speed="3000" data-to="7803" data-from="0" class="item-count">7803</div>
+                                <span class="item-info">Catagories</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="item-counter">
+                                <span class="item-icon"><i class="fa fa-user-plus"></i></span>
+                                <div data-refresh-interval="50" data-speed="5000" data-to="427" data-from="0" class="item-count">427</div>
+                                <span class="item-info">Items</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="item-counter">
+                                <span class="item-icon"><i class="fa fa-map-marker"></i></span>
+                                <div data-refresh-interval="80" data-speed="5000" data-to="639" data-from="0" class="item-count">639</div>
+                                <span class="item-info">Brand</span>
+                            </div>
+                        </div><!--
+                        <div class="col-md-3">
+                            <div class="item-counter">
+                                <span class="item-icon"><i class="fa fa-users"></i></span>
+                                <div data-refresh-interval="80" data-speed="5000" data-to="1548" data-from="0" class="item-count">1548</div>
+                                <span class="item-info">Members</span>
+                            </div>
+                        </div>-->
+                    </div>
+                </div> <!-- / .counter -->
+    </div>
+
+@section HeadCSS{
+		<!-- Dlapak styles -->
+        <link id="theme_style" type="text/css" href="/_assets/css/style1.css" rel="stylesheet" media="screen">
+
+        <!-- Assets -->
+        <link href="/_assets/owl-carousel/owl.carousel.css" rel="stylesheet">
+        <link href="/_assets/owl-carousel/owl.theme.css" rel="stylesheet">
+}
+@section FooterJS{
+<!-- Essentials --
+<script src="/_assets/bootstrap/js/bootstrap.min.js"></script>-->
+<script src="/_assets/owl-carousel/owl.carousel.js"></script>
+<script src="/_assets/js/jquery.countTo.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // ===========Featured Owl Carousel============
+        if ($(".owl-carousel-featured").length > 0) {
+            $(".owl-carousel-featured").owlCarousel({
+                items: 3,
+                lazyLoad: true,
+                pagination: true,
+                autoPlay: 5000,
+                stopOnHover: true
+            });
+        }
+
+        // ==================Counter====================
+        $('.item-count').countTo({
+            formatter: function (value, options) {
+                return value.toFixed(options.decimals);
+            },
+            onUpdate: function (value) {
+                console.debug(this);
+            },
+            onComplete: function (value) {
+                console.debug(this);
+            }
+        });
+    });
+</script>
+}

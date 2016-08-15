@@ -1,0 +1,87 @@
+﻿@RenderPage("~/ModuleTemplates/Forum/WhoIsOnline.cshtml")
+<!DOCTYPE html>
+
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+
+<!--<![endif]-->
+<!-- BC_OBNW -->
+<head>
+  	@*<base href="~/" target="_blank">
+    @RenderPage("~/_System/ContentHolders/_Template - Head Metatags.cshtml")*@
+
+    @RenderPage("~/_System/ContentHolders/_Template - Head Scripts.cshtml")
+</head>
+<body id="top">
+    @RenderSection("googlemanager", required: false)
+
+<!-- remove div#root and replace div#root with main#root or create main#content-->
+<div id="root" class="thebg two-column">
+    <!-- Header -->	
+	@RenderPage("~/_System/ContentHolders/_Template - Header.cshtml")
+	<!-- /Header -->
+	
+	<div class="clearfix"></div>	
+
+    <!-- Top Ads Banner -->
+    @RenderSection("topbanner", required: false)
+	<!-- /Top Ads Banner -->
+
+	<!-- Content -->
+	<section @*id="content"*@ class="container page-top">
+    <!-- Content -->
+
+	    <!-- Left Ads Banner -->
+        @RenderSection("leftbanner", required: false)
+	    <!-- /Left Ads Banner -->
+		
+		<!-- MAIN Content -->
+	    <div class="col-md-8 pagecontainer content-pad">
+            @RenderBody()
+	    </div>
+		<!-- /MAIN Content -->
+		
+		<!-- Sidebar Content -->
+		<div class="col-md-4 sidebar">
+		
+			<!-- Features Sidenav -->	
+			<!-- {module_contentholder, name="_Sidebar - Nav - About"} -->	
+	@RenderPage("~/_System/ContentHolders/_Sidebar - Nav - About.cshtml")
+			<!-- /Features Sidenav -->
+			
+			<!-- Deals -->	
+			<!-- {module_contentholder, name="_Sidebar - Deals"} -->	
+	@RenderPage("~/_System/ContentHolders/_Sidebar - Deals.cshtml")
+			<!-- /Deals -->
+			
+			<!-- Help -->	
+			<!-- {module_contentholder, name="_Sidebar - Help"} -->	
+	@RenderPage("~/_System/ContentHolders/_Sidebar - Help.cshtml")
+			<!-- /Help -->
+
+        <!-- Right Ads Banner -->
+        @RenderSection("rightbanner", required: false)
+	    <!-- /Right Ads Banner -->
+			
+		</div>
+		<!-- /Sidebar Content -->
+
+	<!-- /Content -->	
+	</section><!-- #content -->
+	
+    <!-- Bottom Ads Banner -->
+    @RenderSection("bottombanner", required: false)
+	<!-- /Bottom Ads Banner -->
+
+    <!-- FOOTER -->
+	@RenderPage("~/_System/ContentHolders/_Template - Footer.cshtml")
+	<!-- /FOOTER -->
+			
+	@RenderPage("~/_System/ContentHolders/_Template - Footer Scripts.cshtml")
+
+</div><!-- #root -->
+    @*RenderPage("~/_System/ContentHolders/_Template - AdsBanner.cshtml")*@
+<!-- // analytics -->
+</body>
+</html>

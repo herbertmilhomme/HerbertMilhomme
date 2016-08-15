@@ -1,0 +1,82 @@
+﻿@RenderPage("~/ModuleTemplates/Forum/WhoIsOnline.cshtml")
+<!DOCTYPE html>
+
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+
+<!--<![endif]-->
+<!-- BC_OBNW -->
+<head>
+  	@*<base href="~/" target="_blank">
+    @RenderPage("~/_System/ContentHolders/_Template - Head Metatags.cshtml")*@
+
+    @RenderPage("~/_System/ContentHolders/_Template - Head Scripts - HomePg Only - nonmembers.cshtml")
+</head>
+<body id="top">
+    @RenderSection("googlemanager", required: false)
+
+<!-- remove div#root and replace div#root with main#root or create main#content-->
+<div id="root">
+    <!-- Header -->	
+	@RenderPage("~/_System/ContentHolders/_Template - Header.cshtml")
+	<!-- /Header -->		
+
+	<!-- Slider -->
+    @RenderPage("~/_System/ContentHolders/_Home - Slider.cshtml")
+	<!-- /Slider -->
+
+    <!-- Top Ads Banner -->
+    @RenderSection("topbanner", required: false)
+	<!-- /Top Ads Banner -->
+
+	<!-- Content -->
+	<section id="content">
+    <!-- Content -->
+
+	    <!-- Left Ads Banner -->
+        @RenderSection("leftbanner", required: false)
+	    <!-- /Left Ads Banner -->
+
+	    <div class="wrap cstyle03">
+		
+		    <!-- Features -->
+		    @RenderPage("~/_System/ContentHolders/_Home - Features.cshtml")
+		    <!-- /Features -->
+		
+		    @* if homepage then include testimonial*@
+            <!-- Testimonials -->
+		    @RenderPage("~/_System/ContentHolders/_Home - Testimonial.cshtml")
+		    <!-- /Testimonials -->
+		
+		    @*<div class="cf">&nbsp;</div>*@
+		
+		    <!-- Top Deals - Carousel -->
+		    @RenderPage("~/_System/ContentHolders/_Home - Deals.cshtml")
+		    <!-- /Top Deals - Carousel -->
+            @RenderBody()
+		
+	    </div>
+
+        <!-- Right Ads Banner -->
+        @RenderSection("rightbanner", required: false)
+	    <!-- /Right Ads Banner -->
+
+	<!-- /Content -->	
+	</section><!-- #content -->
+	
+    <!-- Bottom Ads Banner -->
+    @RenderSection("bottombanner", required: false)
+	<!-- /Bottom Ads Banner -->
+
+    <!-- FOOTER -->
+	@RenderPage("~/_System/ContentHolders/_Template - Footer.cshtml")
+	<!-- /FOOTER -->
+			
+	@RenderPage("~/_System/ContentHolders/_Template - Footer Scripts - HomePg Only.cshtml")
+
+</div><!-- #root -->
+    @*RenderPage("~/_System/ContentHolders/_Template - AdsBanner.cshtml")*@
+<!-- // analytics -->
+</body>
+</html>

@@ -1,0 +1,19 @@
+﻿@{
+    // Set the layout page and page title
+    //Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Login Failure";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+}
+
+<hgroup class="title">
+    <h1>@Page.Title.</h1>
+    <h2>Unsuccessful login with service.</h2>
+</hgroup>

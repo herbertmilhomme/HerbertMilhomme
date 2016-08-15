@@ -1,0 +1,57 @@
+﻿@{
+    var db = Database.Open("ColonielHeights");
+    var topnav = db.Query("SELECT * FROM website_pages WHERE parentD = 0 AND header = 'true' AND everyone='true'");
+    //var botnav = db.Query("SELECT * FROM website_pages WHERE parentD = 0 AND footer = 'true'");
+	//~/Layouts/WebApps/NavHeader/newmsgs.cshtml
+}
+<!-- White Nav Menu @@ Top -->
+        <!--<nav id="nav-collapse">-->	
+			<ul id="main-nav-list" class="nav navbar-nav navbar-right">
+				<!-- Collapse Navigation Menu -->@foreach(var item in topnav){
+                        var navmenu = (int)db.QueryValue("SELECT count(*) FROM website_pages WHERE parentD = @0 AND header = 'true' AND everyone='true'", item.pageID); //item.pageID == parentD
+                <li id="@item.name" class="@item.cssCLASS @if(navmenu != null && navmenu > 0){<text>dropdown</text>} @*visible-xs-block*@">
+                    <a href="@Href("~/" + item.UrlPath + item.filename)"@if(navmenu != null && navmenu > 0){<text>class="dropdown-toggle" data-toggle="dropdown"</text>}>@item.Name</a>@if(navmenu != null && navmenu > 0){
+                    <ul class="dropdown-menu">
+                        <li id="@item.name-Main" class="@item.cssCLASS">
+							<a href="@Href("~/" + item.UrlPath + item.filename)">@*Main*@@item.title</a>
+						</li>
+						@foreach(var dropdown in db.Query("SELECT * FROM website_pages WHERE parentD = @0 AND header = 'true' AND everyone='true'", item.pageID)){
+                        <li id="@dropdown.IDname" class="@dropdown.cssCLASS">
+                            <a href="@Href("~/" + dropdown.UrlPath + dropdown.filename)">@dropdown.Name</a>
+                        </li>}
+                    </ul>}
+                </li>}
+				@if (WebSecurity.IsAuthenticated) {
+                            <text>
+                                <li><span>Hello, <a class="email" href="~/Account/MyAccount" title="My Account">@WebSecurity.CurrentUserName</a>!</span></li>&nbsp;
+                                <li>
+                                    <form id="logoutForm" action="~/Account/Logout" method="post">
+                                        @AntiForgery.GetHtml()
+                                        <a href="javascript:document.getElementById('logoutForm').submit()">Log out</a>
+                                    </form>
+                                </li>
+				@*RenderPage("~/ModuleTemplates/Menu/Default/newmsgs.cshtml")*@
+                            </text>
+                        } else {                            
+                                <li><a href="~/Account/MemberSignUp"><strong>Register</strong></a></li>
+                                <li><a href="~/Account/Login"><strong>Log in</strong></a></li>                            
+                        }
+            </ul>
+        <!--</nav>-->
+@*
+				<ul class="nav navbar-nav navbar-right" id="main-nav-list">
+					<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/home">Home</a></li>
+					<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/features">Features</a></li>
+					<li class="dropdown"><a href="http://uguru-bootstrap-us.businesscatalyst.com/pages" class="dropdown-toggle" data-toggle="dropdown">Pages</a>
+						<ul class="dropdown-menu">
+							<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/components">Components</a></li>
+							<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/grid">Grid</a></li>
+							<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/gallery">Photo Gallery</a></li>
+							<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/pricing">Pricing</a></li>
+							<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/typography">Typography</a></li>
+						</ul>
+					</li>
+					<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/shop">Shop</a></li>
+					<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/blog">Blog</a></li>
+					<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/contact">Contact</a></li>
+				</ul>*@

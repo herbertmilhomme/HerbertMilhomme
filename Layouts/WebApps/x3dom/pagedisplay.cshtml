@@ -1,0 +1,38 @@
+﻿@{
+    //Layout = "~/Layouts/Template/about.cshtml";
+    Page.Title = "Projects";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+}
+@RenderPage("/_assets/renders/3d-model/"+Request.QueryString["model"]+".cshtml")
+<!--<x3d id='UniqueModelId' showStat='true' showLog='false' x='0px' y='0px' width='500px' height='400px'> 
+    <scene>
+		<inline url="@Href("/_assets/renders/3d-model/"+Request.QueryString["model"]+".x3d")"> </inline> 
+	</scene> 
+</x3d>
+RenderPage("~/Layouts/WebApps/render.cshtml")-->
+@RenderPage("~/Layouts/WebApps/x3dom/keyboard.cshtml")
+@*if(UrlData.Count == 0){//shop intro services/products?
+            //{tag_cataloguelist,4} 
+			@RenderPage("~/Layouts/Project/list.cshtml")
+		}else if(UrlData.Count == 1){//full selection or presentation (services/products)
+            //{tag_productlist,4}
+			@RenderPage("~/Layouts/Project/details.cshtml") //i think services should have different presentation from products
+		}@*else{
+			<p>Problem loading page.</p>
+		}*@
+@section HeadCSS{
+    @*<link rel='stylesheet' type='text/css' href='http://www.x3dom.org/download/x3dom.css'/>*@
+    <link rel='stylesheet' type='text/css' href='/_assets/x3dom-1.7.0/x3dom.css'/>
+}
+@section FooterJS{
+    @*<script type='text/javascript' src='http://www.x3dom.org/download/x3dom.js'> </script>*@
+    <script type='text/javascript' src='/_assets/x3dom-1.7.0/x3dom.js'> </script>
+}

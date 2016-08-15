@@ -1,0 +1,36 @@
+﻿@{/*
+    var db = Database.Open("CH");
+    var navmenu = db.Query("SELECT * FROM tag_menuitemlabel");
+    var rootdir = db.Query("SELECT * FROM tag_menuitemlabel WHERE tag_menugroup = 'root'");*/
+
+    var db = Database.Open("ColonielHeights");
+    //var navmenu = db.Query("SELECT * FROM website_pages");
+    //var topnav = db.Query("SELECT * FROM website_pages WHERE parentD = 0 AND header = 'true'");
+    var botnav = db.Query("SELECT * FROM website_pages WHERE footer = 'true'");
+}
+@*<!-- Footer Navigation -->
+        <nav id="nav" class="footerbg3black">			
+            <div class="container center">
+			    <div class="btm-links">*@@foreach(var item in botnav){
+                    <a href="@Href("~/" + item.UrlPath + item.FileName)">@item.Name</a>
+                }@*</div>
+                <a href="#top" class="gotop scroll"><img src="~/_assets/images/spacer.png" alt="Click here to go to top"/></a>
+            </div>
+        </nav>
+@*<div class="footerbg3black">
+		<div class="container center">
+			<div class="btm-links"> 
+				<a href="/">Home</a><a href="~/travel-tours/">Travel Tours</a>
+                <a href="~/about-us/">About Us</a>
+                <a href="~/features/">Features</a>
+                <a href="~/travel-blog/">Blog</a>
+                <a href="~/contact-us">Contact Us</a>
+			</div>@*
+            <nav class="nav btm-links">
+				<!-- footer nav -->
+				<ul><li  ><a href="/">Home</a></li><li  ><a href="/about">About</a></li><li  ><a href="/projects">Projects</a></li><li id="main-nav-services" ><a href="/services">Services</a></li><li  ><a href="/news">News</a></li><li id="main-nav-blog" ><a href="/_blog/Blog">Blog</a></li></ul>
+				<!-- // footer nav -->
+			</nav>@
+			<a href="#top" class="gotop scroll"><img src="~/_assets/images/spacer.png" alt=""/></a>
+		</div>
+	</div>*@

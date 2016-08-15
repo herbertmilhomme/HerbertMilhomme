@@ -1,0 +1,31 @@
+@{
+    var db = Database.Open("InfoGraph");
+    //var AdminUsers = System.Web.Security.Roles.GetUsersInRole("Admin");
+    var occupation = db.QuerySingle("SELECT * FROM occupation WHERE display='true'"); 
+}			@foreach(var job in occupation){
+    //int userid = WebMatrix.WebData.WebSecurity.GetUserId(admin);
+    //var company = db.QuerySingle("SELECT * FROM business_EmployeesCompany WHERE email='@0'", admin);//WebMatrix.WebData.WebSecurity.GetUserId(admin)
+    //var personal = db.QuerySingle("SELECT * FROM business_EmployeesPersonal WHERE email=@0", WebMatrix.WebData.WebSecurity.GetUserId(admin));//userid); 
+    if(job == null){continue;}else{//(info == null ? String.Empty : info.Firstname)
+            <div class="col-md-6">
+				<div class="team-member">
+					<img src="@job.ImagePath" class="fwimg" alt="@job.ImageDescription"/>
+					<!--<div class="socials-container">
+						<a href="{tag_twitter link}" data-placement="top" title="Twitter" class="left"><span class="socials-twitter "></span></a>
+						<a href="{tag_facebook link}" data-placement="top" title="Facebook" class="left"><span class="socials-facebook "></span></a>
+					</div>-->
+					<h4>@job.Title</h4>
+					<p>Experience/Years</p><!--OccupationDescription-->
+				</div>
+			</div>}
+    }
+
+Job Title
+Job Subtitle
+Job Image
+Job Description
+Software and Tools Use
+Since Year: @job.SinceYr
+My Experience:
+Status: Rusty - This is a skill i no longer practice, or have not practiced in an extended period of time
+All of these skills i have self-proclaimed to be certified or capable of performing (on par with equivilent or greater expertise/experience as college graduate).

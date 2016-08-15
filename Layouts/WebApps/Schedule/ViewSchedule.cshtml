@@ -1,0 +1,468 @@
+﻿@{
+    //Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "View Schedule";
+
+    @*DateTime input = "0"; //Request["daystart"].AsDateTime;
+    int delta = DayOfWeek.Sunday - input.DayOfWeek;
+    DateTime sunday = input.AddDays(delta);
+    DateTime monday = sunday + 1;    *@
+    @*if (i % 2 == 0) {var evenrow = "even";} else {var evenrow = "odd";}*@
+    
+//onchange="this.document.getElementById('schedule_date').submit();"
+
+    DateTime select = DateTime.Now;
+
+    if(Request.QueryString[null] == "Date" || Request.QueryString["Date"] == ""){
+        select = DateTime.Now;}
+    if(Request.QueryString["Date"] != null){
+        select = DateTime.Parse(Request.QueryString["Date"]);}
+
+    DateTime wkstart = new DateTime();//DateTime.Now; //.ToString("d")
+    DateTime wkend = new DateTime();//DateTime.Now; //.ToString("d")
+
+    switch(select.Date.DayOfWeek.ToString())
+{
+case "Sunday":
+    wkstart = select;
+    wkend = select.AddDays(+6);
+    break;
+case "Monday":
+    wkstart = select.AddDays(-1);
+    wkend = select.AddDays(+5);
+    break;
+case "Tuesday":
+    wkstart = select.AddDays(-2);
+    wkend = select.AddDays(+4);
+    break;
+case "Wednesday":
+    wkstart = select.AddDays(-3);
+    wkend = select.AddDays(+3);
+    break;
+case "Thursday":
+    wkstart = select.AddDays(-4);
+    wkend = select.AddDays(+2);
+    break;
+case "Friday":
+    wkstart = select.AddDays(-5);
+    wkend = select.AddDays(+1);
+    break;
+case "Saturday":
+    wkstart = select.AddDays(-6);
+    wkend = select;
+    break;
+default:
+    wkstart = DateTime.Now;
+    wkend = DateTime.Now.AddDays(6);
+    break;
+}  
+    var storeid = Request.QueryString["Store"]; //or UrlData[0]; //Retrieves passed variable from the database search page
+    /*if(storeid != null){
+        var sqlQ = "SELECT * FROM business_Locations WHERE storeid=@0"; 
+        var store = db.Query(sqlQ, storeid);
+        //departments = db.Query("Select * FROM business_departments WHERE storeid=@0",storeid); 
+    }*/
+    
+    //var db= Database.Open("ColonielHeights");
+    var db= Database.Open("HerbServer1");
+    var departments = db.Query("Select * FROM business_departments"); 
+    //var schedule = db.Query("Select * FROM business_Schedule WHERE punchin='@0' ORDER BY punchin DESC",);
+
+    /*DateTime day1 = wkstart;
+    DateTime day2 = wkstart.AddDays(1);
+    DateTime day3 = wkstart.AddDays(2);
+    DateTime day4 = wkstart.AddDays(3);
+    DateTime day5 = wkstart.AddDays(4);
+    DateTime day6 = wkstart.AddDays(5);
+    DateTime day7 = wkstart.AddDays(6);*/
+
+    /*      make an array/list for each employee in dept
+            total hours in each dpt
+
+			ArrayList open = new ArrayList();
+			ArrayList mid = new ArrayList();
+			ArrayList close = new ArrayList();
+			
+            List<TimeSpan> onight = new List<TimeSpan>();
+			List<TimeSpan> open = new List<TimeSpan>();
+			List<TimeSpan> mid = new List<TimeSpan>();
+			List<TimeSpan> close = new List<TimeSpan>();*/
+
+            Dictionary<int, TimeSpan> depthrs = new Dictionary<int, TimeSpan> (); //total dept hours count
+            //Dictionary<string, TimeSpan> employeehrs = new Dictionary<string, TimeSpan> (); //total workers/employee, and hours count
+            Dictionary<int, TimeSpan> employeedic = new Dictionary<int, TimeSpan> (); //total employeehours dictionary added at end of column
+            /*TimeSpan dbhours1 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan dbhours2 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan dbhours3 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan dbhours4 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan dbhours5 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan dbhours6 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan dbhours7 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+
+            TimeSpan total1 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan total2 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan total3 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan total4 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan total5 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan total6 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            TimeSpan total7 = new TimeSpan(); //dItem.punchout.Subtract(dItem.punchin);
+            */TimeSpan wkhrsvar = new TimeSpan();
+
+            //List<String> DayOne = new List<String>(); //punchin and punchout
+            
+            Dictionary<int, TimeSpan> col_hrs = new Dictionary<int, TimeSpan> ();
+            Dictionary<int, int> col_wrkrs = new Dictionary<int, int> ();
+            Dictionary<string, TimeSpan> row_emp_hrs = new Dictionary<string, TimeSpan> ();
+            Dictionary<string, string> emp_shift = new Dictionary<string, string> (); //employee-id, shift
+            //Dictionary<int, Dictionary<string,string>> shift_collection = new Dictionary<int, Dictionary<string,string>>(); //emp_shift
+
+            Dictionary<int, string> DayOne = new Dictionary<int, string> ();
+            Dictionary<int, string> DayTwo = new Dictionary<int, string> ();
+            Dictionary<int, string> DayThree = new Dictionary<int, string> ();
+            Dictionary<int, string> DayFour = new Dictionary<int, string> ();
+            Dictionary<int, string> DayFive = new Dictionary<int, string> ();
+            Dictionary<int, string> DaySix = new Dictionary<int, string> ();
+            Dictionary<int, string> DaySeven = new Dictionary<int, string> ();
+            
+            /*make a list for open, and another for open-day1 
+            if punchin and punchout are both open then add only 1 to open-day1
+            if (open.Contains("Blue") && open.Contains()){}
+            what if the list was a string, and it held "day1" or "employee.memberid-punchin"
+            then add 1 value to open1
+            */
+
+            //List<Decimal> wkhrs = new List<Decimal>();
+            //List<Decimal> dpthrs = new List<Decimal>();
+			//List<Decimal> dptwkhrs = new List<Decimal>();
+            //List<Decimal> totalwkhrs = new List<Decimal>();
+            //List<int> employeecount = new List<int>(); //total workers/employee count
+            //List<int> hours = new List<int>(); //sum shift at footer
+
+			//DateTime pIn = new DateTime();
+			//DateTime pOut = new DateTime();
+			//TimeSpan pIn = new TimeSpan();
+			//TimeSpan pOut = new TimeSpan();
+
+			int day = 0;    
+            TimeSpan onight_s = new TimeSpan(0);
+            //TimeSpan onight_e = new TimeSpan(6,0,0);
+            TimeSpan open_s = new TimeSpan(6,0,0);
+            //TimeSpan open_e = new TimeSpan();
+            TimeSpan mid_s = new TimeSpan(12,0,0);
+            //TimeSpan mid_e = new TimeSpan();
+            TimeSpan close_s = new TimeSpan(18,0,0);
+            TimeSpan close_e = new TimeSpan(24,0,0);
+}
+
+@section HeadCSS{
+    <!--<link href="~/Content/Schedule.css" rel="stylesheet" type="text/css" />
+    <!-- Responsive-table -->
+    <link href="/_assets/responsive-table/rwd-table.min.css" rel="stylesheet" type="text/css" media="screen"/>
+<style>.today{background-color: gainsboro;}/*.sticky-table-header, .fixed-solution{top: 67px !important;}*/form#schedule_set.table-responsive{margin-bottom: 0;}</style>
+}
+@section FooterJS{
+        <script>
+            function dateFunction(){
+                //document.getElementById("wkend").value = document.getElementById("wkstart").value;
+				if(document.getElementById("storenum").value != null){
+					location.href = '?Date='+ document.getElementById("wkstart").value+'&Store='+ document.getElementById("storenum").value
+				}else{
+					location.href = '?Date='+ document.getElementById("wkstart").value
+				}
+                
+            }
+            function storeFunction(){
+                //document.getElementById("wkend").value = document.getElementById("wkstart").value;
+                location.href = '?Date='+ document.getElementById("wkstart").value+'&Store='+ document.getElementById("storenum").value
+            }
+        </script>
+	<!-- responsive-table--> 
+	<script src="/_assets/responsive-table/rwd-table_edit.js" type="text/javascript"></script>
+	<script>/*
+   $(function() {
+      $('.table-responsive').responsiveTable({options});
+	  //stickyTableHeader true
+	  //fixedNavbar '.navbar-fixed-top'
+   });*/
+	</script>
+}
+
+@*<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>*@
+		<div class="row">
+					<div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h3 class="panel-title">Week of @wkstart.ToString(@"MM'/'dd'/'yyyy") - @wkend.ToString(@"MM'/'dd'/'yyyy")</h3></div>
+                            <!--<div class="panel-body">
+                            </div> <!-- panel-body -->
+                        <!--</div> <!-- panel --
+                    </div>-->
+					<!--<div class="col-lg-12">
+                        <div class="panel panel-default">
+                            
+                            <div class="panel-body table-rep-plugin"> 
+                                <div class="table-responsive" data-pattern="priority-columns">
+                                    
+                                </div>  
+
+                            </div> 
+                        </div>
+                    </div>-->
+                    <!--<div class="col-lg-12">
+                        <div class="panel panel-default">-->
+                            <div class="panel-body table-rep-plugin"> 
+                                <form name="schedule_date" id="schedule_date" method="get" class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 col-md-3 m-b-5" for="wkstart">Select Date</label>
+										<div class="col-xs-12 col-sm-9 col-md-3 m-b-5">
+										<input class="form-control" name="wkstart" type="date" value="@wkstart.ToString("yyyy'-'MM'-'dd")" id="wkstart" onchange="dateFunction()" placeholder="@wkstart.ToString("d")" size=""/></div>
+										<!--to <input name="wkend" type="text" value="@wkend.ToString("d")" id="dayend" readonly=""/>
+                                    </div>
+                                      
+                                    <div class="form-group m-l-10">-->
+                                        <label class="control-label col-xs-12 col-sm-9 col-md-4 m-b-5" for="storenum">Store/Location</label>
+                                        <div class="col-xs-12 col-sm-3 col-md-2 m-b-5"><input class="form-control" placeholder="" type="number" name="storenum" id="storenum" value="@storeid" onblur="storeFunction()" size=""></div>
+                                    </div>
+                                    <!--<div class="form-group m-l-10">
+                                        <label class="cr-styled">
+                                            <input type="checkbox">
+                                            <i class="fa"></i> 
+                                            Remember me
+                                        </label>
+                                    </div>
+                                    <button type="submit" class="btn btn-success m-l-10">Sign in</button>-->
+                                </form>
+                                <div class="table-responsive" data-pattern="priority-columns">
+        <form name="schedule_set" id="schedule_set" method="post" class="table-responsive">
+        <table class="schedule table table-hover table-bordered table-striped m-b-0" border="1">
+            <thead>
+                <tr>
+                    @*Where value = placeholder of date in form
+                    if null or empty... ignore that, i'm incorrect
+                    date value shouldnt affect database query*@
+                    <th colspan="1" class="first_column" @*data-priority="1"*@>Department <br />Employees</th>
+					@for(day = 1; day <= 7; day++){
+						DateTime daystring = wkstart.AddDays(day-1);
+						<th colspan="1" class="@("day"+day) @if(daystring.Date==DateTime.Today){<text>today</text>}" data-priority="1">@daystring.Date.DayOfWeek.ToString() <br /><span>@daystring.ToString("d")</span><!--<input name="@("day"+day)" class="day @("day"+day)" type="text" value="@daystring.ToString("d")" readonly="" />--></th>
+					}@*
+                    <th class="day1 @if(day1.Date==DateTime.Today){<text>today</text>}">Sunday<br /><input name="day1" class="day day1" type="text" value="@day1.ToString("d")" readonly="" /></th>
+                    <th class="day2 @if(day2.Date==DateTime.Today){<text>today</text>}">Monday<br /><input name="day2" class="day day2" type="text" value="@day2.ToString("d")" readonly="" /></th>
+                    <th class="day3 @if(day3.Date==DateTime.Today){<text>today</text>}">Tuesday<br /><input name="day3" class="day day3" type="text" value="@day3.ToString("d")" readonly="" /></th>
+                    <th class="day4 @if(day4.Date==DateTime.Today){<text>today</text>}">Wednesday<br /><input name="day4" class="day day4" type="text" value="@day4.ToString("d")" readonly="" /></th>
+                    <th class="day5 @if(day5.Date==DateTime.Today){<text>today</text>}">Thursday<br /><input name="day5" class="day day5" type="text" value="@day5.ToString("d")" readonly="" /></th>
+                    <th class="day6 @if(day6.Date==DateTime.Today){<text>today</text>}">Friday<br /><input name="day6" class="day day6" type="text" value="@day6.ToString("d")" readonly="" /></th>
+                    <th class="day7 @if(day7.Date==DateTime.Today){<text>today</text>}">Saturday<br /><input name="day7" class="day day7" type="text" value="@day7.ToString("d")" readonly="" /></th>*@
+                    <th colspan="1" class="last_column" data-priority="6">Hours</th>
+                </tr>
+            </thead>
+            <tbody> 
+            @*not every store location will have the same departments.... 
+            filtering headquarters excutive departments from bottom tier associates*@@{
+            foreach (var department in departments){
+                //var dept = department.deptid;
+                var employees = db.Query("SELECT business_schedule.employeeid,  business_schedule.dept, business_employeespersonal.firstname, business_employeespersonal.lastname, business_employeespersonal.employeenum FROM business_schedule "+ 
+				"FULL JOIN business_employeespersonal "+
+				"ON business_schedule.employeeid=business_EmployeesPersonal.email "+
+				"WHERE (business_schedule.punchin BETWEEN @0 AND @1) "+ 	
+				"GROUP BY business_schedule.employeeid,  business_schedule.dept, business_employeespersonal.firstname, business_employeespersonal.lastname, employeenum ",/*[dept]=@0 AND department.deptid,*/ DateTime.Parse(wkstart.ToString(@"yyyy'-'MM'-'dd' 00:00:00'")), DateTime.Parse(wkend.ToString(@"yyyy'-'MM'-'dd' 23:59:59'")));
+                //var employees = db.Query("SELECT DISTINCT business_schedule.employeeid,* FROM business_schedule FULL JOIN business_employeespersonal ON business_schedule.employeeid=business_EmployeesPersonal.email WHERE (punchin BETWEEN @0 AND @1) ORDER BY [punchin] ASC",/*[dept]=@0 AND department.deptid,*/ DateTime.Parse(wkstart.ToString(@"yyyy'-'MM'-'dd' 00:00:00'")), DateTime.Parse(wkend.ToString(@"yyyy'-'MM'-'dd' 23:59:59'"))); //DATEDIFF(year, NewsDate, @0)=0 AND DATEDIFF(month, NewsDate, @1)=0
+                //var employees = db.Query("Select * FROM business_EmployeesPersonal INNER JOIN business_schedule ON business_schedule.employeeid=business_EmployeesPersonal.email WHERE business_schedule.dept=@0 ORDER BY punchin DESC", department.deptid); // AND business_schedule.employeeid=business_EmployeesPersonal.employeenum
+                <tr class="departments @department.deptname">
+                    <th colspan="1" class="departments first_column" id="@department.deptname"><span name="@department.deptname" class="departments" id="@department.deptname-label">@department.deptname</span><!--<input name="@department.deptname" class="departments" id="@department.deptname-input" value="@department.deptname" readonly="">--></th>
+                    <td class="departments department.message" colspan="7">department.message</td>
+                    <th colspan="1" class="last_column">Dept Total: <span id="@department.deptname-wkhrs" class="wkhrs">#</span> <!--<input name="@department.deptname-wkhrs" value="" class="wkhrs" size="4" readonly=""><br />-->Hrs</th>
+                </tr>
+				var schedule = db.Query("Select * FROM business_schedule, business_EmployeesPersonal WHERE (punchin BETWEEN @0 AND @1) ORDER BY punchin ASC",DateTime.Parse(wkstart.ToString(@"yyyy'-'MM'-'dd' 00:00:00'")), DateTime.Parse(wkend.ToString(@"yyyy'-'MM'-'dd' 23:59:59'")));//DATEDIFF(day, business_schedule.punchin, @0)=0
+                //var this = department.id;
+                //queury database for departments 
+                //where employee in database is the same in department
+                foreach (var employee in employees) { 
+					emp_shift = new Dictionary<string, string> (); //employee-id, shift
+                    var i = 0; i++;
+                    //var info = db.QuerySingle("Select * FROM business_customer, business_EmployeesPersonal WHERE business_EmployeesPersonal.memberid=@0", employee.memberid);
+                    if (department.deptid == employee.dept){
+                        row_emp_hrs[employee.employeenum.ToString()] = TimeSpan.Zero;
+                        //total1[employee.memberid] = TimeSpan.Zero;
+                        //List<int> employee.memberid-hours = new List<int>(); //sum hours punch-hours for each name/i
+                        //i'll make a dictionary
+                        
+                <tr @{if (i % 2 == 0) {<text>class="even"</text>;} else {<text> class="odd"</text>;}}>                    
+                    <th colspan="1" class="first_column"name="@employee.employeenum" id="@employee.employeenum" style="text-transform: uppercase">@employee.firstname<br />@employee.lastname<br />@employee.employeenum</th>
+					@for(day = 1; day <= 7; day++){
+						DateTime day_date = wkstart.AddDays(day-1);
+						TimeSpan day_wkhrs = TimeSpan.Zero;
+						var getschedule = schedule.GetEnumerator();
+                        bool isScheduled = db.QueryValue("SELECT CAST( CASE WHEN DATEDIFF(day, business_schedule.punchin, @0) = 0 THEN 1 ELSE 0 END AS bit ) as isEmpty FROM business_schedule, business_EmployeesPersonal WHERE employeeid=@1 AND DEPT=@2 ORDER BY isEmpty DESC", day_date.Date, employee.employeeid, department.deptid) ?? false;
+						emp_shift[employee.employeenum.ToString()] = "";
+						//for each day under employee
+                    <td colspan="1" class="@if(day_date.Date==DateTime.Today){<text>today</text>} @("day"+day)"><div style="display: flex !important;">
+						@{//foreach (var dbschedule in schedule){
+						//TimeSpan punchin = TimeSpan.FromTicks(dbschedule.punchin.Ticks);
+						//TimeSpan punchout = TimeSpan.FromTicks(dbschedule.punchout.Ticks);
+                        /*var dbschedule = db.QuerySingle("Select * FROM business_schedule, business_EmployeesPersonal WHERE DATEDIFF(day, business_schedule.punchin, @0)=0 AND business_EmployeesPersonal.employeenum=@1 ORDER BY punchin DESC", day_date.ToString("d"), employee.employee);*/
+                        if (schedule != null && isScheduled /*&& dbschedule != null(dbschedule.employeenum==employee.employeenum && (DateTime)dbschedule.punchin.Date==day_date.Date)*/){
+						while (getschedule.MoveNext()){
+						var dbschedule = getschedule.Current;
+                        //foreach(var dItem in db.Query("Select * FROM business_schedule, business_employees WHERE business_schedule.date=@0 AND business_employees.memberid=@1", day1.ToString("d"), employee.memberid)){
+                        //var schedule = db.Query("Select * FROM business_schedule, business_employees WHERE business_schedule.date=@0 AND business_employees.memberid=@1", day1.ToString("d"), employee.memberid);
+                        //where date = day1 and employee
+                        //if(DateTime.Parse(dItem.date).ToString("d") == day1.ToString("d")){
+                        
+                        //var Item = db.QueryValue("Select _ FROM business_schedule, business_employees WHERE business_schedule.date=@0 AND business_employees.memberid=@1", day1.ToString("d"), employee.memberid);
+                        //DayOne[employee.memberid] = "";
+                        if(dbschedule.employeenum==employee.employeenum && dbschedule.punchin.Date==day_date.Date){//*-->
+                        //employeedic.Add(employee.memberid, dbhours1); //what if (employeeid, wkhrs) and each day i added to the work hours, using insert.id += workhours
+                        //day_wkhrs = punchout.Subtract(punchin);
+						//day_wkhrs = (TimeSpan)dbschedule.punchout.Subtract((DateTime)dbschedule.punchin);
+						day_wkhrs = TimeSpan.FromTicks(dbschedule.punchout.Subtract(dbschedule.punchin).Ticks);
+						if(day_wkhrs >= TimeSpan.FromHours(6)){day_wkhrs -= TimeSpan.FromMinutes(30);}
+                        row_emp_hrs[employee.employeenum.ToString()] = row_emp_hrs[employee.employeenum.ToString()].Add(day_wkhrs);
+						TimeSpan value = new TimeSpan();
+                        if(col_hrs.TryGetValue(day,out value)){col_hrs[day] = (TimeSpan)value.Add(day_wkhrs);}
+						else{col_hrs.Add(day,day_wkhrs);}
+						//col_hrs[day] = col_hrs.ContainsKey(day) ? (TimeSpan)col_hrs[day].Add(day_wkhrs) : (TimeSpan)col_hrs.Add(day,TimeSpan.Parse(day_wkhrs.ToString()));
+                        wkhrsvar = wkhrsvar.Add(col_hrs[day]);
+                        <div style="float: left;">
+                            <input name="@(employee.employeenum+"-punchin"+day)" type="time" value="@(dbschedule.punchin.TimeOfDay)" onchange="" placeholder="--:--:--" size="6" readonly="enabled"
+                                   class="@{/*if(.Minutes > 0){
+				                        pIn = dItem.punchin.AddHours(1);
+			                        }else{pIn = dItem.punchin;}*/
+									
+                                    if(dbschedule.punchin.TimeOfDay >= onight_s && dbschedule.punchin.TimeOfDay < open_s){//TimeSpan.FromDays(0/24)
+                                        //onight.Add(dbschedule.punchin);
+                                        emp_shift[employee.employeenum.ToString()] += "onight,";//= emp_shift[employee.employeenum.ToString()] + "onight,";
+				                        @:onight 
+                                    }
+		                            if(dbschedule.punchin.TimeOfDay >= open_s && dbschedule.punchin.TimeOfDay < mid_s){
+                                        //open.Add(dbschedule.punchin);
+                                        emp_shift[employee.employeenum.ToString()] = emp_shift[employee.employeenum.ToString()] + "open,";
+				                        @:open 
+			                        }
+			                        if(dbschedule.punchin.TimeOfDay >= mid_s && dbschedule.punchin.TimeOfDay < close_s){ 
+			                            //mid.Add(dbschedule.punchin);
+                                        emp_shift[employee.employeenum.ToString()] = emp_shift[employee.employeenum.ToString()] + "mid,";
+				                        @:mid 
+			                        }
+			                        if(dbschedule.punchin.TimeOfDay >= close_s && dbschedule.punchin.TimeOfDay < close_e){ 
+			                            //close.Add(dbschedule.punchin);
+                                        emp_shift[employee.employeenum.ToString()] = emp_shift[employee.employeenum.ToString()] + "close,";
+				                        @:clse 
+                                    }
+			                    }"/><br />
+                            <input name="@(employee.employeenum+"-punchout"+day)" type="time" value="@(dbschedule.punchout.TimeOfDay)" onchange="" placeholder="--:--:--" size="6" readonly="enabled"
+                                   class="@{/*if(dItem.punchout.Minutes > 0){
+				                        pOut = dItem.punchout.AddHours(1);
+			                        }else{pOut = dItem.punchout;}*/
+			
+                                    if(dbschedule.punchout.TimeOfDay >= onight_s && dbschedule.punchout.TimeOfDay < open_s){ 
+			                            //onight.Add(dbschedule.punchout);
+                                        emp_shift[employee.employeenum.ToString()] += "onight,";//= emp_shift[employee.employeenum.ToString()] + "onight,";
+				                        @:onight 
+			                        }
+		                            if(dbschedule.punchout.TimeOfDay >= open_s && dbschedule.punchout.TimeOfDay < mid_s){
+                                        //open.Add(dbschedule.punchout);
+                                        emp_shift[employee.employeenum.ToString()] = emp_shift[employee.employeenum.ToString()] + "open,";
+				                        @:open 
+			                        }
+			                        if(dbschedule.punchout.TimeOfDay >= mid_s && dbschedule.punchout.TimeOfDay < close_s){ 
+			                            //mid.Add(dbschedule.punchout);
+                                        emp_shift[employee.employeenum.ToString()] = emp_shift[employee.employeenum.ToString()] + "mid,";
+				                        @:mid 
+			                        }
+			                        if(dbschedule.punchout.TimeOfDay >= close_s && dbschedule.punchout.TimeOfDay <= close_e){ 
+			                            //close.Add(dbschedule.punchout);
+                                        emp_shift[employee.employeenum.ToString()] = emp_shift[employee.employeenum.ToString()] + "close,";
+				                        @:clse 
+                                    }
+			                    }"/>
+                                    @if(emp_shift[employee.employeenum.ToString()].Contains("close") && emp_shift[employee.employeenum.ToString()].Contains("open") ){emp_shift[employee.employeenum.ToString()] = emp_shift[employee.employeenum.ToString()] + "mid,";}
+									
+                            </div>
+                        <div class="hours" style="float: right;">
+                            <input name="@(employee.employeenum+"-day"+day+"hrs")" value="@day_wkhrs.TotalHours" onchange="" type="text" size="1" readonly="enabled" /><br />Hrs
+                        </div>}else{/*
+                            <input name="@(employee.employeenum+"-punchin"+day)" type="time" value="--:--:--" onchange="" placeholder="--:--:--" size="5"/><br />
+                            <input name="@(employee.employeenum+"-punchout"+day)" type="time" value="--:--:--" onchange="" placeholder="--:--:--" size="5"/>
+									*/}}}
+                        else{
+                            //TimeSpan.ParseExact(Item.punchin, "hh:mm:ss", null), Convert.ToDateTime(Item.punchin).TimeOfDay TimeSpan.Parse(Item.punchin) @Item.punchin, @dbschedule.punchin.Hours*@
+                        <div style="float: left;">
+                            <input name="@(employee.employeenum+"-punchin"+day)" type="time" value="--:--:--" onchange="" placeholder="--:--:--" size="5" readonly="enabled"/><br />
+                            <input name="@(employee.employeenum+"-punchout"+day)" type="time" value="--:--:--" onchange="" placeholder="--:--:--" size="5" readonly="enabled"/>
+                        </div>
+                        <div class="hours" style="float: right;">
+                            <input name="@(employee.employeenum+"-day"+day+"hrs")" value="@day_wkhrs.TotalHours" onchange="" type="text" size="1" readonly="enabled" /><br />Hrs
+                        </div>}}</div>
+                    </td>}@*
+                    <td class="@if(day2.Date==DateTime.Today){<text>today</text>} day2"><div style="float: left;"><input name="employeeid.punchin" type="time" value="--:--:--" onchange="" readonly="readonly" /><br /><input name="employeeid.punchout" value="00:00:00" onchange="" type="time" size="4" /></div><div class="hours" style="float: right;"><input name="employeeid.day1hrs" value="" onchange="" type="text" size="5" readonly="" /><br />Hrs</div></td>
+                    <td class="@if(day3.Date==DateTime.Today){<text>today</text>} day3"><div style="float: left;"><input name="employeeid.punchin" type="time" value="00:00:00" onchange="" /><br /><input name="employeeid.punchout" value="00:00:00" onchange="" type="time" size="4" /></div><div class="hours" style="float: right;"><input name="employeeid.day1hrs" value="" onchange="" type="text" size="4" readonly="" /><br />Hrs</div></td>
+                    <td class="@if(day4.Date==DateTime.Today){<text>today</text>} day4"><div style="float: left;"><input name="employeeid.punchin" type="time" value="00:00:00" onchange="" /><br /><input name="employeeid.punchout" value="00:00:00" onchange="" type="time" size="4" /></div><div class="hours" style="float: right;"><input name="employeeid.day1hrs" value="" onchange="" type="text" size="4" readonly="" /><br />Hrs</div></td>
+                    <td class="@if(day5.Date==DateTime.Today){<text>today</text>} day5"><div style="float: left;"><input name="employeeid.punchin" type="time" value="00:00:00" onchange="" /><br /><input name="employeeid.punchout" value="00:00:00" onchange="" type="time" size="4" /></div><div class="hours" style="float: right;"><input name="employeeid.day1hrs" value="" onchange="" type="text" size="4" readonly="" /><br />Hrs</div></td>
+                    <td class="@if(day6.Date==DateTime.Today){<text>today</text>} day6"><div style="float: left;"><input name="employeeid.punchin" type="time" value="00:00:00" onchange="" /><br /><input name="employeeid.punchout" value="00:00:00" onchange="" type="time" size="4" /></div><div class="hours" style="float: right;"><input name="employeeid.day1hrs" value="" onchange="" type="text" size="4" readonly="" /><br />Hrs</div></td>
+                    <td class="@if(day7.Date==DateTime.Today){<text>today</text>} day7"><div style="float: left;"><input name="employeeid.punchin" type="time" value="00:00:00" onchange="" /><br /><input name="employeeid.punchout" value="00:00:00" onchange="" type="time" size="4" /></div><div class="hours" style="float: right;"><input name="employeeid.day1hrs" value="" onchange="" type="text" size="4" readonly="" /><br />Hrs</div></td>*@
+                    <th colspan="1" class="last_column"><span name="@employee.employeenum-wkhrs" class="wkhrs">@{if(row_emp_hrs.ContainsKey(employee.employeenum.ToString())){@row_emp_hrs[employee.employeenum.ToString()].TotalHours}else{<text>0.00</text>}}</span><!--<input name="@employee.employeenum-wkhrs" class="wkhrs" type="text" size="4" value="@{if(row_emp_hrs.ContainsKey(employee.employeenum.ToString())){row_emp_hrs[employee.employeenum.ToString()].ToString("h'.'mm");}else{<text>0.00</text>}}" readonly="" />--><br />Hrs</th>
+                </tr>}
+					 //shift_collection.Add(day,emp_shift);
+                    }
+                }
+}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="1" class="first_column">Total <br />Employees: <br />@row_emp_hrs.Count</th>
+					@for(day = 1; day <= 7; day++){
+						DateTime foot_date = wkstart.AddDays(day-1);
+                    <td colspan="1" class="total @("day"+day) @if(foot_date.Date==DateTime.Today){<text>today</text>}">
+                        <div class="open total @("day"+day)">Open: <span>@emp_shift.Where(x => x.Value.Contains("open")).Count()</span><!--<br /><input name="@("day"+day+"open")" type="text" size="2" value="@DayOne.Where(x => x.Value.Contains("open")).Count()" readonly="" />--></div>
+                        <div class="mid total @("day"+day)">Mid: <span>@emp_shift.Where(x => x.Value.Contains("mid")).Count()</span><!--<br /><input name="@("day"+day+"mid")" type="text" size="2" value="@DayOne.Where(x => x.Value.Contains("mid")).Count()" readonly="" />--></div>
+                        <div class="clse total @("day"+day)">Close: <span>@emp_shift.Where(x => x.Value.Contains("close")).Count()</span><!--<br /><input name="@("day"+day+"close")" type="text" size="2" value="@DayOne.Where(x => x.Value.Contains("close")).Count()" readonly="" />--></div>
+                        <div class="hours total @("day"+day)">Hours: <span>@{if(col_hrs.ContainsKey(day)){@col_hrs[day].TotalHours}else{<text>0</text>}}</span><!--<br /><input name="@("day"+day+"hours")" type="text" size="3" value="@{if(col_hrs.ContainsKey(day)){col_hrs[day].ToString("h'.'mm");}else{<text>0.00</text>}}" readonly="" />--></div>
+                    </td>}@*
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>
+                    <td class="total"><div class="open total">Open:<br /><input name="day1open" type="text" size="2" readonly="" /></div>
+                        <div class="mid total">Mid:<br /><input name="day1mid" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Close:<br /><input name="day1close" type="text" size="2" readonly="" /></div>
+                        <div class="close total">Hours:<br /><input name="day1hours" type="text" size="3" readonly="" /></div>
+                    </td>*@
+                    <th colspan="1" class="last_column total">Total: <span>@wkhrsvar.TotalHours</span><!--<br /><input name="totalhours" type="text" size="3" readonly="" value="@wkhrsvar.ToString("h'.'mm")" />--></th>
+                </tr>
+            </tfoot>
+        </table>
+        </form>
+									</div>  
+
+                            </div> 
+                        </div>
+                    </div>
+                </div> <!-- end row -->
+    @*</body>
+</html>*@

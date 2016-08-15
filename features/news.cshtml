@@ -1,0 +1,80 @@
+@{
+    //Layout = "~/Layouts/Template/features.cshtml";
+    /*Page.Title = "News and Announcements";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}*/
+}
+@*<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" ><!-- InstanceBegin template="/Templates/Features.dwt" codeOutsideHTMLIsLocked="false" --> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" >
+<!--<![endif]-->
+  <head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- InstanceBeginEditable name="doctitle" --><title></title><!-- InstanceEndEditable --><!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+	
+    {module_contentholder, name="_Template - Head Scripts"}
+    @RenderPage("~/_System/ContentHolders/_Template - Head Scripts.cshtml")
+	
+  </head>
+  <body id="top" class="thebg two-column">
+    
+    <!-- Header -->	
+	{module_contentholder, name="_Template - Header"}
+	<!-- /Header -->
+	
+	<div class="clearfix"></div>		
+
+	<!-- Content -->
+	<div class="container page-top">
+		
+		<!-- MAIN Content -->
+		<div class="col-md-8 pagecontainer content-pad">
+			
+			*@<!-- InstanceBeginEditable name="ContentArea" --><h1>Latest News</h1>
+<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+<hr />
+<!--{module_announcement,a,}-->
+@RenderPage("~/Layouts/Announcement/list.cshtml")
+<!-- InstanceEndEditable -->@*
+			
+		</div>
+		<!-- /MAIN Content -->
+		
+		<!-- Sidebar Content -->
+		<div class="col-md-4 sidebar">
+		
+			<!-- Features Sidenav -->	
+			{module_contentholder, name="_Sidebar - Nav - Features"}
+			<!-- /Features Sidenav -->
+			
+			<!-- Deals -->	
+			{module_contentholder, name="_Sidebar - Deals"}
+			<!-- /Deals -->
+			
+			<!-- Help -->	
+			{module_contentholder, name="_Sidebar - Help"}
+			<!-- /Help -->
+			
+		</div>
+		<!-- /Sidebar Content -->
+			
+	</div>
+	<!-- /Content -->
+				
+	<!-- FOOTER -->
+	{module_contentholder, name="_Template - Footer"}
+	<!-- /FOOTER -->
+			
+	{module_contentholder, name="_Template - Footer Scripts"}
+	
+  </body>
+<!-- InstanceEnd --></html>*@

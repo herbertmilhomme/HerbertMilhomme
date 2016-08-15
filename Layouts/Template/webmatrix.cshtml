@@ -1,0 +1,53 @@
+﻿@RenderPage("~/ModuleTemplates/Forum/WhoIsOnline.cshtml")
+<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+    <head>
+		@RenderPage("~/_System/ContentHolders/_Template - Head Metatags.cshtml")
+        @RenderPage("~/_System/ContentHolders/_Template - Head Scripts - Uguru.cshtml")
+		<!-- Bootstrap -->
+		<link href="~/_assets/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+		@RenderSection("HeadCSS", required: false)
+    </head>
+
+    <body id="top">
+    @RenderSection("googlemanager", required: false)
+    
+        <!-- Header -->	
+	    <!--{module_contentholder, name="_Template - Header"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Header.cshtml")
+	    <!-- /Header -->		
+
+	    <!-- Page Title Header -->
+		<div class="bs-header">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12">
+						<h1>@Page.Title</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	    <!-- /Page Title -->
+
+	    <!-- Content -->
+		<section class="container">
+			@RenderBody()
+		</section>
+	    <!-- /Content -->
+				
+	    <!-- FOOTER -->
+	    <!--{module_contentholder, name="_Template - Footer"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer.cshtml")
+	    <!-- /FOOTER -->
+			
+	    <!--{module_contentholder, name="_Template - Footer Scripts - HomePg Only"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer Scripts - Uguru.cshtml")
+		@RenderSection("FooterJS", required: false)
+
+		@*RenderPage("~/_System/ContentHolders/_Template - AdsBanner.cshtml")*@	
+    </body>
+	<!-- InstanceEnd -->
+</html>

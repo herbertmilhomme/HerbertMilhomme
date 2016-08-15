@@ -1,0 +1,34 @@
+
+<div class="shop-main clear">  
+    <div class="header clear">  
+        <div class="breadcrumbs">You are here:&nbsp;
+			@for(var i = 0; i < UrlData.Count; i++){//{tag_cataloguebreadcrumbs}
+                if(i!=UrlData.Count){<a href="@for(int n=i;n!=0;n--){<text>/@UrlData[n]</text>}">@UrlData[i]</a>}else{@UrlData[i]}
+                    }
+		</div>
+        <div class="cart-summary">{module_shoppingcartsummary,horizontal}</div>
+    </div>  
+    <div class="body clear">
+		@if(UrlData.Count == 0){//shop intro services/products?
+            //{tag_cataloguelist,4} 
+			@RenderPage("~/Layouts/OnlineShop/catalogue.cshtml")
+		}else if(UrlData.Count == 1){//full selection or presentation (services/products)
+            //{tag_productlist,4}
+			@RenderPage("~/Layouts/OnlineShop/small_product.cshtml") //i think services should have different presentation from products
+		}else if(UrlData.Count == 2){//productdept catalog
+			@RenderPage("~/Layouts/OnlineShop/small_product.cshtml") 
+		}else if(UrlData.Count == 3){//productclass catalog
+			@RenderPage("~/Layouts/OnlineShop/small_product.cshtml") 
+		}else if(UrlData.Count == 4){//productid item display
+			@RenderPage("~/Layouts/OnlineShop/large_product.cshtml") 
+		}@*else{
+			<p>Problem loading page.</p>
+		}*@
+    </div>  
+    <div class="footer clear">
+        //QueryString to determine pages
+        {tag_previouspage,<img src="/CatalystImages/module_previous.png" alt="Previous" />} 
+        {tag_nextpage,<img src="/CatalystImages/module_next.png" alt="Next" />} <br><br>
+        {tag_pagination}
+    </div>
+</div>

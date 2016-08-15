@@ -1,0 +1,72 @@
+﻿@{
+	int numperpg = PageData[0];//10
+    int currentpage = 1;
+    int tag_counter = 0;
+	int total=PageData[1];// ? PageData[0] : Request.Form["TotalTagCount"];
+    if(Request.QueryString["page"] != null){
+        if(int.TryParse(Request.QueryString["page"], out currentpage)){
+            currentpage = (int)Request.QueryString["page"].AsInt();
+            if(currentpage >= (total / numperpg)){
+                currentpage = total / numperpg;
+            }
+            if(currentpage < 1){
+                currentpage = 1;
+            }
+            tag_counter = currentpage * numperpg;
+        }else{
+            Response.Redirect("?page=" + currentpage);
+        }
+    }
+}
+<nav>
+  <ul class="pager">
+    <!--//OLDEST-->
+	@if(tag_counter > numperpg){<li class="previous">
+      <a href="@Href("?page=1")" aria-label="Oldest" rel="first"><span aria-hidden="true">&larr;&larr;</span> Oldest</a>
+    </li>}else{<li  class="previous disabled">
+      <span>
+        <span aria-hidden="true">&larr;&larr;</span> Oldest
+      </span>
+    </li>}
+	<!--//OLDER-->
+	@if(tag_counter > numperpg){<li  class="previous">
+      <a href="@Href("?page=" + currentpage--)" aria-label="Older" rel="prev"><span aria-hidden="true">&larr;</span> Older</a>
+    </li>}else{<li class="previous disabled">
+      <span>
+        <span aria-hidden="true">&larr;</span> Older
+      </span>
+    </li>}
+	@*<!--//MINUS-5?-->
+	@if(currentpage-5<tag_counter / numperpg){<li>
+      <span><a href="@Href("?page=" + ((total / numperpg)-5))">@((total / numperpg)-5)</a></span>
+    </li>}
+	<!--//PAGE COUNT-->
+@for(int i = currentpage-2;i>0 && (i<currentpage+2||i<total);i++){//foreach(int i in total)){
+    if(currentpage==i){<li class="active">
+      <span>@i <span class="sr-only">(current)</span></span>
+    </li>}else{<li>
+      <span><a href="@Href("?page=" + i)">@i</a></span>
+    </li>}
+	}
+	<!--//PLUS-5?-->
+	@if(currentpage+5<total / numperpg){<li>
+      <span><a href="@Href("?page=" + ((total / numperpg)+5))">@((total / numperpg)+5)</a></span>
+    </li>}*@
+	<!--//NEWER-->
+    @if(tag_counter + numperpg < total){<li class="next">
+      <a href="@Href("?page=" + currentpage++)" aria-label="Newer"  rel="next">Newer <span aria-hidden="true">&rarr;</span></a>
+    </li>}else{<li class="next disabled">
+      <span>
+        Newer <span aria-hidden="true">&rarr;</span>
+      </span>
+    </li>}
+	<!--//NEWEST-->
+    @if(tag_counter + numperpg < total){<li class="next">
+      <a href="@Href("?page=" + (total / numperpg))" aria-label="Newest" rel="last">Newest <span aria-hidden="true">&rarr;</span></a>
+    </li>}else{<li class="next disabled">
+      <span>
+        Newest <span aria-hidden="true">&rarr;</span>
+      </span>
+    </li>}
+  </ul>
+</nav>

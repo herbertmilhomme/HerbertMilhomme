@@ -1,0 +1,79 @@
+﻿@{
+    // Set the layout page and page title
+    //Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Thanks for registering";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+}
+
+@if (!WebSecurity.IsAuthenticated) {
+    <hgroup class="title">
+        <h1>@Page.Title.</h1>
+        <h2>But you're not done yet!</h2>
+    </hgroup>
+
+    <p>
+       An email with instructions on how to activate your account is on its way to you.
+    </p>
+} else {
+
+    /*WebMail.Send(
+		to: email,
+		subject: "Thank you",
+		body: "Thank you for registering."
+	);*/
+	//create the mail message
+	MailMessage mail = new MailMessage();
+
+	//set the addresses
+	//mail.From = new MailAddress("me@mycompany.com");
+	//mail.To.Add("you@yourcompany.com");
+	//to specify a friendly 'from' name, we use a different ctor
+	mail.From = new MailAddress("system@ColonielHeights.com", "Coloniel Heights" );
+	//since the To,Cc, and Bcc accept addresses, we can use the same technique as the From address
+	mail.To.Add( new MailAddress( email, firstname + " " + lastname) );
+	
+
+	//set the content
+	mail.Subject = "Thank you"; //"This is an email";
+
+	//first we create the Plain Text part
+	AlternateView plainView = AlternateView.CreateAlternateViewFromString("Thank you for registering.", null, "text/plain");
+	//then we create the Html part
+	AlternateView htmlView = AlternateView.CreateAlternateViewFromString("Thank you for registering.", null, "text/html");
+	mail.AlternateViews.Add(plainView);
+	mail.AlternateViews.Add(htmlView);
+
+	//specify the priority of the mail message
+	mail.ReplyTo = new MailAddress("herbertmilhomme@ColonielHeights.com", "Herbert M.");
+	//specify the priority of the mail message
+	mail.Priority = MailPriority.High;
+
+	/*
+	System.Net.Configuration.MailSettingsSectionGroup mMailSettings;
+
+	int mPort = mMailSettings.Smtp.Network.Port;
+	string mHost = mMailSettings.Smtp.Network.Host;
+	string mPassword = mMailSettings.Smtp.Network.Password;
+	string mUsername = mMailSettings.Smtp.Network.Username;
+	*/
+	//send the message
+	SmtpClient smtp = new SmtpClient("smtp.gmail.com"); //specify the mail server address
+	smtp.Send(mail);
+
+    <hgroup class="title">
+        <h1>@Page.Title.</h1>
+        <h2>You are all set.</h2>
+    </hgroup>
+
+    <p>
+        It looks like you've already confirmed your account and are good to go.
+    </p>
+}

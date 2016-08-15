@@ -1,0 +1,195 @@
+@{
+    //Layout = "~/Layouts/Template/features.cshtml";
+    //Page.Title = "Features";
+	/*if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}*/
+	//Response.Redirect("~/features/sample");
+}
+@*<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" ><!-- InstanceBegin template="/Templates/Features.dwt" codeOutsideHTMLIsLocked="false" --> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" >
+<!--<![endif]-->
+  <head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- InstanceBeginEditable name="doctitle" --><title></title><!-- InstanceEndEditable --><!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+	
+    {module_contentholder, name="_Template - Head Scripts"}
+	
+  </head>
+  <body id="top" class="thebg two-column">
+    
+    <!-- Header -->	
+	{module_contentholder, name="_Template - Header"}
+	<!-- /Header -->
+	
+	<div class="clearfix"></div>		
+
+	<!-- Content -->
+	<div class="container page-top">
+		
+		<!-- MAIN Content -->
+		<div class="col-md-8 pagecontainer content-pad">
+			
+			*@<!-- InstanceBeginEditable name="ContentArea" --><h1>This is an H1 headline.</h1>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor aliquam felis, sit amet tempus nibh ullamcorper nec. Maecenas suscipit dolor at blandit congue. Sed adipiscing, odio feugiat pellentesque tincidunt, est leo vestibulum erat, ac pharetra massa justo ac lorem. Libero temporibus assumenda vel animi numquam ut vero quaerat soluta illum odit. Quia aliquid ipsam nesciunt necessitatibus pariatur debitis earum quis.</p>
+<div class="row">
+<a href="#" class="thumbnail left img-floatL" style="margin: 0 20px 10px 0;	float: left;">
+<img alt="" src="http://placehold.it/180x150&amp;text=Image" />
+</a>
+<p><a href="#">This is a link inline with text</a>. Ipsa aspernatur ex libero cupiditate possimus blanditiis quas molestiae sint animi expedita? Vitae ipsum sit ratione autem blanditiis ipsa nihil soluta eos ut praesentium quas non eaque inventore velit in! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nullam auctor aliquam felis, sit amet tempus nibh ullamcorper nec. Aut hic cupiditate nisi quidem quaerat beatae accusantium odit explicabo quisquam eos tenetur consequuntur maxime nulla sapiente soluta dolorum aspernatur provident modi error iure recusandae nobis praesentium impedit. Modi cumque.</p>
+</div>
+<h2>This would be an H2 headline size.</h2>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor aliquam felis, sit amet tempus nibh ullamcorper nec. Maecenas suscipit dolor at blandit congue. Sed adipiscing, odio feugiat pellentesque tincidunt, est leo vestibulum erat, ac pharetra massa justo ac lorem. Libero temporibus assumenda vel animi numquam ut vero quaerat soluta illum odit. Quia aliquid ipsam nesciunt necessitatibus pariatur debitis earum quis.</p>
+<h3>This would be an H3 headline size.</h3>
+<p>Ipsa aspernatur ex libero cupiditate possimus blanditiis quas molestiae sint animi expedita? Vitae ipsum sit ratione autem blanditiis ipsa nihil soluta.</p>
+<p><strong>This is a bullet list:</strong></p>
+<ul>
+    <li>Item 1 - Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+    <li>Item 2 - Sed adipiscing, odio feugiat pellentesque tincidunt.</li>
+    <li>Item 3 - Quia aliquid ipsam nesciunt necessitatibus pariatur.</li>
+    <li>Item 4 - Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+    <li>Item 5 - Sed adipiscing, odio feugiat pellentesque tincidunt.</li>
+</ul>
+<h4>This would be an H4 headline size.</h4>
+<p>Ipsa aspernatur ex libero cupiditate possimus blanditiis quas molestiae sint animi expedita? Vitae ipsum sit ratione autem blanditiis ipsa nihil soluta.</p>
+<h5>This would be an H5 headline size.</h5>
+<h6>This would be an H6 headline size.</h6>
+<hr />
+<h3>Tabs</h3>
+<ul class="nav nav-tabs nav-justified" id="myTab">
+    <li role="presentation" class="active">
+    <a aria-controls="summery" data-toggle="tab" href="#summary"><span><em class="icon-info-sign"></em></span><span class="hidetext">Summary</span>&nbsp;</a>
+    </li>
+    <li role="presentation" >
+    <a aria-controls="preferences" data-toggle="tab" href="#preferences"><span><em class="icon-ok-sign"></em></span><span class="hidetext">Preferences</span>&nbsp;</a>
+    </li>
+    <li role="presentation" >
+    <a aria-controls="maps" data-toggle="tab" href="#maps"><span><em class="icon-map-marker"></em></span><span class="hidetext">Maps</span>&nbsp;</a>
+    </li>
+    <li role="presentation" >
+    <a aria-controls="comments" data-toggle="tab" href="#comments"><span><em class="icon-comment"></em></span><span class="hidetext">Comments</span>&nbsp;</a>
+    </li>
+</ul>
+<div class="tab-content tab-content4">
+<!-- TAB 1 -->
+<div role="tabpanel" id="summary" class="tab-pane fade active in">
+<div class="hpadding20">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor aliquam felis, sit amet tempus nibh ullamcorper nec. Maecenas suscipit dolor at blandit congue. Sed adipiscing, odio feugiat pellentesque tincidunt, est leo vestibulum erat, ac pharetra massa justo ac lorem.</p>
+<p>Libero temporibus assumenda vel animi numquam ut vero quaerat soluta illum odit. Quia aliquid ipsam nesciunt necessitatibus pariatur debitis earum quis. Nam.</p>
+<p>Ipsa aspernatur ex libero cupiditate possimus blanditiis quas molestiae sint animi expedita? Vitae ipsum sit ratione autem blanditiis ipsa nihil soluta eos ut praesentium quas non eaque inventore velit in! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nullam auctor aliquam felis, sit amet tempus nibh ullamcorper nec.</p>
+<p>Aut hic cupiditate nisi quidem quaerat beatae accusantium odit explicabo quisquam eos tenetur consequuntur maxime nulla sapiente soluta dolorum aspernatur provident modi error iure recusandae nobis praesentium impedit. Modi cumque.</p>
+</div>
+</div>
+<!-- TAB 2 -->
+<div role="tabpanel" id="preferences" class="tab-pane fade">
+<div class="hpadding20">
+<p>Libero temporibus assumenda vel animi numquam ut vero quaerat soluta illum odit. Quia aliquid ipsam nesciunt necessitatibus pariatur debitis earum quis. Ipsa aspernatur ex libero cupiditate possimus blanditiis quas molestiae sint animi expedita? Vitae ipsum sit ratione autem blanditiis ipsa nihil soluta eos ut praesentium quas non eaque inventore velit in! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nullam auctor aliquam felis, sit amet tempus nibh ullamcorper nec.</p>
+<p>Aut hic cupiditate nisi quidem quaerat beatae accusantium odit explicabo quisquam eos tenetur consequuntur maxime nulla sapiente soluta dolorum aspernatur provident modi error iure recusandae nobis praesentium impedit. Modi cumque.</p>
+</div>
+</div>
+<!-- TAB 3 -->
+<div role="tabpanel" id="maps" class="tab-pane fade">
+<div class="hpadding20">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor aliquam felis, sit amet tempus nibh ullamcorper nec. Maecenas suscipit dolor at blandit congue. Sed adipiscing, odio feugiat pellentesque tincidunt, est leo vestibulum erat, ac pharetra massa justo ac lorem.</p>
+<p>Libero temporibus assumenda vel animi numquam ut vero quaerat soluta illum odit. Quia aliquid ipsam nesciunt necessitatibus pariatur debitis earum quis. Nam.</p>
+<p>Ipsa aspernatur ex libero cupiditate possimus blanditiis quas molestiae sint animi expedita? Vitae ipsum sit ratione autem blanditiis ipsa nihil soluta eos ut praesentium quas non eaque inventore velit in! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nullam auctor aliquam felis, sit amet tempus nibh ullamcorper nec.</p>
+<p>Aut hic cupiditate nisi quidem quaerat beatae accusantium odit explicabo quisquam eos tenetur consequuntur maxime nulla sapiente soluta dolorum aspernatur provident modi error iure recusandae nobis praesentium impedit. Modi cumque.</p>
+</div>
+</div>
+<!-- TAB 4 -->
+<div role="tabpanel" id="comments" class="tab-pane fade">
+<div class="hpadding20">
+<p>Libero temporibus assumenda vel animi numquam ut vero quaerat soluta illum odit. Quia aliquid ipsam nesciunt necessitatibus pariatur debitis earum quis. Ipsa aspernatur ex libero cupiditate possimus blanditiis quas molestiae sint animi expedita? Vitae ipsum sit ratione autem blanditiis ipsa nihil soluta eos ut praesentium quas non eaque inventore velit in! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nullam auctor aliquam felis, sit amet tempus nibh ullamcorper nec.</p>
+<p>Aut hic cupiditate nisi quidem quaerat beatae accusantium odit explicabo quisquam eos tenetur consequuntur maxime nulla sapiente soluta dolorum aspernatur provident modi error iure recusandae nobis praesentium impedit. Modi cumque.</p>
+</div>
+</div>
+</div>
+<hr />
+<h3>Tables</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Username</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@@mdo</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@@fat</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>@@twitter</td>
+        </tr>
+    </tbody>
+</table>
+<hr />
+<h3>Alerts</h3>
+<div class="alert alert-success">
+<strong>Well done!</strong> You successfully read this important alert message.
+</div>
+<div class="alert alert-info">
+<strong>Heads up!</strong> This alert needs your attention, but it's not super important.
+</div>
+<div class="alert alert-warning">
+<strong>Warning!</strong> Best check yo self, you're not looking too good.
+</div>
+<div class="alert alert-danger">
+<strong>Oh snap!</strong> Change a few things up and try submitting again.
+</div>
+<!-- InstanceEndEditable -->@*
+			
+		</div>
+		<!-- /MAIN Content -->
+		
+		<!-- Sidebar Content -->
+		<div class="col-md-4 sidebar">
+		
+			<!-- Features Sidenav -->	
+			{module_contentholder, name="_Sidebar - Nav - Features"}
+			<!-- /Features Sidenav -->
+			
+			<!-- Deals -->	
+			{module_contentholder, name="_Sidebar - Deals"}
+			<!-- /Deals -->
+			
+			<!-- Help -->	
+			{module_contentholder, name="_Sidebar - Help"}
+			<!-- /Help -->
+			
+		</div>
+		<!-- /Sidebar Content -->
+			
+	</div>
+	<!-- /Content -->
+				
+	<!-- FOOTER -->
+	{module_contentholder, name="_Template - Footer"}
+	<!-- /FOOTER -->
+			
+	{module_contentholder, name="_Template - Footer Scripts"}
+	
+  </body>
+<!-- InstanceEnd --></html>*@

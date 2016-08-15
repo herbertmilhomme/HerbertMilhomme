@@ -1,0 +1,39 @@
+﻿<div class="feature-main">
+	<p>The images in your gallery should be the same size for the gallery images to align properly on all screen sizes.</p>
+    <link type="text/css" href="/CatalystStyles/lightbox.css?vs=b1884.r475844-phase1" rel="StyleSheet">
+	<script type="text/javascript" src="/CatalystScripts/Cache/lightbox2022.js?vs=b1884.r475844-phase1"></script>
+	<div id="photogalleryTable" class="row collapse">
+		<span>
+			<div class="medium-4 large-3 left">
+				<a onclick="myLightbox.start(this);return false;" rel="lightbox[710]" href="/_assets/img/gallery/gallery-1.jpg" title="">
+					<img src="/_assets/img/gallery/gallery-1.jpg?Action=thumbnail&amp;Width=420&amp;Height=420&amp;Algorithm=proportional&amp;USM=1" alt="" border="0">
+				</a>
+			</div>
+			<div class="medium-4 large-3 left"><a onclick="myLightbox.start(this);return false;" rel="lightbox[710]" href="/_assets/img/gallery/gallery-2.jpg" title=""><img src="/_assets/img/gallery/gallery-2.jpg?Action=thumbnail&amp;Width=420&amp;Height=420&amp;Algorithm=proportional&amp;USM=1" alt="" border="0"></a></div>
+			<div class="medium-4 large-3 left"><a onclick="myLightbox.start(this);return false;" rel="lightbox[710]" href="/_assets/img/gallery/gallery-3.jpg" title=""><img src="/_assets/img/gallery/gallery-3.jpg?Action=thumbnail&amp;Width=420&amp;Height=420&amp;Algorithm=proportional&amp;USM=1" alt="" border="0"></a></div>
+			<div class="medium-4 large-3 left"><a onclick="myLightbox.start(this);return false;" rel="lightbox[710]" href="/_assets/img/gallery/gallery-4.jpg" title=""><img src="/_assets/img/gallery/gallery-4.jpg?Action=thumbnail&amp;Width=420&amp;Height=420&amp;Algorithm=proportional&amp;USM=1" alt="" border="0"></a></div>
+		</span>
+		<span>
+			<div class="medium-4 large-3 left"><a onclick="myLightbox.start(this);return false;" rel="lightbox[710]" href="/_assets/img/gallery/gallery-5.jpg" title=""><img src="/_assets/img/gallery/gallery-5.jpg?Action=thumbnail&amp;Width=420&amp;Height=420&amp;Algorithm=proportional&amp;USM=1" alt="" border="0"></a></div>
+			<div class="medium-4 large-3 left"><a onclick="myLightbox.start(this);return false;" rel="lightbox[710]" href="/_assets/img/gallery/gallery-6.jpg" title=""><img src="/_assets/img/gallery/gallery-6.jpg?Action=thumbnail&amp;Width=420&amp;Height=420&amp;Algorithm=proportional&amp;USM=1" alt="" border="0"></a></div>
+			<div class="medium-4 large-3 left"><a onclick="myLightbox.start(this);return false;" rel="lightbox[710]" href="/_assets/img/gallery/gallery-7.jpg" title=""><img src="/_assets/img/gallery/gallery-7.jpg?Action=thumbnail&amp;Width=420&amp;Height=420&amp;Algorithm=proportional&amp;USM=1" alt="" border="0"></a></div>
+			<div class="medium-4 large-3 left"><a onclick="myLightbox.start(this);return false;" rel="lightbox[710]" href="/_assets/img/gallery/gallery-8.jpg" title=""><img src="/_assets/img/gallery/gallery-8.jpg?Action=thumbnail&amp;Width=420&amp;Height=420&amp;Algorithm=proportional&amp;USM=1" alt="" border="0"></a></div>
+		</span>
+		<span></span>
+	</div> 
+
+</div>
+
+
+<script src="/_assets/js/jquery-1.11.1.min.js"></script>
+<script>
+    //responsive photogallery
+$('table.photogalleryTable').replaceWith($('table.photogalleryTable').html()
+   .replace(/<tbody/gi, "<div id='photogalleryTable' class='row collapse'")
+   .replace(/<tr/gi, "<span")
+   .replace(/<\/tr>/gi, "</span>")
+   .replace(/<td class="photogalleryItem"/gi, "<div class='medium-4 large-3 left'")
+   .replace(/<\/td>/gi, "</div>")
+   .replace(/<\/tbody/gi, "<\/div")
+);
+</script>

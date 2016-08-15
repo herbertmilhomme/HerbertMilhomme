@@ -1,0 +1,64 @@
+﻿@{
+    /*if (!WebSecurity.IsAuthenticated) {
+        Response.Redirect("~/Account/Login?returnUrl="
+            + Request.Url.LocalPath);
+    }*/
+
+    Layout = "~/_MemberSiteLayout.cshtml";
+    //PageData["Title"] = "Administrators only";
+
+    var db = Database.Open("StarterSite");
+    var selectQueryString = "SELECT * FROM business_Customer WHERE CustomerID=2";
+}
+
+    <span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member Profile</title>
+    <style type="text/css">
+        table, th, td {
+          border: solid 1px #bbbbbb;
+          border-collapse: collapse;
+          padding: 2px;
+        }
+    </style>
+</head>
+<body>
+    <h1>View My Account Profile</h1>
+    <table>
+      <thead>
+        <tr>
+          <!--<th>&nbsp;</th>-->
+          <th>First Name</hd>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Mobile Number</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Zip/Postal Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var row in db.QuerySingle(selectQueryString)) {
+          <tr>
+            <!--<td>@row.EmployeeNumber</td>-->
+            <td><a href="@Href("~/UpdateMemberProfile", row.Id)">@row.MemberID</a></td>
+            <td>@row.FirstName</td>
+            <td>@row.LastName</td>
+            <td>@row.Email</td>
+            <td>@row.PhoneNumber</td>
+            <td>@row.MobileNumber</td>
+            <td>@row.Address</td>
+            <td>@row.City</td>
+            <td>@row.State</td>
+            <td>@row.ZipPostalCode</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+</body>
+</html>

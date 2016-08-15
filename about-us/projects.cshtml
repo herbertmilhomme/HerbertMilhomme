@@ -1,0 +1,90 @@
+﻿@{
+    //Layout = "~/Layouts/Template/about.cshtml";
+    Page.Title = "Projects";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+	}
+}
+@if(UrlData.Count == 0){//shop intro services/products?
+            //{tag_cataloguelist,4} 
+			@RenderPage("~/Layouts/Project/list.cshtml")
+		}else if(UrlData.Count == 1){//full selection or presentation (services/products)
+            //{tag_productlist,4}
+			@RenderPage("~/Layouts/Project/details.cshtml") //i think services should have different presentation from products
+		}@*else{
+			<p>Problem loading page.</p>
+		}*@
+@section HeadCSS{
+		<!-- Google-Fonts --
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic' rel='stylesheet'>
+
+        <!-- Bootstrap core CSS --
+        <link href="/_assets/css/bootstrap.min.css" rel="stylesheet">-->
+        <link href="/_assets/css/bootstrap-reset.css" rel="stylesheet">
+
+        <!--Animation css--
+        <link href="/_assets/css/animate.css" rel="stylesheet">
+
+        <!-- Custom styles for this template --
+        <link href="/_assets/css/style.css" rel="stylesheet">-->
+        <link href="/_assets/css/helper.css" rel="stylesheet">
+        <!--<link href="/_assets/css/style-responsive.css" rel="stylesheet" />-->
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+        <!--[if lt IE 9]>
+          <script src="/_assets/js/html5shiv.js"></script>
+          <script src="/_assets/js/respond.min.js"></script>
+        <![endif]-->
+	@*
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">	*@
+}
+@section FooterJS{
+    <!-- Mainly scripts -->
+    <script src="js/jquery-2.1.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+    <script src="js/plugins/pace/pace.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+
+            $('#loading-example-btn').click(function () {
+                btn = $(this);
+                simpleLoad(btn, true)
+
+                // Ajax example
+//                $.ajax().always(function () {
+//                    simpleLoad($(this), false)
+//                });
+
+                simpleLoad(btn, false)
+            });
+        });
+
+        function simpleLoad(btn, state) {
+            if (state) {
+                btn.children().addClass('fa-spin');
+                btn.contents().last().replaceWith(" Loading");
+            } else {
+                setTimeout(function () {
+                    btn.children().removeClass('fa-spin');
+                    btn.contents().last().replaceWith(" Refresh");
+                }, 2000);
+            }
+        }
+    </script>
+}

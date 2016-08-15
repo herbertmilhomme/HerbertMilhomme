@@ -1,0 +1,65 @@
+@{
+    var db = Database.Open("ColonielHeights");
+    IEnumerable<dynamic> posts = db.Query("SELECT * FROM website_forumpost WHERE remove='false'");
+    //IEnumerable<dynamic> threads=null;
+    int thread; //= UrlData[0];
+    if(UrlData[1] != null && UrlData[1] != ""){
+        if(int.TryParse(UrlData[1], out thread)){
+            if(thread < 1){
+                thread = 1;
+            }
+            //tag_counter = discussion * numperpg;
+            posts = db.Query("SELECT * FROM website_forumpost WHERE threadid=@0 AND remove='false'", thread);
+        }else{
+            //Response.Redirect("?SearchQuery=" + SearchQuery + "/" + discussion);
+            //posts = db.Query("SELECT * FROM website_forumpost WHERE threadid=@0 AND remove='false'", thread);
+            posts = db.Query("SELECT * FROM website_forumdiscussion as d, website_forumthread as t, website_forumpost as p WHERE t.topicname LIKE @0 AND t.Forumid=d.forumid AND t.[remove]='false'",UrlData[1].Replace("-"," "));
+            //posts = db.Query("SELECT * FROM website_forumpost WHERE threadid=@0 AND remove='false'", UrlData[1].Split("-")[0]);
+        }/*
+		if(WebSecurity.IsAuthenticated){
+			// Check if subscribe
+			bool subscribe = db.QueryValue("SELECT subscribe FROM website_forumthreadview WHERE threadid=@0 AND userid=@1", thread, WebSecurity.CurrentUserId);
+			if (subscribe == null) {
+				// Insert into view table
+				db.Execute("INSERT INTO website_forumthreadview (lastview, threadid, userid, viewed) VALUES (@0, @1, @2, @3)", DateTime.Now,thread,WebSecurity.CurrentUserId, true);
+			}else{db.Execute("UPDATE website_forumthreadview SET lastview=@0 WHERE threadid=@1 AND userid=@2",DateTime.Now, thread, WebSecurity.CurrentUserId);}
+		}*/
+    }//else{posts = db.Query("SELECT * FROM website_forumpost WHERE threadid=@0 AND remove='false'");}
+    //int Replies = 0;
+    //IEnumerable<dynamic> lastpost = null;
+
+    int numperpg = PageData[0];
+    int currentpage = posts.Count() / numperpg;//1;
+    int tag_counter = currentpage * numperpg;/*0;
+    if(Request.QueryString["page"] != null){
+        if(int.TryParse(Request.QueryString["page"], out currentpage)){
+            currentpage = (int)Request.QueryString["page"].AsInt();
+            if(currentpage >= (posts.Count() / numperpg)){
+                currentpage = posts.Count() / numperpg;
+            }
+            if(currentpage < 1){
+                currentpage = 1;
+            }
+            tag_counter = currentpage * numperpg;
+        }else{
+            Response.Redirect("?page=1"/* + currentpage*);
+        }*/
+    }
+@for(int i = tag_counter; i < posts.Count() && i < (numperpg+tag_counter); i++){
+<div class="post @if(WebSecurity.IsAuthenticated && WebSecurity.CurrentUserId==posts.ElementAt(i).userid){<text>user-post</text>}">   
+    <h2><time datetime="@posts.ElementAt(i).datepost">@posts.ElementAt(i).datepost</time></h2>
+    @if(posts.ElementAt(i).lastedit!=null){<time datetime="@posts.ElementAt(i).lastedit" class="lastedit">@posts.ElementAt(i).lastedit</time>}   
+    <table class="container" cellpadding="0" cellspacing="0">     
+        <tr class="content">      
+            <td class="author">       
+                <h3 class="name">@posts.ElementAt(i).userid</h3>       
+                <p class="total-posts">Posts: @db.QueryValue("SELECT count(*) FROM website_forumpost WHERE userid=@0", posts.ElementAt(i).userid)</p>      
+            </td>      
+            <td class="post">@posts.ElementAt(i).postmsg</td>     
+        </tr>     
+        <tr class="sub">      
+            <td class="attribute">&nbsp;</td>      
+            <td class="action"><a href="#">Reply</a></td>     
+        </tr>   
+    </table>  
+</div>}

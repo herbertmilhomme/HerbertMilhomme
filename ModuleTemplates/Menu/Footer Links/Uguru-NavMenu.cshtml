@@ -1,0 +1,62 @@
+﻿@{/*
+    var db = Database.Open("CH");
+    var navmenu = db.Query("SELECT * FROM tag_menuitemlabel");
+    var rootdir = db.Query("SELECT * FROM tag_menuitemlabel WHERE tag_menugroup = 'root'");*/
+
+    var db = Database.Open("ColonielHeights");
+    //var navmenu = db.Query("SELECT * FROM website_pages");
+    //var topnav = db.Query("SELECT * FROM website_pages WHERE parentD = 0 AND header = 'true'");
+    var botnav = db.Query("SELECT * FROM website_pages WHERE footer = 'true' AND everyone='true'");// ORDER BY Priority DESC
+}
+@*<!-- Footer Navigation -->
+        <nav id="nav" class="footerbg3black">			
+            <div class="container center">
+			    <div class="btm-links">*@
+				<ul class="list-inline">
+					@foreach(var item in botnav){
+                    if(/*item.priority==(float)"1.0"*/ item.parentD==0){<li><a href="@Href("/" + item.UrlPath + item.FileName)">@item.Name</a></li> <li>⋅</li>}
+					}
+				</ul>
+				<ul class="list-inline">
+					@foreach(var item in botnav){
+                    if(/*item.priority!=(float)"1.0"*/ item.parentD!=0){<li><a href="@Href("/" + item.UrlPath + item.FileName)">@item.Name</a></li> <li>⋅</li>}
+					}
+				</ul>
+				<p class="copyright text-center medium">Copyright &copy; Herbert Milhomme <script>var tD = new Date();var datestr =  tD.getFullYear();document.write(datestr);</script>. All Rights Reserved. <a href="/privacy">Privacy Policy</a></p>@*
+			</div>
+                <a href="#top" class="gotop scroll"><img src="~/_assets/images/spacer.png" alt="Click here to go to top"/></a>
+            </div>
+        </nav>
+@*        <footer><br>
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+		<hr>
+			<ul class="list-inline">
+				<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/home">Home</a></li>
+				<li>⋅</li>
+				<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/features">Features</a></li>
+				<li>⋅</li>
+				<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/shop">Shop</a></li>
+				<li>⋅</li>
+				<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/blog">Blog</a></li>
+				<li>⋅</li>
+				<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/contact">Contact</a></li>
+			</ul>
+			<ul class="list-inline">
+				<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/components">Components</a></li>
+				<li>⋅</li>
+				<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/grid">Grid</a></li>
+				<li>⋅</li>
+				<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/gallery">Photos</a></li>
+				<li>⋅</li>
+				<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/pricing">Pricing</a></li>
+				<li>⋅</li>
+				<li><a href="http://uguru-bootstrap-us.businesscatalyst.com/typography">Type</a></li>
+			</ul>
+
+			<p class="copyright text-center medium">Copyright © Company Name 2013. All Rights Reserved. <a href="http://uguru-bootstrap-us.businesscatalyst.com/privacy">Privacy Policy</a></p> 
+		</div>
+	</div>
+</div></footer>*@

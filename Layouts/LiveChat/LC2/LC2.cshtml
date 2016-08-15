@@ -1,0 +1,312 @@
+﻿@{
+	//Load Alias from Cookie
+	//Load Server from PageData
+		//if Alias is in cookie, no need to redirect to server
+		//SQL serverID with UrlData
+	//if( UrlData[1] == db.QuerySingle("SELECT * FROM website_livechatServer WHERE LOWER(servername) = LOWER(@0)", UrlData[1])) //Request.Url.LocalPath
+	//if (!Request["serverpass"].IsEmpty() && Request["serverpass"].Equals(PageData.ServerPass)){}//If pass required pass no match, then offer a modal redirect
+
+	//Private Msging TABS in the Same Server
+	var serverid = Database.Open("ColonielHeights").QueryValue("SELECT ServerID FROM website_livechatServer WHERE LOWER(servername) = LOWER(@0)", "/"+UrlData[0]);//QuerySingle for Pass
+	//If Pass, Redirect to Velonic Pass-LockPage
+	//If page loaded from server page, auto-fetch pass and continue
+}
+@Html.Hidden("serverpass", Request.Form["serverpass"])
+@Html.Hidden("servername", serverid, new Dictionary<string, object>(){{ "id", "servername"}})
+<script>onresize(requestPermissions());alert(hi);</script>
+<div class="col-lg-12">
+                        <!-- Chat -->
+                        <div class="portlet"><!-- /primary heading -->
+                            <div class="portlet-heading">
+                                <h3 class="portlet-title text-dark text-uppercase">
+                                    Chat Server : @UrlData[0]
+                                </h3>
+					<!--<form class="custom" id="frmMain">
+						<div class="form-group" id="notification">
+							<label class="col-sm-6 control-label">Notification</label>
+							<div class="col-sm-6 control-label">
+								<div class="toggle toggle-default"></div>
+							</div>--
+							<div class="col-sm-6 control-label">
+								<div class="toggle toggle-default" style="height: 20px; width: 50px;">
+									<div class="toggle-slide active">
+										<div class="toggle-inner" style="width: 80px; margin-left: 0px;">
+											<div id="chkGranted" class="toggle-on active" style="height: 20px; width: 40px; text-align: center; text-indent: -10px; line-height: 20px;">ON</script></div>
+											<div class="toggle-blob" style="height: 20px; width: 20px; margin-left: -10px;"></div>
+											<div id="chkDenied" class="toggle-off" style="height: 20px; width: 40px; margin-left: -10px; text-align: center; text-indent: 10px; line-height: 20px;">OFF</script></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--<div class="">
+							<h4><script>_("Permission")</script></h4>
+							<div class="switch round">
+								<input id="chkDenied" name="permission" type="radio" checked />
+								<label for="chkDenied" onclick="" data-lang="No" data-init-lang>No</script></label>
+
+								<input id="chkGranted" name="permission" type="radio" />
+								<label for="chkGranted" onclick="" data-lang="Yes" data-init-lang>Yes</script></label>
+							</div>
+						</div>
+					</form>-->
+                                <div class="portlet-widgets">
+                                    <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                    <span class="divider"></span>
+                                    <a data-toggle="collapse" data-parent="#accordion1" href="#portlet-3"><i class="ion-minus-round"></i></a><!--
+                                    <span class="divider"></span>
+                                    <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>-->
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div id="portlet-3" class="panel-collapse collapse in">
+                                <div class="portlet-body">
+                                    <div class="chat-conversation">
+                                        <ul id="conversation-list" class="conversation-list nicescroll" tabindex="5000" style="overflow-y: scroll; outline: none; height: 325px;">
+											@*<!--RenderPage("~/Layouts/LiveChat/LC2/msgs.cshtml", Database.Open("ColonielHeights").QueryValue("SELECT ServerID FROM website_livechatServer WHERE LOWER(servername) = LOWER(0)", UrlData[1]))
+											<!-- --
+                                            <li class="clearfix">
+                                                <div class="chat-avatar">
+                                                    <img src="/_assets/images/users/avatar-2.jpg" alt="male">
+                                                    <i>10:00</i>
+                                                </div>
+                                                <div class="conversation-text">
+                                                    <div class="ctext-wrap">
+                                                        <i>John Deo</i>
+                                                        <p>
+                                                            Hello!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="clearfix odd">
+                                                <div class="chat-avatar">
+                                                    <img src="/_assets/images/users/avatar-3.jpg" alt="Female">
+                                                    <i>10:01</i>
+                                                </div>
+                                                <div class="conversation-text">
+                                                    <div class="ctext-wrap">
+                                                        <i>Smith</i>
+                                                        <p>
+                                                            Hi, How are you? What about our next meeting?
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="clearfix">
+                                                <div class="chat-avatar">
+                                                    <img src="/_assets/images/users/avatar-2.jpg" alt="male">
+                                                    <i>10:01</i>
+                                                </div>
+                                                <div class="conversation-text">
+                                                    <div class="ctext-wrap">
+                                                        <i>John Deo</i>
+                                                        <p>
+                                                            Yeah everything is fine
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li id="0" name="0"  class="clearfix odd conversation-msg">
+                                                <div class="chat-avatar">
+                                                    <img src="/_assets/images/users/avatar-3.jpg" alt="male">
+                                                    <i>10:02</i>
+                                                </div>
+                                                <div class="conversation-text">
+                                                    <div class="ctext-wrap">
+                                                        <i>Smith</i>
+                                                        <p>
+                                                            Wow that's great
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </li>-->*@
+                                        </ul>
+										<div id="loading"></div>
+										<form id="PostMsg" method="post" class="" action="/Layouts/LiveChat/LC2/send?server=@serverid" onsubmit="return submitForm(this);">
+                                        <div class="row">
+                                            <div class="col-xs-9 chat-inputbar">
+                                                <input id="SendMsg" name="SendMsg" type="text" class="form-control chat-input" spellcheck="true" autocomplete="off" maxlength="255" placeholder="Enter your text" @*oninput="return updateDraft(this);"*@ />
+                                            </div>
+                                            <div class="col-xs-3 chat-send">
+                                                <button type="submit" id="sendbtn" class="btn btn-info">Send</button>
+                                            </div><!--
+											<div class="col-xs-12 chat-inputbar input-group">
+												<input type="text" id="SendMsg" name="SendMsg" spellcheck="true" @*value="@SendMsg"*@ placeholder="Enter text" autocomplete="off" maxlength="255"  class="form-control chat-input"/>
+												<span class="col-xs-3 chat-send input-group-btn">
+													<button type="submit" id="sendbtn" onclick="" class="btn btn-info" style="float: right;">Send</button>
+												</span>
+                                            </div>-->
+                                        </div>
+										</form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end Chat -->
+                    </div> <!-- end col-->
+
+@*<script>
+	function SubmitOnEnter() {
+		document.getElementById("SendMsg").addEventListener("keydown", function (e) {
+			if (!e) { var e = window.event; }
+			e.preventDefault(); // sometimes useful
+
+			// Enter is pressed
+			if (e.keyCode == 13) { document.getElementById("PostMsg").submit(); }
+		}, false);
+	}
+	//-----------------------------------------------------------------
+	/*
+	var frm = $('#PostMsg');
+    frm.submit(function (ev) {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+                //alert('ok');
+				document.getElementById("SendMsg").value = "";
+            }
+        });
+
+        ev.preventDefault();
+    });
+	*/
+	function submitForm(oFormElement)//
+			{
+				//var oFormElement = this.$chatInput.val();
+				var xhr = new XMLHttpRequest();
+				//xhr.onload = function(){ alert (xhr.responseText); }
+				if (oFormElement != "") {
+					xhr.open(oFormElement.method, oFormElement.action, true);
+					xhr.send(new FormData(oFormElement));
+				}else{ alert ("Oops... You forgot to enter your chat message"); }
+				return false;
+				document.getElementById("SendMsg").value = "";
+			} 
+	//-----------------------------------------------------------------
+	//while mouse is up, feed msgs into div
+	function showLiveMsgs() {//(str)
+		var msgTAGcount = document.getElementsByClassName('conversation-list li').length;
+		var msgTAG = document.getElementsByClassName('conversation-list li')[msgTAGcount-1].id;//getAttribute('id');
+		var msgSer = document.getElementById('servername').val();//.attr('value');
+		var xhttp; /*
+	            if (str == "") {
+	                document.getElementById("display-text").innerHTML = "";
+	                return;
+	            }*/
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function () {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				//document.getElementById("display-text").innerHTML = xhttp.responseText;
+				document.getElementById("display-text").appendChild(xhttp.responseText);
+			}
+		}
+		xhttp.open("GET", "/Layouts/LiveChat/LC2/msgs?server="+msgSer+"&tag="+msgTAG, true);
+		xhttp.send();/*
+			this.$chatList.scrollTo('100%', '100%', {
+				easing: 'swing'
+			});*/
+	}
+	/* --------------------------------------------------------- */
+    var scrolled = false
+    function updateScroll(){
+        if(!scrolled){
+            var element = document.getElementsByClassName("conversation-list");
+            element.scrollTop= element.scrollHeight;
+        }
+    }
+
+    document.getElementsByClassName("conversation-list").addEventListener('scroll', function(){
+        scrolled=true;
+    });
+	/* --------------------------------------------------------- */
+	var mousedownID = -1;  //Global ID of mouse down interval
+	function mousedown(event) {
+		if (mousedownID != -1) {  //Only stop if exists
+			clearInterval(mousedownID);
+			mousedownID = -1;
+		}
+	}
+	function mouseup(event) {
+		if (mousedownID == -1) {  //Prevent multiple loops!
+			mousedownID = setInterval(showLiveMsgs, 500 /*execute every 500ms*/);
+		}
+	}
+	//Assign events
+	document.addEventListener("mousedown", mousedown);
+	document.addEventListener("mouseup", mouseup);
+	//Also clear the interval when user leaves the window with mouse
+	document.addEventListener("mouseout", mousedown);
+	//document.addEventListener("pageshow", mouseup);
+	//document.addEventListener("onload", mouseup);
+	//window.onload = mouseup;
+	var evt = document.createEvent("MouseEvents");
+	evt.initEvent("mouseup", true, true);
+	document.dispatchEvent(evt);
+
+	/* Click to Join 
+	var timeout, clicker = $('#chat-window');
+	//var count = 0;
+
+	clicker.mouseup(function () {
+		timeout = setInterval(function () {
+			//clicker.text(count++);
+			showLiveMsgs();
+		}, 100); //500
+
+		return false;
+	});
+
+	$(document).mousedown(function () {
+		clearInterval(timeout);
+		return false;
+	});*/
+</script>
+@*
+@section HeadCSS{
+		<!-- Google-Fonts --
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic' rel='stylesheet'>
+
+        <!-- Bootstrap core CSS -->
+        <link href="/_assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/_assets/css/bootstrap-reset.css" rel="stylesheet">
+
+        <!--Animation css-->
+        <link href="/_assets/css/animate.css" rel="stylesheet">
+
+        <!--Icon-fonts css-->
+        <link href="/_assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link href="/_assets/ionicon/css/ionicons.min.css" rel="stylesheet" />
+
+        <!--Morris Chart CSS --
+        <link href="/_assets/morris/morris.css" rel="stylesheet">
+
+        <!-- sweet alerts -->
+        <link href="/_assets/sweet-alert/sweet-alert.min.css" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="/_assets/css/style.css" rel="stylesheet">
+        <link href="/_assets/css/helper.css" rel="stylesheet">
+        <link href="/_assets/css/style-responsive.css" rel="stylesheet" />
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+        <!--[if lt IE 9]>
+          <script src="/_assets/js/html5shiv.js"></script>
+          <script src="/_assets/js/respond.min.js"></script>
+        <![endif]-->
+}
+@section FooterJS{
+		<!-- js placed at the end of the document so the pages load faster -->
+        <script src="/_assets/js/jquery.js"></script>
+        <script src="/_assets/js/bootstrap.min.js"></script>
+        <script src="/_assets/js/modernizr.min.js"></script>
+        <script src="/_assets/js/pace.min.js"></script>
+        <script src="/_assets/js/wow.min.js"></script>
+        <script src="/_assets/js/jquery.scrollTo.min.js"></script>
+        <script src="/_assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="/_assets/chat/moment-2.2.1.js"></script>
+
+        <!-- Chat -->
+        <script src="/_assets/js/jquery.chat.js"></script>
+}*@

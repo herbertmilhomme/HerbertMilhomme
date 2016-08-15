@@ -1,0 +1,55 @@
+﻿@{
+	/*
+	CREATE TABLE [dbo].[MailBox](
+	[MailID] [bigint] IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	[MailTo] [int] NULL,
+	[MailFrom] [int] NULL,
+	[MailSub] [varchar](25) NULL,
+	[MailMsg] [varchar](4000) NULL,
+	[MailPostDate] [datetime] DEFAULT (getdate()) NULL,
+	[Report] [bit] NULL,
+	[ReportReason] [int] NULL,
+	[Read] [bit] DEFAULT ((0)) NULL,
+	[Attachment][bit] DEFAULT ((0))  NULL,
+	[Draft] [bit] DEFAULT ((1)) NULL
+	//Starred
+	//Delete
+	)
+	*/
+	//Session.SessionID.
+	
+	int inbox = (int)Database.Open("ServerDB").QueryValue("SELECT count(*) FROM MailBox WHERE DRAFT='false' AND [Read]='false' AND MailTo=@0", WebSecurity.CurrentUserId);// || 0;
+	var db = Database.Open("ColonielHeights");
+	int msgs = (int)db.QueryValue("SELECT COUNT(UserID) AS count FROM website_livechat WHERE sent='true' AND recipientuserid=@0", WebSecurity.CurrentUserId);// || 0;
+	//if transfering over to SQL-Azure trigger
+	//int posts = db.QueryValue("SELECT count(threadid) FROM website_forumthreadview WHERE viewed='false' AND subscribe='true' AND remove='false'");// || 0;
+	//int thread = db.QueryValue("SELECT count(forumid) FROM website_forumdiscussionview WHERE viewed='false' AND subscribe='true' AND remove='false'");// || 0;
+
+	//var lastpost = db.QuerySingle("SELECT *, CASE WHEN DatePost < COALESCE(LastEdit,'') THEN LastEdit ELSE DatePost END AS MostRecent FROM website_forumpost WHERE threadID=@0 ORDER BY mostrecent desc", topics.threadid);
+	//--Count each thread where PostDate was greater than LastViewed
+	int post = db.QueryValue("SELECT count(*)"+ /* //count(threadid)
+	"CASE "+
+		"WHEN website_forumpost.DatePost < COALESCE(website_forumpost.LastEdit,'') "+
+		"THEN website_forumpost.LastEdit "+
+		"ELSE website_forumpost.DatePost "+
+	"END AS MostRecent "+ */
+	"FROM website_forumthreadview as v JOIN website_forumpost as p ON (v.ThreadID=p.threadid)"+
+	"WHERE (v.lastview<p.LastEdit OR v.lastview<p.DatePost)"+
+	//"AND v.ThreadID=p.threadid"+
+	"AND v.[subscribe]='true' "+
+	"AND p.remove='false'" +
+	"AND v.userid=@0", WebSecurity.CurrentUserId);// || 0;
+	//--Count each thread where PostDate was greater than LastViewed
+	int thread = db.QueryValue("SELECT count(*) FROM website_forumdiscussionview as v JOIN website_forumdiscussion as d ON (v.forumid=d.forumid) WHERE v.lastview>d.PostDate AND v.subscribe='true' AND d.remove='false' AND v.userid=@0", WebSecurity.CurrentUserId);// || 0;
+	int total = inbox + msgs + post + thread;
+	int bothCombined = post + thread;
+}
+@if(total!=0){<ul class="nav nav-pills" role="tablist">
+	<li id="notify-all" role="presentation"><a href="#">Notifications <span class="badge">@total</span></a></li>
+    @if(inbox!=0){<li id="notify-inbox" role="presentation"><a href="#">Inbox <span class="badge">@inbox</span></a></li>}
+    @if(msgs!=0){<li id="notify-msgs" role="presentation"><a href="#">Chat <span class="badge">@msgs</span></a></li>}
+    @if(total!=0){<li id="notify-friends" role="presentation"><a href="#">Friend Requests <span class="badge"></span></a></li>}
+    @if(bothCombined!=0){<li id="notify-forum" role="presentation"><a href="#">Forum <span class="badge">@bothCombined</span></a></li>}
+    @if(thread!=0){<li id="notify-threads" class="indent" role="presentation"><a href="#">&nbsp;Topics <span class="badge">@thread</span></a></li>}
+    @if(post!=0){<li id="notify-posts" class="indent" role="presentation"><a href="#">&nbsp;Posts <span class="badge">@post</span></a></li>}
+</ul>}

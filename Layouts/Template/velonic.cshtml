@@ -1,0 +1,53 @@
+﻿@RenderPage("~/ModuleTemplates/Forum/WhoIsOnline.cshtml")
+<!DOCTYPE html><!--[if IE 8]> <html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+    <head>
+		@RenderPage("~/_System/ContentHolders/_Template - Head Metatags.cshtml")
+        @RenderPage("~/_System/ContentHolders/_Template - Head Scripts - Velonic.cshtml")
+		@RenderSection("HeadCSS", required: false)
+    </head>
+
+    <body>
+    @RenderSection("googlemanager", required: false)
+
+        <!-- Aside Start-->
+        @RenderPage("~/ModuleTemplates/Menu/Default/Velonic-CollapseNav.cshtml")
+        <!-- Aside Ends-->
+
+
+        <!--Main Content Start -->
+        <section class="content" style="padding-top: 51px;">
+            
+            <!-- Header -->
+            @RenderPage("~/_System/ContentHolders/_Template - Header - Velonic.cshtml")
+            <!-- Header Ends -->
+
+
+            <!-- Page Content Start -->
+            <!-- ================== -->
+            <div class="wraper container-fluid">
+                <div class="page-title"> 
+                    <h3 class="title">@Page.Title</h3> 
+                </div>
+				@RenderBody()
+            </div>
+            <!-- Page Content Ends -->
+            <!-- ================== -->
+
+            <!-- Footer Start --
+			RenderPage("~/_System/ContentHolders/_Template - Footer - Velonic.cshtml")-->
+			<footer class="footer"><p class="copyright text-center medium">Copyright &copy; Herbert Milhomme <script>var tD = new Date();var datestr =  tD.getFullYear();document.write(datestr);</script>. All Rights Reserved. <a href="/privacy">Privacy Policy</a></p></footer>
+            <!-- Footer Ends -->
+
+        </section>
+        <!-- Main Content Ends -->
+
+        <!-- js placed at the end of the document so the pages load faster -->
+		@RenderPage("~/_System/ContentHolders/_Template - Footer Scripts - Velonic.cshtml")
+		@RenderSection("FooterJS", required: false)
+
+		@*RenderPage("~/_System/ContentHolders/_Template - AdsBanner.cshtml")*@
+    </body>
+</html>

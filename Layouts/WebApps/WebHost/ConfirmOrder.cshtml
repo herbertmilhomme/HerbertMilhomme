@@ -1,0 +1,112 @@
+﻿@{
+    
+}
+
+<div class="col-xs-12 main-content">
+
+
+    <link rel="stylesheet" type="text/css" href="templates/orderforms/verticalsteps/style.css">
+    <script type="text/javascript" src="/assets/js/StatesDropdown.js"></script>
+    <script type="text/javascript" src="/assets/js/PasswordStrength.js"></script>
+    <script type="text/javascript" src="/assets/js/CreditCardValidation.js"></script>
+
+
+    <script language="javascript">
+function removeItem(type,num) {
+    var response = confirm("Are you sure you want to remove this item from your cart?");
+    if (response) {
+        window.location = 'cart.php?a=remove&r='+type+'&i='+num;
+    }
+}
+function emptyCart(type,num) {
+    var response = confirm("Are you sure you want to empty your shopping cart?");
+    if (response) {
+        window.location = 'cart.php?a=empty';
+    }
+}
+    </script>
+
+    <script>
+window.langPasswordStrength = "Password Strength";
+window.langPasswordWeak = "Weak";
+window.langPasswordModerate = "Moderate";
+window.langPasswordStrong = "Strong";
+    </script>
+
+    <div id="order-verticalsteps">
+
+        <div class="stepsbar">
+
+            <div class="step "><strong>Step 1</strong><br><a href="cart.php">Choose Product</a></div>
+
+            <div class="step "><strong>Step 2</strong><br>Domain Options</div>
+
+            <div class="step "><strong>Step 3</strong><br>Configure</div>
+
+            <div class="step active"><strong>Step 4</strong><br><a href="cart.php?a=view">Confirm Order</a></div>
+
+            <div class="step "><strong>Step 5</strong><br><a href="cart.php?a=checkout">Checkout</a></div>
+
+        </div>
+
+        <div class="maincontent">
+
+
+            <h1>Order Summary</h1>
+
+
+
+            <form method="post" action="/cart.php?a=view">
+                <input type="hidden" name="token" value="d112dab85b37c95cfbb302a1b88287e307d2af23">
+
+                <table class="styled">
+                    <tbody>
+                        <tr class="textcenter"><th width="70%">Description</th><th width="30%">Price</th></tr>
+
+                        <tr>
+                            <td>
+                                <strong><em>Cloud Hosting</em> - WebMatrix Express Hosting</strong> (herbertmilhomme.us)<br>
+                                <a href="/cart.php?a=confproduct&amp;i=0" class="cartedit">[Edit Configuration]</a> <a href="#" onclick="removeItem('p','0');return false" class="cartremove">[Remove]</a>
+                            </td>
+                            <td class="textcenter"><strong>$99.95</strong></td>
+                        </tr>
+
+
+                        <tr>
+                            <td>
+                                <strong>Domain Registration</strong> - herbertmilhomme.us - 1 Year/s<br>
+                                <a href="/cart.php?a=confdomains" class="cartedit">[Configure Domain Extras]</a> <a href="#" onclick="removeItem('d','0');return false" class="cartremove">[Remove]</a>
+                            </td>
+                            <td class="textcenter"><strong>$24.95</strong></td>
+                        </tr>
+
+
+
+                    </tbody>
+                </table>
+
+            </form>
+
+            <form method="post" action="/cart.php?a=view">
+                <input type="hidden" name="token" value="d112dab85b37c95cfbb302a1b88287e307d2af23">
+                <input type="hidden" name="validatepromo" value="true">
+                <p align="center"><strong>Promotional Code:</strong> webmatrix - $40.55 One Time Discount<br><a href="/cart.php?a=removepromo">Don't use Promotional Code</a></p>
+            </form>
+
+            <p align="center">
+                Subtotal: <b>$124.90</b><br>
+                $40.55 One Time Discount: <b>$40.55</b><br>Total Due Today: <b>$84.35</b><br>
+                Total Recurring: <b>$124.90 Annually<br></b>
+            </p>
+
+            <p align="center"><input type="button" value="« Start Over" onclick="window.location='cart.php?a=startover'"> <input type="button" value="Checkout »" onclick="window.location='cart.php?a=checkout'"></p>
+
+
+
+        </div>
+
+    </div>
+
+
+
+</div>

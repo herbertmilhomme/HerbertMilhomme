@@ -1,0 +1,769 @@
+﻿@{
+    
+}
+
+<div class="row">
+    <!-- Container for main page display content -->
+    <div class="col-xs-12 main-content">
+
+
+        <link rel="stylesheet" type="text/css" href="templates/orderforms/standard_cart/style.css">
+        <link href="assets/css/icheck/square/blue.css" rel="stylesheet">
+        <link href="assets/css/icheck/square/green.css" rel="stylesheet">
+        <script type="text/javascript" src="assets/js/icheck.js"></script>
+        <script type="text/javascript" src="templates/orderforms/standard_cart/base.js"></script>
+
+
+        <script>
+var _localLang = {
+    'addToCart': 'Add to Cart',
+    'addedToCartRemove': 'Added to Cart (Remove)'
+}
+        </script>
+
+        <div id="order-standard_cart">
+
+            <div class="row">
+
+                <div class="pull-md-right col-md-12">
+
+                    <div class="header-lined">
+                        <h1><font><font>The choice of configuration</font></font></h1>
+                    </div>
+
+                </div>
+
+                @*<div class="col-md-3 pull-md-left sidebar hidden-xs hidden-sm">
+
+                    <div menuitemname="Categories" class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-shopping-cart"></i><font>
+                                    <font>
+                                        &nbsp;
+
+                                        Categories
+
+                                    </font>
+                                </font>
+                            </h3>
+                        </div>
+
+
+                        <div class="list-group">
+                            <a menuitemname="PPA Products" href="cartec60.html?gid=27" class="list-group-item" id="Secondary_Sidebar-Categories-PPA_Products">
+                                <font>
+                                    <font>
+
+                                        PPA Products
+
+                                    </font>
+                                </font>
+                            </a>
+                            <a menuitemname="Standard Cloud Servers" href="carte3c3.html?gid=19" class="list-group-item" id="Secondary_Sidebar-Categories-Standard_Cloud_Servers">
+                                <font>
+                                    <font>
+
+                                        Standard Cloud Servers
+
+                                    </font>
+                                </font>
+                            </a>
+                            <a menuitemname="Clustered Cloud Servers" href="cartba5d.html?gid=2" class="list-group-item" id="Secondary_Sidebar-Categories-Clustered_Cloud_Servers">
+                                <font>
+                                    <font>
+
+                                        Clustered Cloud Servers
+
+                                    </font>
+                                </font>
+                            </a>
+                            <a menuitemname="SSL Certificates" href="cart7a49.html?gid=3" class="list-group-item" id="Secondary_Sidebar-Categories-SSL_Certificates">
+                                <font>
+                                    <font>
+
+                                        SSL Certificates
+
+                                    </font>
+                                </font>
+                            </a>
+                            <a menuitemname="Awesome AntiSpam" href="cartf10a.html?gid=20" class="list-group-item" id="Secondary_Sidebar-Categories-Awesome_AntiSpam">
+                                <font>
+                                    <font>
+
+                                        Awesome AntiSpam
+
+                                    </font>
+                                </font>
+                            </a>
+                            <a menuitemname="Network Solutions" href="cartd2a8.html?gid=18" class="list-group-item" id="Secondary_Sidebar-Categories-Network_Solutions">
+                                <font>
+                                    <font>
+
+                                        Network Solutions
+
+                                    </font>
+                                </font>
+                            </a>
+                            <a menuitemname="Cloud Sites (WAP)" href="cart53da.html?gid=22" class="list-group-item" id="Secondary_Sidebar-Categories-Cloud_Sites_(WAP)">
+                                <font>
+                                    <font>
+
+                                        Cloud Sites (WAP)
+
+                                    </font>
+                                </font>
+                            </a>
+                            <a menuitemname="Dedicated Servers" href="cartda4c.html?gid=17" class="list-group-item" id="Secondary_Sidebar-Categories-Dedicated_Servers">
+                                <font>
+                                    <font>
+
+                                        Dedicated Servers
+
+                                    </font>
+                                </font>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div menuitemname="Actions" class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-plus"></i>&nbsp;
+
+                                Actions
+
+                            </h3>
+                        </div>
+
+
+                        <div class="list-group">
+                            <a menuitemname="Domain Renewals" href="cart697f.html?gid=renewals" class="list-group-item" id="Secondary_Sidebar-Actions-Domain_Renewals">
+                                <i class="fa fa-refresh fa-fw"></i><font>
+                                    <font>
+                                        &nbsp;
+
+                                        Continued domain
+
+                                    </font>
+                                </font>
+                            </a>
+                            <a menuitemname="Domain Registration" href="cart2029.html?a=add&amp;domain=register" class="list-group-item" id="Secondary_Sidebar-Actions-Domain_Registration">
+                                <i class="fa fa-globe fa-fw"></i><font>
+                                    <font>
+                                        &nbsp;
+
+                                        Register a domain
+
+                                    </font>
+                                </font>
+                            </a>
+                            <a menuitemname="Domain Transfer" href="cart7c76.html?a=add&amp;domain=transfer" class="list-group-item" id="Secondary_Sidebar-Actions-Domain_Transfer">
+                                <i class="fa fa-share fa-fw"></i>&nbsp;
+
+                                Transfer in a Domain
+
+                            </a>
+                            <a menuitemname="View Cart" href="cart14c8.html?a=view" class="list-group-item" id="Secondary_Sidebar-Actions-View_Cart">
+                                <i class="fa fa-shopping-cart fa-fw"></i><font>
+                                    <font>
+                                        &nbsp;
+
+                                        Browse cart
+
+                                    </font>
+                                </font>
+                            </a>
+                        </div>
+
+                    </div>
+
+
+
+                </div>*@
+
+                <div class="col-md-12 pull-md-right">
+
+                    @*<div class="categories-collapsed visible-xs visible-sm clearfix">
+
+                        <div class="pull-left form-inline">
+                            <form method="get" action="../external.html?link=https://billing.appliedi.net/cart.php">
+                                <select name="gid" onchange="submit()" class="form-control">
+                                    <optgroup label="Product Categories">
+                                        <option value="27"><font><font>PPA Products</font></font></option>
+                                        <option value="19">Standard Cloud Servers</option>
+                                        <option value="2">Clustered Cloud Servers</option>
+                                        <option value="3">SSL Certificates</option>
+                                        <option value="20">Awesome AntiSpam</option>
+                                        <option value="18">Network Solutions</option>
+                                        <option value="22">Cloud Sites (WAP)</option>
+                                        <option value="17">Dedicated Servers</option>
+                                    </optgroup>
+                                    <optgroup label="Actions">
+                                        <option value="registerdomain"><font><font>Register a domain</font></font></option>
+                                        <option value="transferdomain">Transfer in a Domain</option>
+                                        <option value="viewcart"><font><font>Browse cart</font></font></option>
+                                    </optgroup>
+                                </select>
+                            </form>
+                        </div>
+
+
+                    </div>*@
+
+
+                    <form id="frmConfigureProduct" onsubmit="catchEnter(event);">
+                        <input type="hidden" name="configure" value="true">
+                        <input type="hidden" name="i" value="4">
+
+                        <div class="row">
+                            <div class="col-md-8">
+
+                                <p>Configure your desired options and continue to checkout.</p>
+
+                                <div class="product-info">
+                                    <p class="product-title">Clustered Cloud Server - Express</p>
+                                    <p>
+                                        vCPU: 1
+                                        Memory: 1GB
+                                        SAN Storage: 50GB
+                                        Transfer: 3000MB
+                                    </p>
+                                </div>
+
+                                <div class="alert alert-danger hidden" role="alert" id="containerProductValidationErrors">
+                                    <p>Please correct the following errors before continuing:</p>
+                                    <ul id="containerProductValidationErrorsList"></ul>
+                                </div>
+
+                                <div class="field-container">
+                                    <div class="form-group">
+                                        <label for="inputBillingcycle"><font><font>Choose billing cycle</font></font></label>
+                                        <select name="billingcycle" id="inputBillingcycle" class="form-control select-inline" onchange="updateConfigurableOptions(4, this.value);">
+                                            <option value="monthly" selected="">
+                                                <font>
+                                                    <font>
+                                                        1 Month Price - $ 69.95
+                                                    </font>
+                                                </font>
+                                            </option>
+                                            <option value="quarterly">
+                                                <font>
+                                                    <font>
+                                                        Price 3 months - $ 69.95
+                                                    </font>
+                                                </font>
+                                            </option>
+                                            <option value="annually">
+                                                <font>
+                                                    <font>
+                                                        12 Months Price - $ 62.96
+                                                    </font>
+                                                </font>
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="serverconfig">
+                                    <input type="hidden" name="hostname" size="15" value="hostname">
+                                    <input type="hidden" name="ns1prefix" size="10" value="nameserver1">
+                                    <input type="hidden" name="ns2prefix" size="10" value="nameserver2">
+                                    <input type="hidden" name="rootpw" size="20" value="password">
+                                </div>
+                                <div class="sub-heading">
+                                    <span><font><font>Options that are set</font></font></span>
+                                </div>
+                                <div class="product-configurable-options" id="productConfigurableOptions">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="inputConfigOption143">CPU</label>
+                                                <select name="configoption[143]" id="inputConfigOption143" class="form-control">
+                                                    <option value="828" selected="selected">
+                                                        1 vCPUs (included)
+                                                    </option>
+                                                    <option value="829">
+                                                        <font>
+                                                            <font>
+                                                                2 vCPU $ 50.00
+                                                            </font>
+                                                        </font>
+                                                    </option>
+                                                    <option value="830">
+                                                        <font>
+                                                            <font>
+                                                                3 vCPU $ 100.00
+                                                            </font>
+                                                        </font>
+                                                    </option>
+                                                    <option value="832">
+                                                        <font>
+                                                            <font>
+                                                                4 vCPU $ 150.00
+                                                            </font>
+                                                        </font>
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="inputConfigOption141">Memory</label>
+                                                <select name="configoption[141]" id="inputConfigOption141" class="form-control">
+                                                    <option value="803" selected="selected">
+                                                        1 GB (included)
+                                                    </option>
+                                                    <option value="804">
+                                                        2 GB  $25.00
+                                                    </option>
+                                                    <option value="805">
+                                                        3 GB $50.00
+                                                    </option>
+                                                    <option value="806">
+                                                        4 GB $75.00
+                                                    </option>
+                                                    <option value="807">
+                                                        5 GB $100.00
+                                                    </option>
+                                                    <option value="808">
+                                                        6 GB $125.00
+                                                    </option>
+                                                    <option value="809">
+                                                        7 GB $150.00
+                                                    </option>
+                                                    <option value="810">
+                                                        8 GB $175.00
+                                                    </option>
+                                                    <option value="1264">
+                                                        9 GB $200.00
+                                                    </option>
+                                                    <option value="1265">
+                                                        10 GB $225.00
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="inputConfigOption142">Disk Storage</label>
+                                                <select name="configoption[142]" id="inputConfigOption142" class="form-control">
+                                                    <option value="811" selected="selected">
+                                                        50 GB
+                                                    </option>
+                                                    <option value="815">
+                                                        60 GB $10.00
+                                                    </option>
+                                                    <option value="816">
+                                                        70 GB $20.00
+                                                    </option>
+                                                    <option value="817">
+                                                        80 GB $30.00
+                                                    </option>
+                                                    <option value="818">
+                                                        90 GB $40.00
+                                                    </option>
+                                                    <option value="812">
+                                                        100 GB $50.00
+                                                    </option>
+                                                    <option value="819">
+                                                        110 GB $60.00
+                                                    </option>
+                                                    <option value="820">
+                                                        120 GB $70.00
+                                                    </option>
+                                                    <option value="821">
+                                                        130 GB $80.00
+                                                    </option>
+                                                    <option value="822">
+                                                        140 GB $90.00
+                                                    </option>
+                                                    <option value="813">
+                                                        150 GB $100.00
+                                                    </option>
+                                                    <option value="1620">
+                                                        160 GB $110.00
+                                                    </option>
+                                                    <option value="1271">
+                                                        170 GB  $120.00
+                                                    </option>
+                                                    <option value="1734">
+                                                        180 GB $130.00
+                                                    </option>
+                                                    <option value="1735">
+                                                        190 GB $140.00
+                                                    </option>
+                                                    <option value="814">
+                                                        200 GB $150.00
+                                                    </option>
+                                                    <option value="823">
+                                                        210 GB $160.00
+                                                    </option>
+                                                    <option value="824">
+                                                        220 GB $170.00
+                                                    </option>
+                                                    <option value="825">
+                                                        230 GB $180.00
+                                                    </option>
+                                                    <option value="826">
+                                                        240 GB $190.00
+                                                    </option>
+                                                    <option value="827">
+                                                        250 GB $200.00
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="inputConfigOption244">Operating System</label>
+                                                <select name="configoption[244]" id="inputConfigOption244" class="form-control">
+                                                    <option value="1495" selected="selected">
+                                                        MS Windows 2012 R2 $10.00
+                                                    </option>
+                                                    <option value="1496">
+                                                        MS Windows 2012 $10.00
+                                                    </option>
+                                                    <option value="1497">
+                                                        MS Windows 2008 R2  $10.00
+                                                    </option>
+                                                    <option value="1498">
+                                                        MS Windows 2008 $10.00
+                                                    </option>
+                                                    <option value="1524">
+                                                        Other Windows
+                                                    </option>
+                                                    <option value="1521">
+                                                        CentOS
+                                                    </option>
+                                                    <option value="1522">
+                                                        CloudLinux $15.00
+                                                    </option>
+                                                    <option value="1523">
+                                                        Other Linux
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="inputConfigOption247">SQL Edition</label>
+                                                <select name="configoption[247]" id="inputConfigOption247" class="form-control">
+                                                    <option value="1532" selected="selected">
+                                                        None/Shared/Express/Other
+                                                    </option>
+                                                    <option value="1529">
+                                                        MS SQL 2014 Web Edition (4 Cores) $40.00
+                                                    </option>
+                                                    <option value="1530">
+                                                        MS SQL 2014 Standard Edition (4 Cores) $330.00
+                                                    </option>
+                                                    <option value="1531">
+                                                        MS SQL 2014 Enterprise Edition (4 Cores) $1250.00
+                                                    </option>
+                                                    <option value="1526">
+                                                        MS SQL 2012 Web Edition (4 Cores) $40.00
+                                                    </option>
+                                                    <option value="1527">
+                                                        MS SQL 2012 Standard Edition (4 Cores) $330.00
+                                                    </option>
+                                                    <option value="1528">
+                                                        MS SQL 2012 Enterprise Edition (4 Cores) $1250.00
+                                                    </option>
+                                                    <option value="1512">
+                                                        MS SQL 2008 Web Edition (4 Cores) $40.00
+                                                    </option>
+                                                    <option value="1525">
+                                                        MS SQL 2008 Standard Edition (4 Cores) $330.00
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="inputConfigOption243">Management</label>
+                                                <select name="configoption[243]" id="inputConfigOption243" class="form-control">
+                                                    <option value="1492" selected="selected">
+                                                        Client Managed (included)
+                                                    </option>
+                                                    <option value="1493">
+                                                        Fully Managed (ServerConcierge) $150.00
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="inputConfigOption144">Public Network (NIC)</label>
+                                                <select name="configoption[144]" id="inputConfigOption144" class="form-control">
+                                                    <option value="831" selected="selected">
+                                                        1Gbps (included)
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="inputConfigOption245">IPs</label>
+                                                <select name="configoption[245]" id="inputConfigOption245" class="form-control">
+                                                    <option value="1500" selected="selected">
+                                                        1 (included)
+                                                    </option>
+                                                    <option value="1501">
+                                                        2 $5.00
+                                                    </option>
+                                                    <option value="1502">
+                                                        3 $10.00
+                                                    </option>
+                                                    <option value="1503">
+                                                        4 $15.00
+                                                    </option>
+                                                    <option value="1504">
+                                                        5 $20.00
+                                                    </option>
+                                                    <option value="1658">
+                                                        6 $25.00
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="inputConfigOption248"><font><font>RDP Connections</font></font></label>
+                                                <select name="configoption[248]" id="inputConfigOption248" class="form-control">
+                                                    <option value="1517" selected="selected">
+                                                        2 (included)
+                                                    </option>
+                                                    <option value="1518">
+                                                        3 $8.00
+                                                    </option>
+                                                    <option value="1519">
+                                                        4 $16.00
+                                                    </option>
+                                                    <option value="1520">
+                                                        5 $24.00
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="inputConfigOption246">R1Soft Backup Storage</label>
+                                                <select name="configoption[246]" id="inputConfigOption246" class="form-control">
+                                                    <option value="1505" selected="selected">
+                                                        30 GB (included)
+                                                    </option>
+                                                    <option value="1619">
+                                                        No Backup / Client Performs Backup
+                                                    </option>
+                                                    <option value="1506">
+                                                        50 GB $20.00
+                                                    </option>
+                                                    <option value="1507">
+                                                        70 GB $40.00
+                                                    </option>
+                                                    <option value="1508">
+                                                        90 GB $60.00
+                                                    </option>
+                                                    <option value="1509">
+                                                        110 GB $80.00
+                                                    </option>
+                                                    <option value="1510">
+                                                        130 GB $100.00
+                                                    </option>
+                                                    <option value="1511">
+                                                        150 GB $120.00
+                                                    </option>
+                                                    <option value="1618">
+                                                        170 GB $140.00
+                                                    </option>
+                                                    <option value="1738">
+                                                        190 GB $160.00
+                                                    </option>
+                                                    <option value="1739">
+                                                        210 GB $180.00
+                                                    </option>
+                                                    <option value="1740">
+                                                        230 GB $200.00
+                                                    </option>
+                                                    <option value="1587">
+                                                        250 GB $220.00
+                                                    </option>
+                                                    <option value="1745">
+                                                        270 GB $240.00
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="inputConfigOption263">Control Panel</label>
+                                                <select name="configoption[263]" id="inputConfigOption263" class="form-control">
+                                                    <option value="1676" selected="selected">
+                                                        None
+                                                    </option>
+                                                    <option value="1672">
+                                                        Plesk 12 - Web App Edition $5.00
+                                                    </option>
+                                                    <option value="1671">
+                                                        Plesk 12 - Web Pro Edition $10.00
+                                                    </option>
+                                                    <option value="1670">
+                                                        Plesk 12 - Web Host Edition  $15.00
+                                                    </option>
+                                                    <option value="1674">
+                                                        Plesk 12 - Web Pro Edition &amp; CloudLinux Bundle $20.00
+                                                    </option>
+                                                    <option value="1673">
+                                                        Plesk 12 - Web Host Edition &amp; CloudLinux Bundle $25.00
+                                                    </option>
+                                                    <option value="1675">
+                                                        WebsitePanel
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="sub-heading">
+                                    <span><font><font>Available Apps</font></font></span>
+                                </div>
+
+                                <div class="row addon-products">
+                                    <div class="col-sm-6">
+                                        <div class="panel panel-default panel-addon">
+                                            <div class="panel-body">
+                                                <label>
+                                                    <div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" name="addons[5]" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
+                                                    FREE SmarterTools Bundle
+                                                </label><br>
+                                                Free Bundle of SmarterMail, SmarterStats and SmarterTrack for all VPS, Dedicated Server and Cloud Server Customers
+                                            </div>
+                                            <div class="panel-price">
+                                                <font>
+                                                    <font>
+                                                        $ 0.00 Free Account
+                                                    </font>
+                                                </font>
+                                            </div>
+                                            <div class="panel-add">
+                                                <i class="fa fa-plus"></i><font>
+                                                    <font>
+                                                        Add to basket
+                                                    </font>
+                                                </font>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="panel panel-default panel-addon">
+                                            <div class="panel-body">
+                                                <label>
+                                                    <div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" name="addons[9]" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
+                                                    InstantSSL Pro Promotion
+                                                </label><br>
+                                                Online Signup Special: 1 Year InstantSSL Pro SSL Certificate Discounted Price, ($249.00 value)
+                                            </div>
+                                            <div class="panel-price">
+                                                <font>
+                                                    <font>
+                                                        $ 149.95 Once
+                                                    </font>
+                                                </font>
+                                            </div>
+                                            <div class="panel-add">
+                                                <i class="fa fa-plus"></i><font>
+                                                    <font>
+                                                        Add to basket
+                                                    </font>
+                                                </font>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="panel panel-default panel-addon">
+                                            <div class="panel-body">
+                                                <label>
+                                                    <div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" name="addons[6]" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
+                                                    WebsitePanel Integration*
+                                                </label><br>
+                                                Integrate your new server with our distributed WebsitePanel Install at WebPanel.appliedi.net. Includes use of our DNS servers for your domains.
+                                                * This feature is included as part of ServerConcierge managed services.
+                                                * WebsitePanel is NOT compatible with: Windows Server 2012 R2 or SQL Server 2014
+                                            </div>
+                                            <div class="panel-price">
+                                                <font>
+                                                    <font>
+                                                        Once $ 0.00 + $ 39.95 Cost of installation
+                                                    </font>
+                                                </font>
+                                            </div>
+                                            <div class="panel-add">
+                                                <i class="fa fa-plus"></i><font>
+                                                    <font>
+                                                        Add to basket
+                                                    </font>
+                                                </font>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="alert alert-warning info-text-sm">
+                                    <i class="fa fa-question-circle"></i>
+                                    Have questions? Contact our sales team for assistance. <a href="contact.html" target="_blank" class="alert-link"></a>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4" id="scrollingPanelContainer">
+
+                                <div id="orderSummary" style="margin-top: 0px;">
+                                    <div class="order-summary">
+                                        <div class="loader" id="orderSummaryLoader" style="display: none;">
+                                            <i class="fa fa-fw fa-refresh fa-spin"></i>
+                                        </div>
+                                        <h2><font><font>Total price</font></font></h2>
+                                        <div class="summary-container" id="producttotal"></div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="button" id="btnCompleteProductConfig" class="btn btn-primary btn-lg" onclick="addtocart()">
+                                            <font>
+                                                <font>
+                                                    Continue
+                                                </font>
+                                            </font><i class="fa fa-arrow-circle-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>recalctotals();</script>
+
+
+
+    </div><!-- /.main-content -->
+</div>

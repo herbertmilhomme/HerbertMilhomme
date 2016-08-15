@@ -1,0 +1,6 @@
+﻿@{
+    //var db = Database.Open("eCommerce");
+    //var catalogues = db.QuerySingle("SELECT * FROM catalog"); //product, services, or all
+    var db = Database.Open("ColonielHeights");
+    var catalogfilter = db.Query("SELECT * FROM [taxonomy_en-US] WHERE breadcrumbs LIKE '@0%' ORDER BY ClassName Asc", UrlData[0]);// AND ClassTier<>1
+}
