@@ -1,10 +1,4 @@
-
-<!-- saved from url=(0095)http://programmers.stackexchange.com/revisions/040cdfd2-4b9d-4d72-b8c9-c631ccc01db5/view-source -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Revision 040cdfd2-4b9d-4d72-b8c9-c631ccc01db5 - Programmers Stack Exchange</title>
-</head>
-<body>
-<pre style="width:650px; white-space:pre-wrap">The idea here is that most of us should _already_ know _most_ of what is on this list.  But there just might be one or two items you haven't really looked into before, don't fully understand, or maybe never even heard of.
+The idea here is that most of us should _already_ know _most_ of what is on this list.  But there just might be one or two items you haven't really looked into before, don't fully understand, or maybe never even heard of.
 
 **Interface and User Experience**
 
@@ -200,6 +194,3 @@ Lots of stuff omitted not necessarily because they're not useful answers, but be
   [89]: http://log4r.rubyforge.org/
   [90]: http://nvie.com/about/
   [91]: http://nvie.com/posts/a-successful-git-branching-model/
-</pre>
-
-</body></html>
