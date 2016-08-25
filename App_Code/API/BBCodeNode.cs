@@ -4,78 +4,78 @@ using System.Web;
 
 /// <summary>
 /// Summary description for BBCodeNode
-/// </summary><?php
+/// </summary>
 
-abstract class BuckysBBCodeNode {
+abstract class BBCodeNode {
 
-    /**
-     * Nodes parent
-     *
-     * @var BuckysBBCodeNodeContainer
-     */
-    protected $parent;
+    /// <summery>
+    /// Nodes parent
+    /// 
+    /// @var BBCodeNodeContainer
+    /// </summery>
+    protected parent;
 
-    /**
-     * Nodes root parent
-     *
-     * @var BuckysBBCodeNodeContainer
-     */
-    protected $root;
+    /// <summery>
+    /// Nodes root parent
+    /// 
+    /// @var BBCodeNodeContainer
+    /// </summery>
+    protected root;
 
-    /**
-     * Sets the nodes parent
-     *
-     * @param BuckysBBCodeNode|BuckysBBCodeNodeContainer $parent
-     */
-    public function set_parent(BuckysBBCodeNodeContainer $parent = null){
-        $this->parent = $parent;
+    /// <summery>
+    /// Sets the nodes parent
+    /// 
+    /// <typeparam name=""></typeparam> BBCodeNode|BBCodeNodeContainer parent
+    /// </summery>
+    public function set_parent(BBCodeNodeContainer parent = null){
+        this.parent = parent;
 
-        if($parent instanceof BuckysBBCodeNodeContainerDocument)
-            $this->root = $parent;else
-            $this->root = $parent->root();
+        if(parent instanceof BBCodeNodeContainerDocument)
+            this.root = parent;else
+            this.root = parent.root();
     }
 
-    /**
-     * Gets the nodes parent. Returns null if there
-     * is no parent
-     *
-     * @return BuckysBBCodeNode
-     */
+    /// <summery>
+    /// Gets the nodes parent. Returns null if there
+    /// is no parent
+    /// 
+    /// <returns></returns> BBCodeNode
+    /// </summery>
     public function parent(){
-        return $this->parent;
+        return this.parent;
     }
 
-    /**
-     * @return string
-     */
+    /// <summery>
+    /// <returns></returns> string
+    /// </summery>
     public function get_html(){
         return null;
     }
 
-    /**
-     * Gets the nodes root node
-     *
-     * @return BuckysBBCodeNode
-     */
+    /// <summery>
+    /// Gets the nodes root node
+    /// 
+    /// <returns></returns> BBCodeNode
+    /// </summery>
     public function root(){
-        return $this->root;
+        return this.root;
     }
 
-    /**
-     * Finds a parent node of the passed type.
-     * Returns null if none found.
-     *
-     * @param string $tag
-     * @return BuckysBBCodeNodeContainerTag
-     */
-    public function find_parent_by_tag($tag){
-        $node = $this->parent();
+    /// <summery>
+    /// Finds a parent node of the passed type.
+    /// Returns null if none found.
+    /// 
+    /// <typeparam name=""></typeparam> string tag
+    /// <returns></returns> BBCodeNodeContainerTag
+    /// </summery>
+    public function find_parent_by_tag(tag){
+        node = this.parent();
 
-        while($this->parent() != null && !$node instanceof BuckysBBCodeNodeContainerDocument){
-            if($node->tag() === $tag)
-                return $node;
+        while(this.parent() != null && !node instanceof BBCodeNodeContainerDocument){
+            if(node.tag() === tag)
+                return node;
 
-            $node = $node->parent();
+            node = node.parent();
         }
 
         return null;

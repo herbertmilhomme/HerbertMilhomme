@@ -4,12 +4,12 @@ using System.Web;
 
 /// <summary>
 /// Summary description for ShopProduct
-/// </summary><?php
+/// </summary>
 
-/**
- * Shop Product management
- */
-class BuckysShopProduct {
+/// <summery>
+/// Shop Product management
+/// </summery>
+class ShopProduct {
 
     const SHIPPING_LOCATION_WORLDWIDE = 0;
     const LIST_FEE_PAYMENT_TYPE_CREDIT = 0;
@@ -18,21 +18,21 @@ class BuckysShopProduct {
     const STATUS_ACTIVE = 1;    // Is available product for sale.
     const STATUS_SOLD = 2;      // Has been sold
 
-    /**
-     * Check if the user has credits or BTC to list the product
-     *
-     * @param mixed $userID
-     * @param mixed $paymentType
-     * @return boolean
-     */
-    public function hasMoneyToListProduct($userID, $paymentType = BuckysShopProduct::LIST_FEE_PAYMENT_TYPE_BTC){
+    /// <summery>
+    /// Check if the user has credits or BTC to list the product
+    /// 
+    /// <typeparam name=""></typeparam> mixed userID
+    /// <typeparam name=""></typeparam> mixed paymentType
+    /// <returns></returns> boolean
+    /// </summery>
+    public function hasMoneyToListProduct(userID, paymentType = ShopProduct.LIST_FEE_PAYMENT_TYPE_BTC){
 
-        if($paymentType == BuckysShopProduct::LIST_FEE_PAYMENT_TYPE_CREDIT){
-            $tradeUserIns = new BuckysTradeUser();
-            return $tradeUserIns->hasCredits($userID, SHOP_PRODUCT_LISTING_FEE_IN_CREDIT);
-        }else if($paymentType == BuckysShopProduct::LIST_FEE_PAYMENT_TYPE_BTC){
-            $balance = BuckysBitcoin::getUserWalletBalance($userID);
-            return $balance >= SHOP_PRODUCT_LISTING_FEE_IN_BTC;
+        if(paymentType == ShopProduct.LIST_FEE_PAYMENT_TYPE_CREDIT){
+            tradeUserIns = new TradeUser();
+            return tradeUserIns.hasCredits(userID, SHOP_PRODUCT_LISTING_FEE_IN_CREDIT);
+        }else if(paymentType == ShopProduct.LIST_FEE_PAYMENT_TYPE_BTC){
+            balance = Bitcoin.getUserWalletBalance(userID);
+            return balance >= SHOP_PRODUCT_LISTING_FEE_IN_BTC;
 
         }else{
             return false;
@@ -40,180 +40,180 @@ class BuckysShopProduct {
 
     }
 
-    /**
-     * Add Products, use BTC or credit to list them
-     *
-     * @param mixed $data
-     * @param mixed $paymentType
-     * @return int|null|string|void
-     */
-    public function addProduct($data, $paymentType = BuckysShopProduct::LIST_FEE_PAYMENT_TYPE_BTC){
+    /// <summery>
+    /// Add Products, use BTC or credit to list them
+    /// 
+    /// <typeparam name=""></typeparam> mixed data
+    /// <typeparam name=""></typeparam> mixed paymentType
+    /// <returns></returns> int|null|string|void
+    /// </summery>
+    public function addProduct(data, paymentType = ShopProduct.LIST_FEE_PAYMENT_TYPE_BTC){
 
-        if(!$this->hasMoneyToListProduct($data['userID'], $paymentType)){
-            //You don't have money to list this product
+        if(!this.hasMoneyToListProduct(data["userID"], paymentType)){
+            //You don"t have money to list this product
             return;
         }
 
-        global $db;
+        global db;
 
-        if(empty($data['userID']) || empty($data['title']) || empty($data['subtitle']) || empty($data['price']) || empty($data['catID'])
+        if(empty(data["userID"]) || empty(data["title"]) || empty(data["subtitle"]) || empty(data["price"]) || empty(data["catID"])
         )
             return;
 
-        $data['price'] = fn_buckys_get_btc_price_formated($data['price']);
+        data["price"] = fn_get_btc_price_formated(data["price"]);
 
-        $newID = $db->insertFromArray(TABLE_SHOP_PRODUCTS, $data);
+        newID = db.insertFromArray(TABLE_SHOP_PRODUCTS, data);
 
-        if($newID){
+        if(newID){
 
-            $flag = $this->payListingFee($data['userID'], $newID, $paymentType);
+            flag = this.payListingFee(data["userID"], newID, paymentType);
 
-            if(!$flag){
-                $this->removeProducts($newID);
-                return; //failed since we can't charge you.
+            if(!flag){
+                this.removeProducts(newID);
+                return; //failed since we can"t charge you.
             }
 
         }
 
-        return $newID;
+        return newID;
     }
 
-    /**
-     * Pay to list products
-     *
-     * @param mixed $userID
-     * @param mixed $paymentType
-     * @return bool|int|null|string|void
-     */
-    public function payListingFee($userID, $prodID, $paymentType = BuckysShopProduct::LIST_FEE_PAYMENT_TYPE_BTC){
+    /// <summery>
+    /// Pay to list products
+    /// 
+    /// <typeparam name=""></typeparam> mixed userID
+    /// <typeparam name=""></typeparam> mixed paymentType
+    /// <returns></returns> bool|int|null|string|void
+    /// </summery>
+    public function payListingFee(userID, prodID, paymentType = ShopProduct.LIST_FEE_PAYMENT_TYPE_BTC){
 
-        $flag = false;
+        flag = false;
 
-        if($paymentType == BuckysShopProduct::LIST_FEE_PAYMENT_TYPE_CREDIT){
-            $transactionIns = new BuckysTransaction();
-            $flag = $transactionIns->useCreditsInShop($userID, SHOP_PRODUCT_LISTING_FEE_IN_CREDIT);
+        if(paymentType == ShopProduct.LIST_FEE_PAYMENT_TYPE_CREDIT){
+            transactionIns = new Transaction();
+            flag = transactionIns.useCreditsInShop(userID, SHOP_PRODUCT_LISTING_FEE_IN_CREDIT);
 
-        }else if($paymentType == BuckysShopProduct::LIST_FEE_PAYMENT_TYPE_BTC){
+        }else if(paymentType == ShopProduct.LIST_FEE_PAYMENT_TYPE_BTC){
 
-            $flag = BuckysBitcoin::sendBitcoin($userID, SHOP_TNB_LISTING_FEE_RECEIVER_BITCOIN_ADDRESS, SHOP_PRODUCT_LISTING_FEE_IN_BTC);
-            buckys_get_messages(); // this will flash the messages
+            flag = Bitcoin.sendBitcoin(userID, SHOP_LISTING_FEE_RECEIVER_BITCOIN_ADDRESS, SHOP_PRODUCT_LISTING_FEE_IN_BTC);
+            get_messages(); // this will flash the messages
 
-            if($flag){
+            if(flag){
                 //Create bitcoin transaction
-                BuckysBitcoinTransaction::addTransaction(BuckysBitcoinTransaction::TNB_BITCOIN_RECEIVER_ID, $userID, BuckysBitcoinTransaction::ACTIVITY_TYPE_LISTING_PRODUCT, $prodID, SHOP_PRODUCT_LISTING_FEE_IN_BTC);
+                BitcoinTransaction.addTransaction(BitcoinTransaction.BITCOIN_RECEIVER_ID, userID, BitcoinTransaction.ACTIVITY_TYPE_LISTING_PRODUCT, prodID, SHOP_PRODUCT_LISTING_FEE_IN_BTC);
             }
 
         }
 
-        return $flag;
+        return flag;
     }
 
-    /**
-     * Remove products from user's shop
-     *
-     * @param integer $prodID
-     * @param integer $userID
-     * @return bool|void
-     */
-    public function removeProductByUserID($prodID, $userID){
+    /// <summery>
+    /// Remove products from user"s shop
+    /// 
+    /// <typeparam name=""></typeparam> integer prodID
+    /// <typeparam name=""></typeparam> integer userID
+    /// <returns></returns> bool|void
+    /// </summery>
+    public function removeProductByUserID(prodID, userID){
 
-        global $db;
+        global db;
 
-        if(is_numeric($userID) && is_numeric($prodID)){
+        if(is_numeric(userID) && is_numeric(prodID)){
 
-            //Check if this product is new (not sold). If it has been sold already, then it couldn't be deleted
-            $prodData = $this->getProductById($prodID);
+            //Check if this product is new (not sold). If it has been sold already, then it couldn"t be deleted
+            prodData = this.getProductById(prodID);
 
-            if($prodData['status'] == BuckysShopProduct::STATUS_ACTIVE && $prodData['userID'] == $userID){
-                $this->removeProducts([$prodID]);
-                buckys_add_message('An item has been removed successfully.');
+            if(prodData["status"] == ShopProduct.STATUS_ACTIVE && prodData["userID"] == userID){
+                this.removeProducts([prodID]);
+                add_message("An item has been removed successfully.");
                 return true;
             }
 
         }
-        buckys_add_message('Something goes wrong. Please contact customer support!');
+        add_message("Something goes wrong. Please contact customer support!");
 
         return;
 
     }
 
-    /**
-     * Get products by ID
-     *
-     * @param integer $prodID    : Product ID
-     * @param boolean $isExpired : boolean
-     * @return stdClass
-     */
-    public function getProductById($prodID, $isExpired = null){
+    /// <summery>
+    /// Get products by ID
+    /// 
+    /// <typeparam name=""></typeparam> integer prodID    : Product ID
+    /// <typeparam name=""></typeparam> boolean isExpired : boolean
+    /// <returns></returns> stdClass
+    /// </summery>
+    public function getProductById(prodID, isExpired = null){
 
-        if(empty($prodID) || !is_numeric($prodID) || $prodID <= 0)
+        if(empty(prodID) || !is_numeric(prodID) || prodID <= 0)
             return null;
 
-        global $db;
+        global db;
 
-        $availableQueryStr = '';
+        availableQueryStr = "";
 
-        $avaiableTime = date('Y-m-d H:i:s');
-        if($isExpired === false){
-            $availableQueryStr = " AND (sp.expiryDate >='" . $avaiableTime . "' OR sp.listingDuration=-1) AND sp.status=" . BuckysShopProduct::STATUS_ACTIVE;
-        }else if($isExpired === true){
-            $availableQueryStr = " AND sp.expiryDate <'" . $avaiableTime . "' AND sp.status=" . BuckysShopProduct::STATUS_ACTIVE;
+        avaiableTime = date("Y-m-d H:i:s");
+        if(isExpired === false){
+            availableQueryStr = " AND (sp.expiryDate >="" + avaiableTime + "" OR sp.listingDuration=-1) AND sp.status=" + ShopProduct.STATUS_ACTIVE;
+        }else if(isExpired === true){
+            availableQueryStr = " AND sp.expiryDate <"" + avaiableTime + "" AND sp.status=" + ShopProduct.STATUS_ACTIVE;
         }
 
-        $query = sprintf("SELECT sp.*, u.totalRating, u.positiveRating , r.reportID
+        query = sprintf("SELECT sp.*, u.totalRating, u.positiveRating , r.reportID
                 FROM %s AS sp 
-                LEFT JOIN %s AS r ON r.objectID=sp.productID AND r.objectType='shop_item'
+                LEFT JOIN %s AS r ON r.objectID=sp.productID AND r.objectType="shop_item"
                     LEFT JOIN %s AS u ON sp.userID=u.userID", TABLE_SHOP_PRODUCTS, TABLE_REPORTS, TABLE_USERS_RATING);
 
-        $query .= ' WHERE sp.productID=' . $prodID . $availableQueryStr . " GROUP BY sp.productID ";
+        query += " WHERE sp.productID=" + prodID + availableQueryStr + " GROUP BY sp.productID ";
 
-        $query = $db->prepare($query);
+        query = db.prepare(query);
 
-        $data = $db->getRow($query);
+        data = db.getRow(query);
 
-        if($data){
-            if(strtotime($avaiableTime) < strtotime($data['createdDate']))
-                $data['isExpired'] = false;else
-                $data['isExpired'] = true;
+        if(data){
+            if(strtotime(avaiableTime) < strtotime(data["createdDate"]))
+                data["isExpired"] = false;else
+                data["isExpired"] = true;
         }
 
-        return $data;
+        return data;
 
     }
 
-    /**
-     * Remove Products by product ID list
-     *
-     * @param array $prodIDList
-     */
-    public function removeProducts($prodIDList){
-        global $db;
+    /// <summery>
+    /// Remove Products by product ID list
+    /// 
+    /// <typeparam name=""></typeparam> array prodIDList
+    /// </summery>
+    public function removeProducts(prodIDList){
+        global db;
 
-        if(is_numeric($prodIDList) && $prodIDList > 0){
-            $prodIDList = [$prodIDList];
+        if(is_numeric(prodIDList) && prodIDList > 0){
+            prodIDList = [prodIDList];
         }
 
-        if(is_array($prodIDList) && count($prodIDList) > 0){
-            $idCondStr = implode(',', $prodIDList);
+        if(is_array(prodIDList) && count(prodIDList) > 0){
+            idCondStr = implode(",", prodIDList);
 
-            $query = sprintf('SELECT * FROM %s WHERE productID IN (%s) AND STATUS=%d', TABLE_SHOP_PRODUCTS, $idCondStr, BuckysShopProduct::STATUS_ACTIVE);
-            $prodList = $db->getResultsArray($query);
+            query = sprintf("SELECT * FROM %s WHERE productID IN (%s) AND STATUS=%d", TABLE_SHOP_PRODUCTS, idCondStr, ShopProduct.STATUS_ACTIVE);
+            prodList = db.getResultsArray(query);
 
-            if(count($prodList) > 0){
+            if(count(prodList) > 0){
 
                 //remove product images first
-                foreach($prodList as $prodData){
-                    if($prodData['images'] != ''){
-                        $imageList = explode('|', $prodData['images']);
+                foreach(prodList as prodData){
+                    if(prodData["images"] != ""){
+                        imageList = explode("|", prodData["images"]);
 
-                        if(count($imageList) > 0){
-                            foreach($imageList as $key => $val){
-                                if($val != ''){
-                                    $val = ltrim($val, '/');
-                                    $thumb = fn_buckys_get_item_first_image_thumb($val, false);
+                        if(count(imageList) > 0){
+                            foreach(imageList as key => val){
+                                if(val != ""){
+                                    val = ltrim(val, "/");
+                                    thumb = fn_get_item_first_image_thumb(val, false);
 
-                                    @unlink(DIR_FS_ROOT . $val);
-                                    @unlink(DIR_FS_ROOT . $thumb);
+                                    @unlink(DIR_FS_ROOT + val);
+                                    @unlink(DIR_FS_ROOT + thumb);
                                 }
                             }
                         }
@@ -222,10 +222,10 @@ class BuckysShopProduct {
                 }
 
                 //Delete products
-                $query = sprintf('DELETE FROM %s WHERE productID IN (%s) AND STATUS=%d', TABLE_SHOP_PRODUCTS, $idCondStr, BuckysShopProduct::STATUS_ACTIVE);
-                $db->query($query);
-                $query = sprintf('DELETE FROM %s WHERE productID IN (%s)', TABLE_SHOP_ORDERS, $idCondStr);
-                $db->query($query);
+                query = sprintf("DELETE FROM %s WHERE productID IN (%s) AND STATUS=%d", TABLE_SHOP_PRODUCTS, idCondStr, ShopProduct.STATUS_ACTIVE);
+                db.query(query);
+                query = sprintf("DELETE FROM %s WHERE productID IN (%s)", TABLE_SHOP_ORDERS, idCondStr);
+                db.query(query);
             }
 
         }
@@ -233,133 +233,133 @@ class BuckysShopProduct {
         return;
     }
 
-    /**
-     * Update Product
-     *
-     * @param integer $productID
-     * @param array   $data
-     */
-    public function updateProduct($productID, $data){
+    /// <summery>
+    /// Update Product
+    /// 
+    /// <typeparam name=""></typeparam> integer productID
+    /// <typeparam name=""></typeparam> array   data
+    /// </summery>
+    public function updateProduct(productID, data){
 
-        global $db;
+        global db;
 
-        if(isset($data['price']))
-            $data['price'] = fn_buckys_get_btc_price_formated($data['price']);
+        if(isset(data["price"]))
+            data["price"] = fn_get_btc_price_formated(data["price"]);
 
-        $res = $db->updateFromArray(TABLE_SHOP_PRODUCTS, $data, ['productID' => $productID]);
+        res = db.updateFromArray(TABLE_SHOP_PRODUCTS, data, ["productID" => productID]);
 
         return;
 
     }
 
-    /**
-     * Add shipping price for a product
-     *
-     * @param integer $productID
-     * @param array   $shippingPriceList array (locationID, price)
-     */
-    public function addShippingPrice($productID, $shippingPriceList){
+    /// <summery>
+    /// Add shipping price for a product
+    /// 
+    /// <typeparam name=""></typeparam> integer productID
+    /// <typeparam name=""></typeparam> array   shippingPriceList array (locationID, price)
+    /// </summery>
+    public function addShippingPrice(productID, shippingPriceList){
 
-        global $db;
+        global db;
 
-        if(!is_numeric($productID) || !is_array($shippingPriceList) || count($shippingPriceList) < 1){
+        if(!is_numeric(productID) || !is_array(shippingPriceList) || count(shippingPriceList) < 1){
             return;
         }
 
-        foreach($shippingPriceList as $shippingPrice){
-            $param = ['productID' => $productID, 'locationID' => $shippingPrice['locationID'], 'price' => fn_buckys_get_btc_price_formated($shippingPrice['price']),];
+        foreach(shippingPriceList as shippingPrice){
+            param = ["productID" => productID, "locationID" => shippingPrice["locationID"], "price" => fn_get_btc_price_formated(shippingPrice["price"]),];
 
-            $db->insertFromArray(TABLE_SHOP_SHIPPING_PRICE, $param);
+            db.insertFromArray(TABLE_SHOP_SHIPPING_PRICE, param);
 
         }
 
     }
 
-    /**
-     * Get product shipping price list
-     *
-     * @param integer $productID
-     * @return array
-     */
-    public function getShippingPrice($productID){
+    /// <summery>
+    /// Get product shipping price list
+    /// 
+    /// <typeparam name=""></typeparam> integer productID
+    /// <returns></returns> array
+    /// </summery>
+    public function getShippingPrice(productID){
 
-        global $db;
+        global db;
 
-        if(!is_numeric($productID)){
+        if(!is_numeric(productID)){
             return;
         }
-        $query = sprintf('SELECT * FROM %s WHERE productID=%d', TABLE_SHOP_SHIPPING_PRICE, $productID);
+        query = sprintf("SELECT * FROM %s WHERE productID=%d", TABLE_SHOP_SHIPPING_PRICE, productID);
 
-        return $db->getResultsArray($query);
+        return db.getResultsArray(query);
 
     }
 
-    /**
-     * Remove shipping Price node
-     *
-     * @param integer $idList
-     * @return bool|SQLite3Result|void
-     */
-    public function removeShippingPriceByIDs($idList){
+    /// <summery>
+    /// Remove shipping Price node
+    /// 
+    /// <typeparam name=""></typeparam> integer idList
+    /// <returns></returns> bool|SQLite3Result|void
+    /// </summery>
+    public function removeShippingPriceByIDs(idList){
 
-        global $db;
+        global db;
 
-        if(!is_array($idList)){
-            $idList = [$idList];
+        if(!is_array(idList)){
+            idList = [idList];
         }
 
-        if(!is_array($idList) || count($idList) < 1)
+        if(!is_array(idList) || count(idList) < 1)
             return;
 
-        $query = sprintf('DELETE FROM %s WHERE id IN (%s)', TABLE_SHOP_SHIPPING_PRICE, implode(',', $idList));
+        query = sprintf("DELETE FROM %s WHERE id IN (%s)", TABLE_SHOP_SHIPPING_PRICE, implode(",", idList));
 
-        return $db->query($query);
+        return db.query(query);
 
     }
 
-    /**
-     * Update shipping price list
-     *
-     * @param integer $productID
-     * @param array   $newShippingPriceList
-     * @return bool
-     */
-    public function updateShippingPrice($productID, $newShippingPriceList){
+    /// <summery>
+    /// Update shipping price list
+    /// 
+    /// <typeparam name=""></typeparam> integer productID
+    /// <typeparam name=""></typeparam> array   newShippingPriceList
+    /// <returns></returns> bool
+    /// </summery>
+    public function updateShippingPrice(productID, newShippingPriceList){
 
-        global $db;
+        global db;
 
-        if(!is_numeric($productID)){
+        if(!is_numeric(productID)){
             return;
         }
 
-        $newShippingLocationList = [];
-        $delShippingPriceIDList = [];
-        foreach($newShippingPriceList as $shippingData){
-            $newShippingLocationList[$shippingData['locationID']] = $shippingData['price'];
+        newShippingLocationList = [];
+        delShippingPriceIDList = [];
+        foreach(newShippingPriceList as shippingData){
+            newShippingLocationList[shippingData["locationID"]] = shippingData["price"];
         }
 
-        $oldShippingPriceList = $this->getShippingPrice($productID);
+        oldShippingPriceList = this.getShippingPrice(productID);
 
-        if(isset($oldShippingPriceList) && is_array($oldShippingPriceList) && count($oldShippingPriceList) > 0){
-            foreach($oldShippingPriceList as $shippingData){
-                if(array_key_exists($shippingData['locationID'], $newShippingLocationList)){
-                    $query = sprintf('UPDATE %s SET price=%s WHERE id=%d', TABLE_SHOP_SHIPPING_PRICE, $newShippingLocationList[$shippingData['locationID']], $shippingData['id']);
-                    $db->query($query);
-                    unset($newShippingLocationList[$shippingData['locationID']]);
+        if(isset(oldShippingPriceList) && is_array(oldShippingPriceList) && count(oldShippingPriceList) > 0){
+            foreach(oldShippingPriceList as shippingData){
+                if(array_key_exists(shippingData["locationID"], newShippingLocationList)){
+                    query = sprintf("UPDATE %s SET price=%s WHERE id=%d", TABLE_SHOP_SHIPPING_PRICE, newShippingLocationList[shippingData["locationID"]], shippingData["id"]);
+                    db.query(query);
+                    unset(newShippingLocationList[shippingData["locationID"]]);
 
                 }else{
-                    $delShippingPriceIDList[] = $shippingData['id'];
+                    delShippingPriceIDList[] = shippingData["id"];
                 }
             }
         }
 
-        $this->removeShippingPriceByIDs($delShippingPriceIDList);
+        this.removeShippingPriceByIDs(delShippingPriceIDList);
 
-        if(count($newShippingLocationList) > 0){
-            foreach($newShippingLocationList as $key => $val){
-                $param = ['productID' => $productID, 'locationID' => $key, 'price' => $val,];
+        if(count(newShippingLocationList) > 0){
+            foreach(newShippingLocationList as key => val){
+                param = ["productID" => productID, "locationID" => key, "price" => val,];
 
-                $db->insertFromArray(TABLE_SHOP_SHIPPING_PRICE, $param);
+                db.insertFromArray(TABLE_SHOP_SHIPPING_PRICE, param);
             }
         }
 
@@ -367,287 +367,287 @@ class BuckysShopProduct {
 
     }
 
-    /**
-     * Get Product List
-     *
-     * @param integer $userID
-     * @param boolean $isExpired
-     * @param integer $status
-     * @param integer $catID
-     * @param string  $searchStr
-     * @param string  $sortField
-     * @param string  $sortDir
-     * @return Array of products
-     */
-    public function getProductList($userID = null, $isExpired = null, $status = null, $catID = null, $searchStr = null, $sortField = 'title', $sortDir = 'ASC'){
-        global $db;
+    /// <summery>
+    /// Get Product List
+    /// 
+    /// <typeparam name=""></typeparam> integer userID
+    /// <typeparam name=""></typeparam> boolean isExpired
+    /// <typeparam name=""></typeparam> integer status
+    /// <typeparam name=""></typeparam> integer catID
+    /// <typeparam name=""></typeparam> string  searchStr
+    /// <typeparam name=""></typeparam> string  sortField
+    /// <typeparam name=""></typeparam> string  sortDir
+    /// <returns></returns> Array of products
+    /// </summery>
+    public function getProductList(userID = null, isExpired = null, status = null, catID = null, searchStr = null, sortField = "title", sortDir = "ASC"){
+        global db;
 
-        $whereCondList = [];
-        if(isset($userID)){
-            $whereCondList[] = 'p.userID=' . $userID;
+        whereCondList = [];
+        if(isset(userID)){
+            whereCondList[] = "p.userID=" + userID;
         }
 
-        if(isset($catID)){
-            $whereCondList[] = 'p.catID=' . $catID;
+        if(isset(catID)){
+            whereCondList[] = "p.catID=" + catID;
         }
 
-        if(isset($searchStr) && $searchStr != ''){
-            $searchStr = addslashes($searchStr);
-            $whereCondList[] = sprintf(" MATCH (p.title, p.subtitle, p.description) AGAINST ('%s' IN BOOLEAN MODE)", $searchStr);
+        if(isset(searchStr) && searchStr != ""){
+            searchStr = addslashes(searchStr);
+            whereCondList[] = sprintf(" MATCH (p.title, p.subtitle, p.description) AGAINST ("%s" IN BOOLEAN MODE)", searchStr);
         }
 
-        $avaiableTime = date('Y-m-d H:i:s');
-        if($isExpired === false){
-            $whereCondList[] = " (p.expiryDate >='" . $avaiableTime . "' OR p.listingDuration=-1) ";
-        }else if($isExpired === true){
-            //$whereCondList[] = "p.expiryDate <'" . $avaiableTime . "'";
-            $whereCondList[] = "(p.expiryDate <'" . $avaiableTime . "' AND p.listingDuration!=-1) ";
+        avaiableTime = date("Y-m-d H:i:s");
+        if(isExpired === false){
+            whereCondList[] = " (p.expiryDate >="" + avaiableTime + "" OR p.listingDuration=-1) ";
+        }else if(isExpired === true){
+            //whereCondList[] = "p.expiryDate <"" + avaiableTime + """;
+            whereCondList[] = "(p.expiryDate <"" + avaiableTime + "" AND p.listingDuration!=-1) ";
         }
 
-        if(isset($status)){
-            $whereCondList[] = 'p.status=' . $status;
+        if(isset(status)){
+            whereCondList[] = "p.status=" + status;
         }
 
-        if(count($whereCondList) > 0)
-            $whereCond = ' WHERE ' . implode(' AND ', $whereCondList);else
-            $whereCond = ' WHERE 1 ';
+        if(count(whereCondList) > 0)
+            whereCond = " WHERE " + implode(" AND ", whereCondList);else
+            whereCond = " WHERE 1 ";
 
-        $whereCond .= ' GROUP BY p.productID ';
+        whereCond += " GROUP BY p.productID ";
 
-        if(isset($sortField)){
-            $whereCond .= sprintf(" ORDER BY %s %s", $sortField, $sortDir);
+        if(isset(sortField)){
+            whereCond += sprintf(" ORDER BY %s %s", sortField, sortDir);
         }
 
-        $query = sprintf("SELECT p.* FROM %s AS p ", TABLE_SHOP_PRODUCTS);
+        query = sprintf("SELECT p.* FROM %s AS p ", TABLE_SHOP_PRODUCTS);
 
-        $query = $db->prepare($query . $whereCond);
+        query = db.prepare(query + whereCond);
 
-        $data = $db->getResultsArray($query);
+        data = db.getResultsArray(query);
 
-        return $data;
+        return data;
     }
 
-    /**
-     * Get recent products
-     *
-     * @param mixed $limit
-     * @return Indexed
-     */
-    public function getRecentProducts($limit = 10){
+    /// <summery>
+    /// Get recent products
+    /// 
+    /// <typeparam name=""></typeparam> mixed limit
+    /// <returns></returns> Indexed
+    /// </summery>
+    public function getRecentProducts(limit = 10){
 
-        if(!is_numeric($limit))
+        if(!is_numeric(limit))
             return;
 
-        global $db;
+        global db;
 
-        $avaiableTime = date('Y-m-d H:i:s');
+        avaiableTime = date("Y-m-d H:i:s");
 
-        $query = sprintf("
+        query = sprintf("
                         SELECT p.*, user.firstName, user.lastName 
                         FROM %s AS p 
                             LEFT JOIN %s AS USER ON p.userID=USER.userID
-                            WHERE p.status=%d AND (p.expiryDate >='%s' OR p.listingDuration=-1) ORDER BY p.createdDate DESC LIMIT %d 
+                            WHERE p.status=%d AND (p.expiryDate >="%s" OR p.listingDuration=-1) ORDER BY p.createdDate DESC LIMIT %d 
                             
-                    ", TABLE_SHOP_PRODUCTS, TABLE_USERS, BuckysShopProduct::STATUS_ACTIVE, $avaiableTime, $limit);
+                    ", TABLE_SHOP_PRODUCTS, TABLE_USERS, ShopProduct.STATUS_ACTIVE, avaiableTime, limit);
 
-        $result = $db->getResultsArray($query);
+        result = db.getResultsArray(query);
 
-        return $result;
+        return result;
     }
 
-    /**
-     * Search products
-     *
-     * @param string $qStr   : Query String
-     * @param string $catStr : Category Name/ Category ID
-     * @param string $locStr : Location / Location ID
-     * @return array
-     */
-    public function search($qStr, $catStr, $locStr, $userID){
+    /// <summery>
+    /// Search products
+    /// 
+    /// <typeparam name=""></typeparam> string qStr   : Query String
+    /// <typeparam name=""></typeparam> string catStr : Category Name/ Category ID
+    /// <typeparam name=""></typeparam> string locStr : Location / Location ID
+    /// <returns></returns> array
+    /// </summery>
+    public function search(qStr, catStr, locStr, userID){
 
-        global $db;
+        global db;
 
-        $catIns = new BuckysShopCategory();
-        $locationIns = new BuckysCountry();
+        catIns = new ShopCategory();
+        locationIns = new Country();
 
         //Get category data
-        $catData = null;
-        if(is_numeric($catStr))
-            $catData = $catIns->getCategoryByID($catStr);else
-            $catData = $catIns->getCategoryByName($catStr);
+        catData = null;
+        if(is_numeric(catStr))
+            catData = catIns.getCategoryByID(catStr);else
+            catData = catIns.getCategoryByName(catStr);
 
         //Get Location data
-        $locationData = null;
-        if(is_numeric($locStr))
-            $locationData = $locationIns->getCountryById($locStr);else
-            $locationData = $locationIns->getCountryByName($locStr);
+        locationData = null;
+        if(is_numeric(locStr))
+            locationData = locationIns.getCountryById(locStr);else
+            locationData = locationIns.getCountryByName(locStr);
 
         //Make Where condition
-        $whereCondList = [];
+        whereCondList = [];
 
-        if(isset($qStr) && $qStr != ''){
-            $qStr = addslashes($qStr);
-            $whereCondList[] = sprintf(" MATCH (p.title, p.subtitle, p.description) AGAINST ('%s' IN BOOLEAN MODE)", $qStr);
+        if(isset(qStr) && qStr != ""){
+            qStr = addslashes(qStr);
+            whereCondList[] = sprintf(" MATCH (p.title, p.subtitle, p.description) AGAINST ("%s" IN BOOLEAN MODE)", qStr);
         }
 
-        if(isset($catData)){
-            $whereCondList[] = 'p.catID=' . $catData['catID'];
-        }else if($catStr != ''){
+        if(isset(catData)){
+            whereCondList[] = "p.catID=" + catData["catID"];
+        }else if(catStr != ""){
             return null;
         }
 
-        if(isset($locationData)){
-            $whereCondList[] = 'p.locationID=' . $locationData['countryID'];
+        if(isset(locationData)){
+            whereCondList[] = "p.locationID=" + locationData["countryID"];
         }
 
-        if(isset($userID) && is_numeric($userID)){
-            $whereCondList[] = 'p.userID=' . $userID;
+        if(isset(userID) && is_numeric(userID)){
+            whereCondList[] = "p.userID=" + userID;
         }
 
         //Valid items
-        $avaiableTime = date('Y-m-d H:i:s');
-        $whereCondList[] = " (p.expiryDate >='" . $avaiableTime . "' OR p.listingDuration=-1) ";
+        avaiableTime = date("Y-m-d H:i:s");
+        whereCondList[] = " (p.expiryDate >="" + avaiableTime + "" OR p.listingDuration=-1) ";
 
-        $whereCondList[] = 'p.status=' . BuckysShopProduct::STATUS_ACTIVE;
+        whereCondList[] = "p.status=" + ShopProduct.STATUS_ACTIVE;
 
-        $whereCond = ' WHERE ' . implode(' AND ', $whereCondList);
+        whereCond = " WHERE " + implode(" AND ", whereCondList);
 
-        $whereCond .= ' GROUP BY p.productID ';
+        whereCond += " GROUP BY p.productID ";
 
-        $query = sprintf("SELECT p.*, u.firstName, u.lastName, tu.totalRating, tu.positiveRating 
+        query = sprintf("SELECT p.*, u.firstName, u.lastName, tu.totalRating, tu.positiveRating 
                             FROM %s AS p 
                             LEFT JOIN %s AS tu ON p.userID=tu.userID 
                             LEFT JOIN %s AS u ON p.userID=u.userID 
                             ", TABLE_SHOP_PRODUCTS, TABLE_USERS_RATING, TABLE_USERS);
 
-        $query = $db->prepare($query . $whereCond);
+        query = db.prepare(query + whereCond);
 
-        $data = $db->getResultsArray($query);
+        data = db.getResultsArray(query);
 
-        return $data;
+        return data;
     }
 
-    /**
-     * Sort Products
-     *
-     * @param array $prodList
-     * @return array
-     */
-    public function sortProducts($prodList, $sortMod){
+    /// <summery>
+    /// Sort Products
+    /// 
+    /// <typeparam name=""></typeparam> array prodList
+    /// <returns></returns> array
+    /// </summery>
+    public function sortProducts(prodList, sortMod){
 
-        if(!is_array($prodList) || count($prodList) == 0){
+        if(!is_array(prodList) || count(prodList) == 0){
             return [];
         }
 
-        $nowTimeVal = time();
-        foreach($prodList as &$tmpItem){
-            $tmpItem['leftSec'] = strtotime($tmpItem['expiryDate']) - $nowTimeVal;
+        nowTimeVal = time();
+        foreach(prodList as &tmpItem){
+            tmpItem["leftSec"] = strtotime(tmpItem["expiryDate"]) - nowTimeVal;
         }
 
-        switch($sortMod){
+        switch(sortMod){
 
-            case 'endsoon' :
-                usort($prodList, [$this, '_compareEndSoonFirst']);
+            case "endsoon" :
+                usort(prodList, [this, "_compareEndSoonFirst"]);
                 break;
 
-            case 'newly' :
-                usort($prodList, [$this, '_compareEndSoonLast']);
+            case "newly" :
+                usort(prodList, [this, "_compareEndSoonLast"]);
                 break;
 
-            case 'best' :
+            case "best" :
             default:
                 //already sorted
                 break;
 
         }
 
-        return $prodList;
+        return prodList;
 
     }
 
-    /**
-     * @param $a
-     * @param $b
-     * @return int
-     */
-    private function _compareEndSoonFirst($a, $b){
-        if($a['leftSec'] == $b['leftSec'])
+    /// <summery>
+    /// <typeparam name=""></typeparam> a
+    /// <typeparam name=""></typeparam> b
+    /// <returns></returns> int
+    /// </summery>
+    private function _compareEndSoonFirst(a, b){
+        if(a["leftSec"] == b["leftSec"])
             return 0;
 
-        return ($a['leftSec'] > $b['leftSec']) ? 1 : -1;
+        return (a["leftSec"] > b["leftSec"]) ? 1 : -1;
     }
 
-    /**
-     * @param $a
-     * @param $b
-     * @return int
-     */
-    private function _compareEndSoonLast($a, $b){
-        if($a['leftSec'] == $b['leftSec'])
+    /// <summery>
+    /// <typeparam name=""></typeparam> a
+    /// <typeparam name=""></typeparam> b
+    /// <returns></returns> int
+    /// </summery>
+    private function _compareEndSoonLast(a, b){
+        if(a["leftSec"] == b["leftSec"])
             return 0;
 
-        return ($a['leftSec'] < $b['leftSec']) ? 1 : -1;
+        return (a["leftSec"] < b["leftSec"]) ? 1 : -1;
     }
 
-    /**
-     * Count Products according to the category
-     *
-     * @param array $prodList
-     * @return stdClass
-     */
-    public function countProductInCategory($prodList){
+    /// <summery>
+    /// Count Products according to the category
+    /// 
+    /// <typeparam name=""></typeparam> array prodList
+    /// <returns></returns> stdClass
+    /// </summery>
+    public function countProductInCategory(prodList){
 
-        $catIns = new BuckysShopCategory();
-        $categoryList = $catIns->getCategoryList();
+        catIns = new ShopCategory();
+        categoryList = catIns.getCategoryList();
 
-        $catProdCountList = [];
-        if(count($prodList) > 0){
+        catProdCountList = [];
+        if(count(prodList) > 0){
 
-            foreach($prodList as $itemData){
-                if(isset($catProdCountList[$itemData['catID']])){
-                    $catProdCountList[$itemData['catID']]++;
+            foreach(prodList as itemData){
+                if(isset(catProdCountList[itemData["catID"]])){
+                    catProdCountList[itemData["catID"]]++;
                 }else{
-                    $catProdCountList[$itemData['catID']] = 1;
+                    catProdCountList[itemData["catID"]] = 1;
                 }
             }
         }
 
-        if(count($catProdCountList) > 0 && count($categoryList) > 0){
-            foreach($categoryList as &$tmpCatData){
-                isset($catProdCountList[$tmpCatData['catID']]) ? $tmpCatData['count'] = $catProdCountList[$tmpCatData['catID']] : $tmpCatData['count'] = 0;
+        if(count(catProdCountList) > 0 && count(categoryList) > 0){
+            foreach(categoryList as &tmpCatData){
+                isset(catProdCountList[tmpCatData["catID"]]) ? tmpCatData["count"] = catProdCountList[tmpCatData["catID"]] : tmpCatData["count"] = 0;
             }
         }
 
-        return $categoryList;
+        return categoryList;
     }
 
-    /**
-     * Remove expiredProducts
+    /// <summery>
+    /// Remove expiredProducts
 
-     */
+    /// </summery>
     public function removeExpiredProducts(){
 
-        global $db;
+        global db;
 
-        $limitDate = date('Y-m-d H:i:s');
+        limitDate = date("Y-m-d H:i:s");
 
-        $query = sprintf("SELECT productID FROM %s WHERE STATUS=%d AND expiryDate < '%s'", TABLE_SHOP_PRODUCTS, BuckysShopProduct::STATUS_ACTIVE, $limitDate);
+        query = sprintf("SELECT productID FROM %s WHERE STATUS=%d AND expiryDate < "%s"", TABLE_SHOP_PRODUCTS, ShopProduct.STATUS_ACTIVE, limitDate);
 
-        $oldItemList = $db->getResultsArray($query);
-        $idList = [];
+        oldItemList = db.getResultsArray(query);
+        idList = [];
 
-        if(count($oldItemList) > 0){
+        if(count(oldItemList) > 0){
 
-            foreach($oldItemList as $data){
-                $idList[] = $data['productID'];
+            foreach(oldItemList as data){
+                idList[] = data["productID"];
             }
 
         }
 
-        if(count($idList) > 0){
+        if(count(idList) > 0){
 
             //Remove items
-            //$this->removeProducts($idList);
+            //this.removeProducts(idList);
 
         }
 
@@ -655,33 +655,33 @@ class BuckysShopProduct {
 
     }
 
-    /**
-     * Delete whole products
+    /// <summery>
+    /// Delete whole products
 
-     */
-    public function deleteProductsByUserID($userID){
+    /// </summery>
+    public function deleteProductsByUserID(userID){
 
-        global $db;
+        global db;
 
-        if(!is_numeric($userID))
+        if(!is_numeric(userID))
             return;
 
-        $query = sprintf("SELECT productID FROM %s WHERE STATUS!=%d AND userID=%d", TABLE_SHOP_PRODUCTS, BuckysShopProduct::STATUS_SOLD, $userID);
+        query = sprintf("SELECT productID FROM %s WHERE STATUS!=%d AND userID=%d", TABLE_SHOP_PRODUCTS, ShopProduct.STATUS_SOLD, userID);
 
-        $oldItemList = $db->getResultsArray($query);
-        $idList = [];
+        oldItemList = db.getResultsArray(query);
+        idList = [];
 
-        if(count($oldItemList) > 0){
+        if(count(oldItemList) > 0){
 
-            foreach($oldItemList as $data){
-                $idList[] = $data['productID'];
+            foreach(oldItemList as data){
+                idList[] = data["productID"];
             }
         }
 
-        if(count($idList) > 0){
+        if(count(idList) > 0){
 
             //Delete products
-            $this->removeProducts($idList);
+            this.removeProducts(idList);
 
         }
 
@@ -689,53 +689,53 @@ class BuckysShopProduct {
 
     }
 
-    /**
-     * Change product status 1) to Activate 2) to make inactive
-     * It will find all products belonged to this user, and change status as the $status parameter
-     * This function will be called when banning the user or unbanning the user
-     *
-     * @param integer $userID
-     * @param integer $status : value will be one of (STATUS_ITEM_INACTIVE, STATUS_ITEM_ACTIVE)
-     * @return bool|void
-     */
-    public function massStatusChange($userID, $status = BuckysShopProduct::STATUS_INACTIVE){
+    /// <summery>
+    /// Change product status 1) to Activate 2) to make inactive
+    /// It will find all products belonged to this user, and change status as the status parameter
+    /// This function will be called when banning the user or unbanning the user
+    /// 
+    /// <typeparam name=""></typeparam> integer userID
+    /// <typeparam name=""></typeparam> integer status : value will be one of (STATUS_ITEM_INACTIVE, STATUS_ITEM_ACTIVE)
+    /// <returns></returns> bool|void
+    /// </summery>
+    public function massStatusChange(userID, status = ShopProduct.STATUS_INACTIVE){
 
-        global $db;
+        global db;
 
-        if(!is_numeric($userID))
+        if(!is_numeric(userID))
             return;
 
-        $query = '';
-        if($status == BuckysShopProduct::STATUS_INACTIVE){
+        query = "";
+        if(status == ShopProduct.STATUS_INACTIVE){
 
             // To make inactive from active
-            $query = sprintf('UPDATE %s SET STATUS=%d WHERE STATUS=%d AND userID=%d', TABLE_SHOP_PRODUCTS, BuckysShopProduct::STATUS_INACTIVE, BuckysShopProduct::STATUS_ACTIVE, $userID);
-        }else if($status == BuckysShopProduct::STATUS_ACTIVE){
+            query = sprintf("UPDATE %s SET STATUS=%d WHERE STATUS=%d AND userID=%d", TABLE_SHOP_PRODUCTS, ShopProduct.STATUS_INACTIVE, ShopProduct.STATUS_ACTIVE, userID);
+        }else if(status == ShopProduct.STATUS_ACTIVE){
 
             // To make active from inactive
-            $query = sprintf('UPDATE %s SET STATUS=%d WHERE STATUS=%d AND userID=%d', TABLE_SHOP_PRODUCTS, BuckysShopProduct::STATUS_ACTIVE, BuckysShopProduct::STATUS_INACTIVE, $userID);
+            query = sprintf("UPDATE %s SET STATUS=%d WHERE STATUS=%d AND userID=%d", TABLE_SHOP_PRODUCTS, ShopProduct.STATUS_ACTIVE, ShopProduct.STATUS_INACTIVE, userID);
         }else{
             //Error
             return;
         }
 
-        $db->query($query);
+        db.query(query);
 
         return true;
 
     }
 
-    /**
-     * @param $userID
-     * @param $productID
-     * @return one
-     */
-    public function isPurchased($userID, $productID){
-        global $db;
+    /// <summery>
+    /// <typeparam name=""></typeparam> userID
+    /// <typeparam name=""></typeparam> productID
+    /// <returns></returns> one
+    /// </summery>
+    public function isPurchased(userID, productID){
+        global db;
 
-        $query = $db->prepare("SELECT orderID FROM " . TABLE_SHOP_ORDERS . " WHERE buyerID=%d AND productID=%d", $userID, $productID);
-        $oId = $db->getVar($query);
+        query = db.prepare("SELECT orderID FROM " + TABLE_SHOP_ORDERS + " WHERE buyerID=%d AND productID=%d", userID, productID);
+        oId = db.getVar(query);
 
-        return $oId;
+        return oId;
     }
 }

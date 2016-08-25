@@ -4,12 +4,12 @@ using System.Web;
 
 /// <summary>
 /// Summary description for Search
-/// </summary><?php
+/// </summary>
 
-/**
- * Search user and Page
- */
-class BuckysSearch {
+/// <summery>
+/// Search user and Page
+/// </summery>
+class Search {
 
     const SEARCH_TYPE_USER = 0;
     const SEARCH_TYPE_PAGE = 1;
@@ -17,155 +17,155 @@ class BuckysSearch {
 
     const SEARCH_RESULT_PER_PAGE = 30;
 
-    /**
-     * Search users and pages with keyword
-     *
-     * @param mixed $qStr
-     * @param mixed $type
-     * @return Indexed
-     */
-    public function search($qStr, $type = BuckysSearch::SEARCH_TYPE_USER_AND_PAGE, $sort, $page = 1, $limit = BuckysSearch::SEARCH_RESULT_PER_PAGE){
+    /// <summery>
+    /// Search users and pages with keyword
+    /// 
+    /// <typeparam name=""></typeparam> mixed qStr
+    /// <typeparam name=""></typeparam> mixed type
+    /// <returns></returns> Indexed
+    /// </summery>
+    public function search(qStr, type = Search.SEARCH_TYPE_USER_AND_PAGE, sort, page = 1, limit = Search.SEARCH_RESULT_PER_PAGE){
 
-        global $db;
+        global db;
 
-        $query = $this->_getSearchQuery($qStr, $type, $sort);
+        query = this._getSearchQuery(qStr, type, sort);
 
-        if($query == '')
+        if(query == "")
             return;
 
-        if(!is_numeric($page) || $page < 1)
-            $page = 1;
+        if(!is_numeric(page) || page < 1)
+            page = 1;
 
-        $limitCond = sprintf(' LIMIT %d, %d', ($page - 1) * $limit, $limit);
+        limitCond = sprintf(" LIMIT %d, %d", (page - 1) * limit, limit);
 
-        $query .= $limitCond;
+        query += limitCond;
 
-        $data = $db->getResultsArray($query);
+        data = db.getResultsArray(query);
 
-        return $data;
+        return data;
     }
 
-    /**
-     * get number of search result
-     *
-     * @param mixed $qStr
-     * @param mixed $type
-     * @return one
-     */
-    public function getNumberOfSearchResult($qStr, $type){
+    /// <summery>
+    /// get number of search result
+    /// 
+    /// <typeparam name=""></typeparam> mixed qStr
+    /// <typeparam name=""></typeparam> mixed type
+    /// <returns></returns> one
+    /// </summery>
+    public function getNumberOfSearchResult(qStr, type){
 
-        global $db;
+        global db;
 
-        $query = $this->_getSearchQuery($qStr, $type, '', true);
+        query = this._getSearchQuery(qStr, type, "", true);
 
-        return $db->getVar($query);
+        return db.getVar(query);
 
     }
 
-    /**
-     * Get Search Query
-     *
-     * @param mixed $qStr
-     * @param mixed $type
-     * @param mixed $isCount
-     * @return string
-     */
-    private function _getSearchQuery($qStr, $type = BuckysSearch::SEARCH_TYPE_USER_AND_PAGE, $sort, $isCount = false){
+    /// <summery>
+    /// Get Search Query
+    /// 
+    /// <typeparam name=""></typeparam> mixed qStr
+    /// <typeparam name=""></typeparam> mixed type
+    /// <typeparam name=""></typeparam> mixed isCount
+    /// <returns></returns> string
+    /// </summery>
+    private function _getSearchQuery(qStr, type = Search.SEARCH_TYPE_USER_AND_PAGE, sort, isCount = false){
 
-        $qStr = addslashes($qStr);
-        $type = $type == '' ? BuckysSearch::SEARCH_TYPE_USER_AND_PAGE : $type;
+        qStr = addslashes(qStr);
+        type = type == "" ? Search.SEARCH_TYPE_USER_AND_PAGE : type;
 
-        $whereUserCondStr = '';
-        $relavanceUserStr = '';
+        whereUserCondStr = "";
+        relavanceUserStr = "";
 
-        $wherePageCondStr = '';
-        $relavancePageStr = '';
+        wherePageCondStr = "";
+        relavancePageStr = "";
 
-        if($qStr != ''){
-            $whereUserCondStr = sprintf("WHERE MATCH (u.firstName, u.lastName) AGAINST ('%s' IN BOOLEAN MODE) AND u.status=%d", $qStr, BuckysUser::STATUS_USER_ACTIVE);
-            $relavanceUserStr = sprintf("MATCH (u.firstName, u.lastName) AGAINST ('%s') * 10", $qStr);
+        if(qStr != ""){
+            whereUserCondStr = sprintf("WHERE MATCH (u.firstName, u.lastName) AGAINST ("%s" IN BOOLEAN MODE) AND u.status=%d", qStr, User.STATUS_USER_ACTIVE);
+            relavanceUserStr = sprintf("MATCH (u.firstName, u.lastName) AGAINST ("%s") * 10", qStr);
 
-            $wherePageCondStr = sprintf("WHERE MATCH (p.title, p.about) AGAINST ('%s' IN BOOLEAN MODE) AND p.status=%d AND p.title !='%s'", $qStr, BuckysPage::STATUS_ACTIVE, BuckysPage::DEFAULT_PAGE_TITLE);
-            $relavancePageStr = sprintf("MATCH (p.title, p.about) AGAINST ('%s') * 10", $qStr);
+            wherePageCondStr = sprintf("WHERE MATCH (p.title, p.about) AGAINST ("%s" IN BOOLEAN MODE) AND p.status=%d AND p.title !="%s"", qStr, Page.STATUS_ACTIVE, Page.DEFAULT_PAGE_TITLE);
+            relavancePageStr = sprintf("MATCH (p.title, p.about) AGAINST ("%s") * 10", qStr);
         }else{
 
-            $whereUserCondStr = sprintf("WHERE u.status=%d", BuckysUser::STATUS_USER_ACTIVE);
-            $relavanceUserStr = '0';
+            whereUserCondStr = sprintf("WHERE u.status=%d", User.STATUS_USER_ACTIVE);
+            relavanceUserStr = "0";
 
-            $wherePageCondStr = sprintf("WHERE p.status=%d AND p.title !='%s'", BuckysPage::STATUS_ACTIVE, BuckysPage::DEFAULT_PAGE_TITLE);
-            $relavancePageStr = '0';
+            wherePageCondStr = sprintf("WHERE p.status=%d AND p.title !="%s"", Page.STATUS_ACTIVE, Page.DEFAULT_PAGE_TITLE);
+            relavancePageStr = "0";
 
         }
 
-        $query = '';
-        $orderByStr = '';
-        $sort = strtolower($sort);
-        switch($sort){
-            case 'asc':
-                $orderByStr = ' ORDER BY PPName ASC';
+        query = "";
+        orderByStr = "";
+        sort = strtolower(sort);
+        switch(sort){
+            case "asc":
+                orderByStr = " ORDER BY PPName ASC";
                 break;
-            case 'desc':
-                $orderByStr = ' ORDER BY PPName DESC';
+            case "desc":
+                orderByStr = " ORDER BY PPName DESC";
                 break;
-            case 'reputation':
-                $orderByStr = ' ORDER BY reputation DESC';
+            case "reputation":
+                orderByStr = " ORDER BY reputation DESC";
                 break;
-            case 'pop':
+            case "pop":
             default:
-                $orderByStr = ' ORDER BY PPFollowers DESC';
+                orderByStr = " ORDER BY PPFollowers DESC";
                 break;
         }
 
-        switch($type){
-            case BuckysSearch::SEARCH_TYPE_USER_AND_PAGE:
+        switch(type){
+            case Search.SEARCH_TYPE_USER_AND_PAGE:
 
                 //Search user and page
-                if($isCount){
-                    $selectStr = ' COUNT(*) AS Count ';
+                if(isCount){
+                    selectStr = " COUNT(*) AS Count ";
                 }else{
-                    $selectStr = ' up.* ';
+                    selectStr = " up.* ";
 
                 }
 
-                $query = sprintf("
+                query = sprintf("
                     SELECT %s 
                     FROM 
                         (
-                        SELECT u.userID AS userID, '' AS pageID, 'user' AS type, %s AS Relevance, CONCAT(u.firstName, ' ', u.lastName) AS PPName, (SELECT COUNT(DISTINCT(fri.userFriendID)) FROM %s AS fri INNER JOIN %s AS friUT ON friUT.userID=fri.userFriendID WHERE fri.userID=u.userID AND fri.status=1 AND friUT.status=1) PPFollowers FROM %s AS u %s 
+                        SELECT u.userID AS userID, "" AS pageID, "user" AS type, %s AS Relevance, CONCAT(u.firstName, " ", u.lastName) AS PPName, (SELECT COUNT(DISTINCT(fri.userFriendID)) FROM %s AS fri INNER JOIN %s AS friUT ON friUT.userID=fri.userFriendID WHERE fri.userID=u.userID AND fri.status=1 AND friUT.status=1) PPFollowers FROM %s AS u %s 
                         UNION ALL  
-                        SELECT '', p.pageID, 'page', %s, p.title, (SELECT COUNT(*) FROM %s AS pf WHERE pf.pageID=p.pageID) FROM %s AS p %s
+                        SELECT "", p.pageID, "page", %s, p.title, (SELECT COUNT(*) FROM %s AS pf WHERE pf.pageID=p.pageID) FROM %s AS p %s
                         ) AS up
                    %s
                         
-                ", $selectStr, $relavanceUserStr, TABLE_FRIENDS, TABLE_USERS, TABLE_USERS, $whereUserCondStr, $relavancePageStr, TABLE_PAGE_FOLLOWERS, TABLE_PAGES, $wherePageCondStr, $orderByStr);
+                ", selectStr, relavanceUserStr, TABLE_FRIENDS, TABLE_USERS, TABLE_USERS, whereUserCondStr, relavancePageStr, TABLE_PAGE_FOLLOWERS, TABLE_PAGES, wherePageCondStr, orderByStr);
 
                 break;
 
-            case BuckysSearch::SEARCH_TYPE_USER:
+            case Search.SEARCH_TYPE_USER:
 
                 //search user only
 
-                if($isCount)
-                    $query = sprintf("SELECT COUNT(u.userID) AS Count FROM %s AS u %s;", TABLE_USERS, $whereUserCondStr);else{
+                if(isCount)
+                    query = sprintf("SELECT COUNT(u.userID) AS Count FROM %s AS u %s;", TABLE_USERS, whereUserCondStr);else{
 
-                    $query = sprintf("SELECT u.userID AS userID, '' AS pageID, 'user' AS type, %s AS Relevance, CONCAT(u.firstName, ' ', u.lastName) AS PPName, (SELECT COUNT(DISTINCT(fri.userFriendID)) FROM %s AS fri INNER JOIN %s AS friUT ON friUT.userID=fri.userFriendID WHERE fri.userID=u.userID AND fri.status=1 AND friUT.status=1) PPFollowers, ustats.reputation AS rp FROM %s AS u 
-                    LEFT JOIN %s AS ustats ON ustats.userID=u.userID %s %s", $relavanceUserStr, TABLE_FRIENDS, TABLE_USERS, TABLE_USERS, TABLE_USERS_STATS, $whereUserCondStr, $orderByStr);
+                    query = sprintf("SELECT u.userID AS userID, "" AS pageID, "user" AS type, %s AS Relevance, CONCAT(u.firstName, " ", u.lastName) AS PPName, (SELECT COUNT(DISTINCT(fri.userFriendID)) FROM %s AS fri INNER JOIN %s AS friUT ON friUT.userID=fri.userFriendID WHERE fri.userID=u.userID AND fri.status=1 AND friUT.status=1) PPFollowers, ustats.reputation AS rp FROM %s AS u 
+                    LEFT JOIN %s AS ustats ON ustats.userID=u.userID %s %s", relavanceUserStr, TABLE_FRIENDS, TABLE_USERS, TABLE_USERS, TABLE_USERS_STATS, whereUserCondStr, orderByStr);
 
                 }
 
                 break;
 
-            case BuckysSearch::SEARCH_TYPE_PAGE:
+            case Search.SEARCH_TYPE_PAGE:
 
                 //search page only
-                if($isCount)
-                    $query = sprintf("SELECT COUNT(p.pageID) AS Count FROM %s AS p %s;", TABLE_PAGES, $wherePageCondStr);else{
+                if(isCount)
+                    query = sprintf("SELECT COUNT(p.pageID) AS Count FROM %s AS p %s;", TABLE_PAGES, wherePageCondStr);else{
 
-                    $query = sprintf("SELECT '' AS userID, p.pageID AS pageID, 'page' AS type, %s AS Relevance, p.title AS PPName, 
+                    query = sprintf("SELECT "" AS userID, p.pageID AS pageID, "page" AS type, %s AS Relevance, p.title AS PPName, 
                         (SELECT COUNT(*) FROM %s AS pf WHERE pf.pageID=p.pageID) AS PPFollowers 
                         FROM %s AS p 
                         %s 
-                        %s", $relavancePageStr, TABLE_PAGE_FOLLOWERS, TABLE_PAGES, $wherePageCondStr, $orderByStr);
+                        %s", relavancePageStr, TABLE_PAGE_FOLLOWERS, TABLE_PAGES, wherePageCondStr, orderByStr);
 
                 }
 
@@ -173,7 +173,7 @@ class BuckysSearch {
 
         }
 
-        return $query;
+        return query;
 
     }
 

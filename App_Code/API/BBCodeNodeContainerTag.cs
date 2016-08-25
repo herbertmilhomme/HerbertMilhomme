@@ -4,44 +4,44 @@ using System.Web;
 
 /// <summary>
 /// Summary description for BBCodeNodeContainerTag
-/// </summary><?php
+/// </summary>
 
-class BuckysBBCodeNodeContainerTag extends BuckysBBCodeNodeContainer {
+class BBCodeNodeContainerTag extends BBCodeNodeContainer {
 
-    /**
-     * Tag name of this node
-     *
-     * @var string
-     */
-    protected $tag;
+    /// <summery>
+    /// Tag name of this node
+    /// 
+    /// @var string
+    /// </summery>
+    protected tag;
 
-    /**
-     * Assoc array of attributes
-     *
-     * @var array
-     */
-    protected $attribs;
+    /// <summery>
+    /// Assoc array of attributes
+    /// 
+    /// @var array
+    /// </summery>
+    protected attribs;
 
-    public function __construct($tag, $attribs){
-        $this->tag = $tag;
-        $this->attribs = $attribs;
+    public function __construct(tag, attribs){
+        this.tag = tag;
+        this.attribs = attribs;
     }
 
-    /**
-     * Gets the tag of this node
-     *
-     * @return string
-     */
+    /// <summery>
+    /// Gets the tag of this node
+    /// 
+    /// <returns></returns> string
+    /// </summery>
     public function tag(){
-        return $this->tag;
+        return this.tag;
     }
 
-    /**
-     * Gets the tags attributes
-     *
-     * @return array
-     */
+    /// <summery>
+    /// Gets the tags attributes
+    /// 
+    /// <returns></returns> array
+    /// </summery>
     public function attributes(){
-        return $this->attribs;
+        return this.attribs;
     }
 }

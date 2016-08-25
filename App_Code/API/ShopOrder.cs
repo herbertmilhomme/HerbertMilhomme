@@ -4,12 +4,12 @@ using System.Web;
 
 /// <summary>
 /// Summary description for ShopOrder
-/// </summary><?php
+/// </summary>
 
-/**
- * Shop Order management
- */
-class BuckysShopOrder {
+/// <summery>
+/// Shop Order management
+/// </summery>
+class ShopOrder {
 
     const STATUS_SOLD = 1;
 
@@ -19,168 +19,168 @@ class BuckysShopOrder {
     const ORDER_NOT_ARCHIVED = 0;
     const ORDER_ARCHIVED = 1;
 
-    const NOTIFICATION_OBJECT_TYPE = 'shop';
-    const NOTIFICATION_ACTIVITY_TYPE_SOLD = 'sold';
+    const NOTIFICATION_OBJECT_TYPE = "shop";
+    const NOTIFICATION_ACTIVITY_TYPE_SOLD = "sold";
 
-    /**
-     * Get Order by ID
-     *
-     * @param mixed $orderID
-     * @param mixed $status
-     * @return stdClass
-     */
-    public function getOrderByID($orderID, $status = BuckysShopOrder::STATUS_SOLD){
+    /// <summery>
+    /// Get Order by ID
+    /// 
+    /// <typeparam name=""></typeparam> mixed orderID
+    /// <typeparam name=""></typeparam> mixed status
+    /// <returns></returns> stdClass
+    /// </summery>
+    public function getOrderByID(orderID, status = ShopOrder.STATUS_SOLD){
 
-        global $db;
+        global db;
 
-        if(!is_numeric($orderID))
+        if(!is_numeric(orderID))
             return;
 
-        $query = sprintf('SELECT * FROM %s WHERE orderID=%d AND STATUS=%d', TABLE_SHOP_ORDERS, $orderID, $status);
+        query = sprintf("SELECT * FROM %s WHERE orderID=%d AND STATUS=%d", TABLE_SHOP_ORDERS, orderID, status);
 
-        $data = $db->getRow($query);
+        data = db.getRow(query);
 
-        return $data;
+        return data;
 
     }
 
-    /**
-     * @param $orderID
-     * @param $data
-     */
-    public function updateOrder($orderID, $data){
+    /// <summery>
+    /// <typeparam name=""></typeparam> orderID
+    /// <typeparam name=""></typeparam> data
+    /// </summery>
+    public function updateOrder(orderID, data){
 
-        global $db;
+        global db;
 
-        if(isset($data['price']))
-            $data['price'] = fn_buckys_get_btc_price_formated($data['price']);
+        if(isset(data["price"]))
+            data["price"] = fn_get_btc_price_formated(data["price"]);
 
-        $res = $db->updateFromArray(TABLE_SHOP_ORDERS, $data, ['orderID' => $orderID]);
+        res = db.updateFromArray(TABLE_SHOP_ORDERS, data, ["orderID" => orderID]);
 
         return;
 
     }
 
-    /**
-     * Create Order by array
-     *
-     * @param mixed $data
-     * @return bool|int|null|string
-     */
-    public function createOrder($data){
+    /// <summery>
+    /// Create Order by array
+    /// 
+    /// <typeparam name=""></typeparam> mixed data
+    /// <returns></returns> bool|int|null|string
+    /// </summery>
+    public function createOrder(data){
 
-        global $db;
+        global db;
 
-        $newID = $db->insertFromArray(TABLE_SHOP_ORDERS, $data);
+        newID = db.insertFromArray(TABLE_SHOP_ORDERS, data);
 
-        if($newID){
+        if(newID){
 
             //Create bitcoin transaction
-            BuckysBitcoinTransaction::addTransaction($data['sellerID'], $data['buyerID'], BuckysBitcoinTransaction::ACTIVITY_TYPE_PRODUCT_PURCHASE, $newID, $data['totalPrice']);
+            BitcoinTransaction.addTransaction(data["sellerID"], data["buyerID"], BitcoinTransaction.ACTIVITY_TYPE_PRODUCT_PURCHASE, newID, data["totalPrice"]);
 
-            $shopProdIns = new BuckysShopProduct();
+            shopProdIns = new ShopProduct();
 
-            $product = $shopProdIns->getProductById($data['productID']);
+            product = shopProdIns.getProductById(data["productID"]);
 
-            if(!$product['isDownloadable'])
-                $shopProdIns->updateProduct($data['productID'], ['status' => BuckysShopProduct::STATUS_SOLD]);
+            if(!product["isDownloadable"])
+                shopProdIns.updateProduct(data["productID"], ["status" => ShopProduct.STATUS_SOLD]);
 
             //Send notification if the seller wants to get notification
 
-            $notificationIns = new BuckysShopNotification();
-            $notificationIns->createNotification($data['sellerID'], $data['buyerID'], BuckysShopNotification::ACTION_TYPE_PRODUCT_SOLD, $newID);
+            notificationIns = new ShopNotification();
+            notificationIns.createNotification(data["sellerID"], data["buyerID"], ShopNotification.ACTION_TYPE_PRODUCT_SOLD, newID);
 
-            return $newID;
+            return newID;
         }
 
         return false;
 
     }
 
-    /**
-     * make payment
-     *
-     * @param mixed $buyerID
-     * @param mixed $sellerID
-     * @param mixed $amount
-     */
-    public function makePayment($buyerID, $sellerID, $amount){
+    /// <summery>
+    /// make payment
+    /// 
+    /// <typeparam name=""></typeparam> mixed buyerID
+    /// <typeparam name=""></typeparam> mixed sellerID
+    /// <typeparam name=""></typeparam> mixed amount
+    /// </summery>
+    public function makePayment(buyerID, sellerID, amount){
 
-        $sellerBitcoinInfo = BuckysUser::getUserBitcoinInfo($sellerID);
+        sellerBitcoinInfo = User.getUserBitcoinInfo(sellerID);
 
-        if($amount <= 0 || !$sellerBitcoinInfo){
+        if(amount <= 0 || !sellerBitcoinInfo){
             return false; //no payment
         }
 
-        $flag = BuckysBitcoin::sendBitcoin($buyerID, $sellerBitcoinInfo['bitcoin_address'], $amount);
-        buckys_get_messages(); // this will flash the messages
+        flag = Bitcoin.sendBitcoin(buyerID, sellerBitcoinInfo["bitcoin_address"], amount);
+        get_messages(); // this will flash the messages
 
-        return $flag;
-
-    }
-
-    /**
-     * Get sold product count, not read, new one
-     *
-     * @param mixed $userID
-     */
-    public function getNewSoldItemCount($userID){
-
-        global $db;
-
-        $query = sprintf('SELECT COUNT(*) AS count FROM %s WHERE sellerID=%d AND isRead=%d', TABLE_SHOP_ORDERS, $userID, BuckysShopOrder::ORDER_NEW);
-
-        $result = $db->getRow($query);
-
-        return $result['count'];
+        return flag;
 
     }
 
-    /**
-     * Get purchased order history
-     *
-     * @param integer $userID
-     * @return Array
-     */
-    public function getPurchased($userID, $isArchived = BuckysShopOrder::ORDER_NOT_ARCHIVED){
+    /// <summery>
+    /// Get sold product count, not read, new one
+    /// 
+    /// <typeparam name=""></typeparam> mixed userID
+    /// </summery>
+    public function getNewSoldItemCount(userID){
 
-        global $db;
+        global db;
 
-        if(!is_numeric($userID)){
+        query = sprintf("SELECT COUNT(*) AS count FROM %s WHERE sellerID=%d AND isRead=%d", TABLE_SHOP_ORDERS, userID, ShopOrder.ORDER_NEW);
+
+        result = db.getRow(query);
+
+        return result["count"];
+
+    }
+
+    /// <summery>
+    /// Get purchased order history
+    /// 
+    /// <typeparam name=""></typeparam> integer userID
+    /// <returns></returns> Array
+    /// </summery>
+    public function getPurchased(userID, isArchived = ShopOrder.ORDER_NOT_ARCHIVED){
+
+        global db;
+
+        if(!is_numeric(userID)){
             return null;
         }
 
-        $archivedStr = '';
+        archivedStr = "";
 
-        if($isArchived !== null){
-            $archivedStr = ' AND o.isArchived=' . $isArchived . ' ';
+        if(isArchived !== null){
+            archivedStr = " AND o.isArchived=" + isArchived + " ";
         }
 
-        $query = sprintf('SELECT o.*, p.title, p.price, p.subtitle, p.images, f.score, p.isDownloadable
+        query = sprintf("SELECT o.*, p.title, p.price, p.subtitle, p.images, f.score, p.isDownloadable
             FROM %s AS o 
              LEFT JOIN %s AS p ON p.productID=o.productID 
              LEFT JOIN %s AS f ON f.activityID=o.orderID AND f.activityType=%d 
-             WHERE o.buyerID=%d AND o.status=%d %s ORDER BY o.createdDate DESC', TABLE_SHOP_ORDERS, TABLE_SHOP_PRODUCTS, TABLE_FEEDBACK, BuckysFeedback::ACTIVITY_TYPE_SHOP, $userID, BuckysShopOrder::STATUS_SOLD, $archivedStr);
+             WHERE o.buyerID=%d AND o.status=%d %s ORDER BY o.createdDate DESC", TABLE_SHOP_ORDERS, TABLE_SHOP_PRODUCTS, TABLE_FEEDBACK, Feedback.ACTIVITY_TYPE_SHOP, userID, ShopOrder.STATUS_SOLD, archivedStr);
 
-        return $db->getResultsArray($query);
+        return db.getResultsArray(query);
 
     }
 
-    /**
-     * Get sold history
-     *
-     * @param integer $userID
-     * @return Array
-     */
-    public function getSold($userID){
+    /// <summery>
+    /// Get sold history
+    /// 
+    /// <typeparam name=""></typeparam> integer userID
+    /// <returns></returns> Array
+    /// </summery>
+    public function getSold(userID){
 
-        global $db;
+        global db;
 
-        if(!is_numeric($userID)){
+        if(!is_numeric(userID)){
             return null;
         }
 
-        $query = sprintf('SELECT o.*, p.title, p.price, p.subtitle, p.images, f.score, p.isDownloadable,
+        query = sprintf("SELECT o.*, p.title, p.price, p.subtitle, p.images, f.score, p.isDownloadable,
                             CONCAT(u.firstName, " ", u.lastName) AS fullName,
                             tu.shippingAddress AS address,
                             tu.shippingAddress2 AS address2,
@@ -193,27 +193,27 @@ class BuckysShopOrder {
             LEFT JOIN %s AS u ON u.userID=o.buyerID
             LEFT JOIN %s AS p ON p.productID=o.productID 
             LEFT JOIN %s AS f ON f.activityID=o.orderID AND f.activityType=%d 
-            WHERE o.sellerID=%d AND o.status=%d ORDER BY o.createdDate DESC', TABLE_SHOP_ORDERS, TABLE_TRADE_USERS, TABLE_USERS, TABLE_SHOP_PRODUCTS, TABLE_FEEDBACK, BuckysFeedback::ACTIVITY_TYPE_SHOP, $userID, BuckysShopOrder::STATUS_SOLD);
+            WHERE o.sellerID=%d AND o.status=%d ORDER BY o.createdDate DESC", TABLE_SHOP_ORDERS, TABLE_TRADE_USERS, TABLE_USERS, TABLE_SHOP_PRODUCTS, TABLE_FEEDBACK, Feedback.ACTIVITY_TYPE_SHOP, userID, ShopOrder.STATUS_SOLD);
 
-        return $db->getResultsArray($query);
+        return db.getResultsArray(query);
 
     }
 
-    /**
-     * Archive order with order ID
-     *
-     * @param mixed $userID
-     * @param mixed $orderID
-     */
-    public function archiveOrder($userID, $orderID){
+    /// <summery>
+    /// Archive order with order ID
+    /// 
+    /// <typeparam name=""></typeparam> mixed userID
+    /// <typeparam name=""></typeparam> mixed orderID
+    /// </summery>
+    public function archiveOrder(userID, orderID){
 
-        $orderData = $this->getOrderByID($orderID);
+        orderData = this.getOrderByID(orderID);
 
-        if($orderData){
-            if($orderData['buyerID'] == $userID){
+        if(orderData){
+            if(orderData["buyerID"] == userID){
 
-                $data = ['isArchived' => BuckysShopOrder::ORDER_ARCHIVED];
-                $this->updateOrder($orderID, $data);
+                data = ["isArchived" => ShopOrder.ORDER_ARCHIVED];
+                this.updateOrder(orderID, data);
 
                 return true;
             }
@@ -223,44 +223,44 @@ class BuckysShopOrder {
 
     }
 
-    /**
-     * Update the sold item info as read
-     *
-     * @param mixed $userID
-     */
-    public function updateSoldAsRead($userID){
-        global $db;
+    /// <summery>
+    /// Update the sold item info as read
+    /// 
+    /// <typeparam name=""></typeparam> mixed userID
+    /// </summery>
+    public function updateSoldAsRead(userID){
+        global db;
 
-        $query = sprintf('UPDATE %s SET isRead=%d WHERE sellerID=%d', TABLE_SHOP_ORDERS, BuckysShopOrder::ORDER_READ, $userID);
+        query = sprintf("UPDATE %s SET isRead=%d WHERE sellerID=%d", TABLE_SHOP_ORDERS, ShopOrder.ORDER_READ, userID);
 
-        $db->query($query);
+        db.query(query);
 
     }
 
-    /**
-     * Create shipping info
-     *
-     * @param mixed $userID
-     */
-    public function createShippingInfo($userID){
+    /// <summery>
+    /// Create shipping info
+    /// 
+    /// <typeparam name=""></typeparam> mixed userID
+    /// </summery>
+    public function createShippingInfo(userID){
 
-        global $db;
+        global db;
 
-        $newID = null;
+        newID = null;
 
-        $shippingInfoIns = new BuckysTradeUser();
-        $myShippingData = $shippingInfoIns->getUserByID($userID);
+        shippingInfoIns = new TradeUser();
+        myShippingData = shippingInfoIns.getUserByID(userID);
 
-        if(!$myShippingData){
+        if(!myShippingData){
             return;
         }
 
-        $param = [//            'fullName' => $myShippingData['shippingFullName'],
-            'address' => $myShippingData['shippingAddress'], 'address2' => $myShippingData['shippingAddress2'], 'city' => $myShippingData['shippingCity'], 'state' => $myShippingData['shippingState'], 'zip' => $myShippingData['shippingZip'], 'countryID' => $myShippingData['shippingCountryID']];
+        param = [//            "fullName" => myShippingData["shippingFullName"],
+            "address" => myShippingData["shippingAddress"], "address2" => myShippingData["shippingAddress2"], "city" => myShippingData["shippingCity"], "state" => myShippingData["shippingState"], "zip" => myShippingData["shippingZip"], "countryID" => myShippingData["shippingCountryID"]];
 
-        $newID = $db->insertFromArray(TABLE_SHOP_ORDERS_SHIPPING, $param);
+        newID = db.insertFromArray(TABLE_SHOP_ORDERS_SHIPPING, param);
 
-        return $newID;
+        return newID;
 
     }
 

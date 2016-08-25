@@ -4,142 +4,142 @@ using System.Web;
 
 /// <summary>
 /// Summary description for UserAcl
-/// </summary><?php
+/// </summary>
 
-/**
- * Manage User ACL
- */
-class BuckysUserAcl {
+/// <summery>
+/// Manage User ACL
+/// </summery>
+class UserAcl {
 
-    static $USER_ACL = null;
+    static USER_ACL = null;
 
-    /**
-     * Define User Acl Constants
-     * It will be called on the bootstrap file
+    /// <summery>
+    /// Define User Acl Constants
+    /// It will be called on the bootstrap file
 
-     */
+    /// </summery>
     public static function defineAclConstants(){
-        if(BuckysUserAcl::$USER_ACL == null)
-            BuckysUserAcl::loadAcl();
+        if(UserAcl.USER_ACL == null)
+            UserAcl.loadAcl();
 
-        foreach(BuckysUserAcl::$USER_ACL as $row){
-            if(!defined('USER_ACL_' . strtoupper($row['Name'])))
-                define('USER_ACL_' . strtoupper($row['Name']), $row['Level']);
+        foreach(UserAcl.USER_ACL as row){
+            if(!defined("USER_ACL_" + strtoupper(row["Name"])))
+                define("USER_ACL_" + strtoupper(row["Name"]), row["Level"]);
         }
 
     }
 
-    /**
-     * Get ACL data from database and store it to $USER_ACL
+    /// <summery>
+    /// Get ACL data from database and store it to USER_ACL
 
-     */
+    /// </summery>
     public static function loadAcl(){
-        global $db;
+        global db;
 
-        $query = "SELECT * FROM " . TABLE_USER_ACL . " ORDER BY LEVEL";
-        $rows = $db->getResultsArray($query);
+        query = "SELECT * FROM " + TABLE_USER_ACL + " ORDER BY LEVEL";
+        rows = db.getResultsArray(query);
 
-        BuckysUserAcl::$USER_ACL = $rows;
+        UserAcl.USER_ACL = rows;
 
         return;
     }
 
-    /**
-     * Get id from level
-     *
-     * @param $level
-     * @return
-     * @internal param Int $acl
-     */
-    public function getIdFromLevel($level){
-        global $db;
+    /// <summery>
+    /// Get id from level
+    /// 
+    /// <typeparam name=""></typeparam> level
+    /// <returns></returns>
+    /// @internal param Int acl
+    /// </summery>
+    public function getIdFromLevel(level){
+        global db;
 
-        if(BuckysUserAcl::$USER_ACL == null)
-            BuckysUserAcl::loadAcl();
+        if(UserAcl.USER_ACL == null)
+            UserAcl.loadAcl();
 
-        foreach(BuckysUserAcl::$USER_ACL as $row){
-            if($row['Level'] == $level)
-                return $row['aclID'];
+        foreach(UserAcl.USER_ACL as row){
+            if(row["Level"] == level)
+                return row["aclID"];
         }
 
     }
 
-    /**
-     * Get id from Name
-     *
-     * @param $name
-     * @return
-     * @internal param Int $acl
-     */
-    public static function getIdFromName($name){
-        global $db;
+    /// <summery>
+    /// Get id from Name
+    /// 
+    /// <typeparam name=""></typeparam> name
+    /// <returns></returns>
+    /// @internal param Int acl
+    /// </summery>
+    public static function getIdFromName(name){
+        global db;
 
-        if(BuckysUserAcl::$USER_ACL == null)
-            BuckysUserAcl::loadAcl();
+        if(UserAcl.USER_ACL == null)
+            UserAcl.loadAcl();
 
-        foreach(BuckysUserAcl::$USER_ACL as $row){
-            if(strtolower($row['Name']) == strtolower($name))
-                return $row['aclID'];
+        foreach(UserAcl.USER_ACL as row){
+            if(strtolower(row["Name"]) == strtolower(name))
+                return row["aclID"];
         }
 
     }
 
-    /**
-     * Get level from id
-     *
-     * @param $ac_id
-     * @return
-     * @internal param Int $acl
-     */
-    public function getLevelFromId($ac_id){
-        global $db;
+    /// <summery>
+    /// Get level from id
+    /// 
+    /// <typeparam name=""></typeparam> ac_id
+    /// <returns></returns>
+    /// @internal param Int acl
+    /// </summery>
+    public function getLevelFromId(ac_id){
+        global db;
 
-        if(BuckysUserAcl::$USER_ACL == null)
-            BuckysUserAcl::loadAcl();
+        if(UserAcl.USER_ACL == null)
+            UserAcl.loadAcl();
 
-        foreach(BuckysUserAcl::$USER_ACL as $row){
-            if($row['aclID'] == $ac_id)
-                return $row['Level'];
+        foreach(UserAcl.USER_ACL as row){
+            if(row["aclID"] == ac_id)
+                return row["Level"];
         }
 
     }
 
-    /**
-     * Get Level from level
-     *
-     * @param $name
-     * @return
-     * @internal param Int $acl
-     */
-    public function getLevelFromName($name){
-        global $db;
+    /// <summery>
+    /// Get Level from level
+    /// 
+    /// <typeparam name=""></typeparam> name
+    /// <returns></returns>
+    /// @internal param Int acl
+    /// </summery>
+    public function getLevelFromName(name){
+        global db;
 
-        if(BuckysUserAcl::$USER_ACL == null)
-            BuckysUserAcl::loadAcl();
+        if(UserAcl.USER_ACL == null)
+            UserAcl.loadAcl();
 
-        foreach(BuckysUserAcl::$USER_ACL as $row){
-            if(strtolower($row['Name']) == strtolower($name))
-                return $row['Level'];
+        foreach(UserAcl.USER_ACL as row){
+            if(strtolower(row["Name"]) == strtolower(name))
+                return row["Level"];
         }
 
     }
 
-    /**
-     * Get name from level
-     *
-     * @param $level
-     * @return
-     * @internal param Int $acl
-     */
-    public function getNameFromLevel($level){
-        global $db;
+    /// <summery>
+    /// Get name from level
+    /// 
+    /// <typeparam name=""></typeparam> level
+    /// <returns></returns>
+    /// @internal param Int acl
+    /// </summery>
+    public function getNameFromLevel(level){
+        global db;
 
-        if(BuckysUserAcl::$USER_ACL == null)
-            BuckysUserAcl::loadAcl();
+        if(UserAcl.USER_ACL == null)
+            UserAcl.loadAcl();
 
-        foreach(BuckysUserAcl::$USER_ACL as $row){
-            if($row['Level'] == $level)
-                return $row['Name'];
+        foreach(UserAcl.USER_ACL as row){
+            if(row["Level"] == level)
+                return row["Name"];
         }
 
     }
