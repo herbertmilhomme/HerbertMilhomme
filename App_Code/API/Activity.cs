@@ -43,7 +43,7 @@ class Activity {
     /// <typeparam name="actionID">int</typeparam>
     public static function addActivity(int userID,int objectID,int objectType,int activityType,int actionID = 0){
         //global db;
-		//var db = Database.Open("HerbsSocialNet");
+		//var db = Database.Open();
         
         //Remove Duplicated Like Action Activity
         if(activityType == "like"){
@@ -60,7 +60,7 @@ class Activity {
             "isNew" => 1,            
             "activityStatus" => 1,            
             "actionID" => actionID           
-        ));
+        ),"HerbsSocialNet");
         
         return activityID;
         
