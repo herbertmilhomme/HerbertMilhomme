@@ -1,4 +1,4 @@
-﻿<ul>
+﻿<ul> 
 				@foreach(var mu in db.Query("SELECT * FROM Userprofile")){
 					//if userid lastactivity>now-5mins "online" else "offline"
 					if(Membership.GetUser().IsOnline){<text>

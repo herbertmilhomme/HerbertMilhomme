@@ -1,5 +1,5 @@
 @{
-    var db = Database.Open("ColonielHeights");
+    var db = Database.Open("ColonielHeights"); 
     var AdminUsers = System.Web.Security.Roles.GetUsersInRole("Admin");
 }			@foreach(var admin in AdminUsers){
     //int userid = WebMatrix.WebData.WebSecurity.GetUserId(admin);

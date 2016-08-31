@@ -1,4 +1,4 @@
-﻿@{
+﻿@{ 
     var db = Database.Open("ColonielHeights");
     var jobs = db.Query("SELECT * FROM [project_job] LEFT JOIN [project_status] ON project_job.status=project_status.statusid WHERE display='true'");
 }
@@ -367,7 +367,8 @@
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
 
     <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">	*
+    <link href="css/style.css" rel="stylesheet">
+	*
 }
 @section FooterJS{
     <!-- Mainly scripts -->
@@ -407,5 +408,6 @@
                 }, 2000);
             }
         }
-    </script>
+    </script>
+
 }*@

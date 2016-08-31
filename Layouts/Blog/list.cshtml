@@ -1,4 +1,4 @@
-@{
+@{ 
     var db = Database.Open("ColonielHeights");
     var blogs = db.QuerySingle("SELECT * FROM website_blogs WHERE dateposted<=getdate() ORDER BY dateposted desc");
 }@*if(announcements == null){

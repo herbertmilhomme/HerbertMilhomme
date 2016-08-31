@@ -254,14 +254,17 @@ paket-files/
 
 # Webmatrix Sensitive Locations
 [Aa]pp_Data/
-_*
+#_*
 _*.cshtml
 _AppStart.cshtml
 _PageStart.cshtml
+_System/
+xml.cshtml
 *.crt
 *.config
-# *.cshtml
+#*.cshtml
 */[Vv]elonic/
+[Ww]iki/
 [Ss]hopping[Cc]art/
 [Ll]atest/
 [Pp]lugins/
@@ -271,11 +274,44 @@ _PageStart.cshtml
 [Tt]emplates/[Jj][Mm][Ll]-[Pp]hoto-[Ss]ervices/*
 google28de3fd4c250a317.html
 
+# Uncensor Custom Designed Resources
+!**/js
+!_assets
+_assets/*
+!_assets/js
+# _assets/js/
+_assets/js/*
+# **/_assets/js/**
+# !_assets/js/[Ll]ive[Cc]hat[Nn]otify.js
+# !/_assets/js/[Ll]ive[Cc]hat[Nn]otify.js
+# !*/_assets/js/[Ll]ive[Cc]hat[Nn]otify.js
+# !**/_assets/js/[Ll]ive[Cc]hat[Nn]otify.js
+!_assets/js/jquery.chat_herb.js
+!_assets/js/jquery.todo_herb.js
+!_assets/js/jquery.dashboard_herb.js
+!_assets/js/jquery.app_herb.js
+!_assets/js/LiveChatNotify.js
+!_assets/js/LiveChatScript.js
+!_assets/js/LiveChatScript.min.js
+!_assets/js/LiveChatRTC.js
+!_assets/js/notifications.js
+!_assets/js/multiple_notification.js
+!_assets/js/initialize-google-map.js
+!**/LiveChatNotify.js
+!**/LiveChatScript.js
+!**/LiveChatScript.min.js
+!**/LiveChatRTC.js
+!**/notifications.js
+!**/multiple_notification.js
+!**/initialize-google-map.js
+
 # Adobe BC
 *.dwt
 *.DWT
 *.lck
 *.LCK
+*dwsync.xml
+*_notes/
 
 # Unneccessary Creative Content
 .htaccess

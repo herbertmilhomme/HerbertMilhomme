@@ -1,4 +1,4 @@
-@{
+@{ 
     var db = Database.Open("ColonielHeights");
     var announcements = db.Query("SELECT * FROM website_announcements WHERE date<=getdate() ORDER BY date desc");
     

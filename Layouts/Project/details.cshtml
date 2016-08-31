@@ -1,4 +1,4 @@
-﻿@{
+﻿@{ 
     var db = Database.Open("ColonielHeights");
     var job = db.QuerySingle("SELECT * FROM [project_job] LEFT JOIN [project_status] ON project_job.status=project_status.statusid LEFT JOIN [project_priority] ON project_job.priority=project_priority.priority WHERE projectpage=@0", UrlData[0].Replace('-',' '));// (string)Html.Raw(UrlData[0]).ToHtmlString()
     var tasks = db.Query("SELECT * FROM [project_task] LEFT JOIN [project_status] ON project_task.status=project_status.statusid WHERE jobid=@0", job.projectid);
@@ -445,7 +445,8 @@
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
 
     <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">	*
+    <link href="css/style.css" rel="stylesheet">
+	*
 }
 @section FooterJS{
     <!-- Mainly scripts -->

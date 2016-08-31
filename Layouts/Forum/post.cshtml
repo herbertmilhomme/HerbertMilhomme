@@ -1,4 +1,4 @@
-@{
+@{ 
     var db = Database.Open("ColonielHeights");
     IEnumerable<dynamic> posts = db.Query("SELECT * FROM website_forumpost WHERE remove='false'");
     //IEnumerable<dynamic> threads=null;

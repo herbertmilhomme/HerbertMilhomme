@@ -1,4 +1,4 @@
-@{
+@{ 
     var db = Database.Open("ColonielHeights");
     //var blog = db.Query("SELECT * FROM website_blogs WHERE date<=getdate() ORDER BY date desc", UrlData[1].Replace("-"," "));
     var blog = db.QuerySingle("SELECT * FROM website_blogs WHERE title LIKE @0 ORDER BY title ASC", "%"+UrlData[1].Replace("-"," ")+"%");
