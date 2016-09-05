@@ -272,8 +272,7 @@ class Database_MSSQL {
 
         //res = mssqli_query(this.link, query);
         try{//if(res){
-            //newId = mssqli_insert_id(this.link);
-			int newId = WebMatrix.Data.Database.Open(database).Execute(query);
+            newId = mssqli_insert_id(this.link);
             return newId;
         }catch{//else{
             this.setLastError();
@@ -302,7 +301,7 @@ class Database_MSSQL {
         //    query_k += pair.Key;
         //    query_v += pair.Value;
         //}
-        string query = "INSERT INTO " + table + "(" + string.Join(", ", query_k) + ") OUTPUT Inserted.ID VALUES(" + string.Join(", ", query_v) + ")";
+        string query = "INSERT INTO " + table + "(" + string.Join(", ", query_k) + ")VALUES(" + string.Join(", ", query_v) + ")";
 
         return this.insert(query, database);
     }
@@ -312,11 +311,11 @@ class Database_MSSQL {
     /// </summery>
     /// <typeparam name=""></typeparam> mixed query
     /// <returns></returns> bool
-    public function query( string query,  string database){// params object[]
+    public function query( string table, string database, string query){// params object[]
         this.last_query(query);// = query;
         //res = mssqli_query(this.link, query);
         try{//if(!res){
-			WebMatrix.Data.Database.Open(database).Execute(query);
+			WebMatrix.Data.Database.Open(database).Execute("INSERT INTO @0 VALUES @1", table, query);
             return true;
         }
 		catch(Exception e){//else{

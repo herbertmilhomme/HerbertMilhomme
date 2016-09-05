@@ -264,6 +264,7 @@ xml.cshtml
 *.config
 #*.cshtml
 */[Vv]elonic/
+[Ww]iki/
 [Ss]hopping[Cc]art/
 [Ll]atest/
 [Pp]lugins/
@@ -285,6 +286,10 @@ _assets/js/*
 # !/_assets/js/[Ll]ive[Cc]hat[Nn]otify.js
 # !*/_assets/js/[Ll]ive[Cc]hat[Nn]otify.js
 # !**/_assets/js/[Ll]ive[Cc]hat[Nn]otify.js
+!_assets/js/jquery.chat_herb.js
+!_assets/js/jquery.todo_herb.js
+!_assets/js/jquery.dashboard_herb.js
+!_assets/js/jquery.app_herb.js
 !_assets/js/LiveChatNotify.js
 !_assets/js/LiveChatScript.js
 !_assets/js/LiveChatScript.min.js

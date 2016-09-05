@@ -1,4 +1,4 @@
-﻿@{
+﻿@{ 
 	int perpg = 20;
 	int pagenum = Request.QueryString["page"].AsInt(0) * perpg;
 	int i = Request.Form["StartCount"].AsInt(0);//string.IsNullOrEmpty(Request.Form["StartCount"])? Request.Form["StartCount"].AsInt() : 0;

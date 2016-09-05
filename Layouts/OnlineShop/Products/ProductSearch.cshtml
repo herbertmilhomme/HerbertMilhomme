@@ -1,4 +1,4 @@
-﻿@{
+﻿@{ 
     var db = Database.Open("ColonielHeights");
     var categories = db.Query("SELECT * FROM [taxonomy_en-US] WHERE ClassTier=1");
     var categorylist = categories.Select(i => new SelectListItem {

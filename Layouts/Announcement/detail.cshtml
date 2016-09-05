@@ -1,4 +1,4 @@
-@{
+@{ 
     var db = Database.Open("ColonielHeights");
     var announcement = db.QuerySingle("SELECT * FROM website_announcements WHERE subject LIKE '@0' ORDER BY subject ASC", "%"+UrlData[1].Replace("-"," ")+"%");
     

@@ -1,4 +1,4 @@
-﻿@{
+﻿@{ 
     var db = Database.Open("ColonielHeights");
     var LastUser = db.QuerySingle("SELECT * FROM userprofile FULL JOIN webpages_membership ON webpages_membership.userid=userprofile.userid ORDER BY createdate DESC");//minus original post
 	//var OnlineUser = ;

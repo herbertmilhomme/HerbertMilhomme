@@ -1,4 +1,4 @@
-﻿@{
+﻿@{ 
 	var db = Database.Open("ColonielHeights");
 	string SendMsg = db.QueryValue("SELECT postmsg FROM website_livechat WHERE userid=@0 AND sent='false'",WebSecurity.CurrentUserId);
 

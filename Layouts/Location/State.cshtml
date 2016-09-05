@@ -1,4 +1,4 @@
-﻿@{
+﻿@{ 
     var db = Database.Open("Location");
     var countries = db.Query("SELECT DISTINCT country FROM locations_zipcodes WHERE type=@0",Request.QueryString["type"]);//db.Query("SELECT * FROM locations_countries");
     var CountryItems = countries.Select(i => new SelectListItem {

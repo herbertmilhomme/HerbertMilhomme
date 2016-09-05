@@ -1,4 +1,4 @@
-@{
+@{ 
     var db = Database.Open("InfoGraph");
     //var AdminUsers = System.Web.Security.Roles.GetUsersInRole("Admin");
     var occupation = db.QuerySingle("SELECT * FROM occupation WHERE display='true'"); 

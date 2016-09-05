@@ -1,4 +1,4 @@
-﻿@{
+﻿@{ 
 	DateTime ChatStart = new DateTime();
 	if(Request.Form["ChatStart"].IsEmpty()){ChatStart = DateTime.Now;}else{ChatStart = DateTime.Parse(Request.Form["ChatStart"]);}
 	var db = Database.Open("ColonielHeights");

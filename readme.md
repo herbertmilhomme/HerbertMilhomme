@@ -1,6 +1,6 @@
 # Project Name
 
-Web Portfolio
+Herbert Milhomme: My Web Portfolio
 
 ## Status
 
@@ -21,15 +21,35 @@ I don't mind critiques or corrections to any of the codes or documents you've ac
 ## History
 
 Last Update Summery:
-<>
+__0.0.0__ - Initial Commit; Starting place. Github will begin to mirror and copy [website](http://www.herbertmilhommew.com)
 
-Full History and [Changelog]()
+Full History and [Changelog](https://github.com/herbertmilhomme/HerbertMilhomme/wiki/Changelog)
 
 ## Credits
 
-TODO: Write credits
+__Design Inspiration:__
+* [Adobe Business Catalyst]() (Inspired Back-end)
+* Audentio
+* x3dom
+
+__HTML Templates:__
+* [Adobe Business Catalyst]()
+* [Velonic]() - [CoderTheme]()
+* Uguru - BCguru
+* [Dlapak]()
+* [Oxygen]()
+
+__Tutorials:__
+* [Mike Brind](http://www.mikesdotnetting.com/) (Web-development with .NET framework)
+* [Dot Net Perl]() (C# References, tips, and breakdown)
+* [Microsoft]() (Library References of Classes)
+* [W3Schools]() (Basic tutorials, guides, and references)
+* [Mozilla]() (Web-development guides, tutorials, and references)
+* [Official W3]() (Rules of web-development, references, and guides)
 
 ## License
 
-Mozilla Public License Version 2.0
+Mozilla Public License Version 2.0    
 Generic no plagiarizing without making it your own, or crediting and referencing. This IS an exhibition portfolio, to present my abilities, and work. If there's anything i made myself, i'd prefer to be involved somewhere in the communication process, between copying or modifications. But it's not an obligation.
+
+I need to re-read licensing info, and which one this project falls under.

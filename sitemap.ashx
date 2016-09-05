@@ -1,4 +1,4 @@
-﻿<%@ WebHandler Language="C#" Class="HerbertMilhomme.sitemap" %>
+﻿<%@ WebHandler Language="C#" Class="HerbertMilhomme.sitemap" %> 
 //<script runat="server">
 
 using System;

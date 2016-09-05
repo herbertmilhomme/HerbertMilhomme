@@ -1,4 +1,4 @@
-﻿@{  
+﻿@{   
   var db = Database.Open("PetCare");
   //var news = db.Query("SELECT * FROM NewsUpdate ORDER BY NewsDate DESC"); 
   var years = db.Query("SELECT DISTINCT DATEPART(yyyy, NewsDate) AS nYears FROM NewsUpdate ORDER BY nYears DESC");

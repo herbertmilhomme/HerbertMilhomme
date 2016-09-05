@@ -1,4 +1,4 @@
-﻿@{
+﻿@{ 
 	var db = Database.Open("ColonielHeights");
 	int userid = WebSecurity.IsAuthenticated ? WebSecurity.CurrentUserId : 0;
 	var online = db.Query("SELECT * FROM website_whoisonline WHERE isOnline='true'");//if TODAY{TimeVisitPage>midnight}else{isOnline=true}
