@@ -21,7 +21,7 @@ I don't mind critiques or corrections to any of the codes or documents you've ac
 ## History
 
 Last Update Summery:
-__0.0.0__ - Initial Commit; Starting place. Github will begin to mirror and copy [website](http://www.herbertmilhommew.com)
+__0.0.3__ - Readme file includes resource assets under [credits](https://github.com/herbertmilhomme/HerbertMilhomme#credits).
 
 Full History and [Changelog](https://github.com/herbertmilhomme/HerbertMilhomme/wiki/Changelog)
 
@@ -30,7 +30,8 @@ Full History and [Changelog](https://github.com/herbertmilhomme/HerbertMilhomme/
 __Design Inspiration:__
 * [Adobe Business Catalyst]() (Inspired Back-end)
 * Audentio
-* x3dom
+* Facebook
+* Google
 
 __HTML Templates:__
 * [Adobe Business Catalyst]()
@@ -46,6 +47,33 @@ __Tutorials:__
 * [W3Schools]() (Basic tutorials, guides, and references)
 * [Mozilla]() (Web-development guides, tutorials, and references)
 * [Official W3]() (Rules of web-development, references, and guides)
+
+__Nugets, SDKs, & Javascript Snippets__
+* [WebRTC](https://webrtc.org/) (Google's Web Real-Time Communication)    
+  * -- Will not work without SSL Certificates (Website has to be __HTTPS://__ for WebRTC's Cam-chat, and Mic-chat to work)
+  * -- Used for Communicating between other clients on the server (Cam, Mic, Chat, possibly even notifications)
+* [SignalR]() (Microsoft's ASP.NET SignalR)
+  * -- Also Used for Communicating between clients and the server (pinging, connections, and keeping traffic between the two active)
+* [KnockoutJS]() 
+* [Modernizer]
+* [Bootstrap]() (Twitter's Responsive CSS Design layout)
+* [Owin]()
+* [FedEx]() (FedEx's API kit)    
+  * -- Used for shipping data from eCommerce purchases
+* [Google]() (Google's API kit)
+  * -- Authenticate Log-in system
+  * -- Payment method for eCommerce purchases 
+* [PayPal]() (Paypal's API kit)
+  * -- Used for payment method, for eCommerce purchases
+* [Authorize]()
+  * -- Alternative payment method to PayPal
+* [Facebook]() (Facebook's API kit)
+  * -- Authenticate Log-in system
+* [AWS]() (Amazon's API kit)
+* [Microsoft]() (Microsoft's API kit)
+  * -- Authenticate Log-in system
+* x3dom
+
 
 ## License
 
