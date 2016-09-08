@@ -21,32 +21,39 @@ I don't mind critiques or corrections to any of the codes or documents you've ac
 ## History
 
 Last Update Summery:
-__0.0.3__ - Readme file includes resource assets under [credits](https://github.com/herbertmilhomme/HerbertMilhomme#credits).
+__0.0.4__ - Removed stacking jquery, corrected issue #2, and replaced intended design with an `iframe`. Relocated URL link to "/Contacts/index"
 
 Full History and [Changelog](https://github.com/herbertmilhomme/HerbertMilhomme/wiki/Changelog)
 
 ## Credits
 
 __Design Inspiration:__
-* [Adobe Business Catalyst]() (Inspired Back-end)
-* Audentio
-* Facebook
-* Google
+* [Adobe Business Catalyst]() (Inspired Back-end; This whole adventure started when i tried to mimic Adobe BC, and Wordpress using MS IIS.)
+* Audentio (I love their forum layout)
+* Facebook (I wanted a better mail system, and less cluttery chat system)
+* Google (Business concept, and simple/clean UI elements)
+* Mumu.io (No longer exist, but the chat server was amazing. Wanted to create an alternative, with better/more features)
+* Discord (I discovered discord had a similar visual theme to velonics, and it couples nicely with the chat system i had intentions for)
 
 __HTML Templates:__
-* [Adobe Business Catalyst]()
-* [Velonic]() - [CoderTheme]()
-* Uguru - BCguru
-* [Dlapak]()
-* [Oxygen]()
+* [The New Boston](https://github.com/buckyroberts/Social-Network) (His GitHub Supports PHP/Apache Frameworks)
+* [Adobe Business Catalyst]() (Great CMS Design; Better than wordpress IMO)
+* [Velonic]() by [CoderTheme]()
+* Uguru by [BC Gurus](http://www.bcgurus.com/templates)
+* [Tribevita](http://www.tribevita.com/adobe-business-catalyst-templates)
+* [Probity](http://www.probityweb.com.au/website-design/templates)
+* [Dlapak]() (Simple Catalog/eCommerce themed site)
+* [Oxygen]() (Clean Single-page HTML Webpage)
 
 __Tutorials:__
+* [The New Boston](https://github.com/buckyroberts/Social-Network) (Great general tutorials, with beginner to advance guides; Strong forum community)
 * [Mike Brind](http://www.mikesdotnetting.com/) (Web-development with .NET framework)
 * [Dot Net Perl]() (C# References, tips, and breakdown)
 * [Microsoft]() (Library References of Classes)
 * [W3Schools]() (Basic tutorials, guides, and references)
 * [Mozilla]() (Web-development guides, tutorials, and references)
 * [Official W3]() (Rules of web-development, references, and guides)
+* [BC Gurus](http://www.bcgurus.com/tutorials) (Great entrepreneur tutorials; how to establish a web-design business)
 
 __Nugets, SDKs, & Javascript Snippets__
 * [WebRTC](https://webrtc.org/) (Google's Web Real-Time Communication)    
@@ -57,7 +64,9 @@ __Nugets, SDKs, & Javascript Snippets__
 * [KnockoutJS]() 
 * [Modernizer]
 * [Bootstrap]() (Twitter's Responsive CSS Design layout)
+  * -- Alternative to [Foundation](http://foundation.zurb.com/)
 * [Owin]()
+* [Font Awesome](http://fontawesome.io/)
 * [FedEx]() (FedEx's API kit)    
   * -- Used for shipping data from eCommerce purchases
 * [Google]() (Google's API kit)

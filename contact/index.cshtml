@@ -1,0 +1,149 @@
+﻿@{ 
+    //Layout = "~/Layouts/Template/contact.cshtml";
+    Page.Title = "Contact Me";
+	if (WebSecurity.IsAuthenticated) {
+        Layout = "~/Layouts/Template/velonic.cshtml";/*
+        if (Roles.IsUserInRole("admin")) {
+            Layout = "~/Layouts/Home/Microsoft.cshtml";
+            //<span> Welcome <b>@WebSecurity.CurrentUserName</b>! </span>
+        }else {Response.Redirect("~/Admin/AdminError");}*/
+	}else{
+        Layout = "~/Layouts/Template/uguru.cshtml";
+		<style>.form-control{margin-bottom: 10px;}</style>
+	}
+	if(IsPost){
+		var db = Database.Open("House");
+		db.Execute("INSERT INTO ContactMe (firstname, lastname, subject, phone, email, message) VALUES (@0,@1,@2,@3,@4)",Request.Form["FirstName"],Request.Form["LastName"],Request.Form["Subject"],Request.Form["HomePhone"],Request.Form["EmailAddress"],Request.Form["CAT_Custom_869"]);
+		//FormProcessv2.aspx?WebFormID=10090&amp;OID={module_oid}&amp;OTYPE={module_otype}&amp;EID={module_eid}&amp;CID={module_cid}
+	}
+}@*<!DOCTYPE html>
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" ><!-- InstanceBegin template="/Templates/Contact-Us.dwt" codeOutsideHTMLIsLocked="false" --> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en" >
+<!--<![endif]-->
+    <head>
+  	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <!-- InstanceBeginEditable name="doctitle" --><title>@Page.Title</title><!-- InstanceEndEditable --><!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+	
+        <!--{module_contentholder, name="_Template - Head Scripts"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Header Scripts.cshtml")
+	
+    </head>
+    <body id="top" class="thebg two-column">
+    
+        <!-- Header -->	
+	    <!--{module_contentholder, name="_Template - Header"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Header.cshtml")
+	    <!-- /Header -->
+	
+	    <div class="clearfix"></div>		
+
+	    <!-- Content -->
+	    <div class="container page-top">
+		
+		    <!-- MAIN Content -->
+		    <div class="col-md-8 pagecontainer content-pad">
+			
+			    <!-- InstanceBeginEditable name="ContentArea" -->*@<h2>Herb. M.</h2>
+		<h4>Webmaster</h4>
+		<!--<div class="row">
+			<div class="columns col-lg-3 col-sm-6">
+			<p class="left">
+			<em class="fa-map-marker left"></em>
+			&nbsp; Hollywood, FL<br>
+			&nbsp; 33020 - USA </p>
+			</div>
+			<div class="columns col-lg-4 col-sm-6 end">
+			<p> <em class="fa-phone"></em> &nbsp;  Office: +1 000 000 0000<br>
+			<em class="fa-print"></em> &nbsp;  Fax: +1 000 000 0000<br>
+			<em class="fa-envelope-o"></em> &nbsp; Email: mail@example.com </p>
+			</div>
+        </div>-->
+		<div class="col-lg-6">
+	    <h3>Location and Service Area</h3>
+	    <hr />
+	    <div class="map-container">
+		    <iframe width="500" height="340" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Miami,+FL&amp;aq=0&amp;oq=MiamiFlorida&amp;sll=26.730893,-80.870361&amp;sspn=5.439227,6.547852&amp;ie=UTF8&amp;hq=&amp;hnear=Miami,+Miami-Dade,+Florida&amp;t=m&amp;z=13&amp;iwloc=A&amp;output=embed"></iframe>
+	    </div>
+</div>
+<div class="col-lg-6">
+	    <h3>Send Me a Message</h3>
+	    <hr />
+	    <form name="catwebformform11247" method="post" onsubmit="" enctype="multipart/form-data" action="">
+		
+		    <input type="text" name="FirstName" id="FirstName" class="form-control" placeholder="First Name">
+		    <input type="text" name="LastName" id="LastName" class="form-control margtop20" placeholder="Last Name">
+		    <input type="text" name="Subject" id="Subject" class="form-control margtop20" placeholder="Subject">
+		    <input type="tel"  name="HomePhone" id="HomePhone" class="form-control margtop20" placeholder="Phone">
+		    <input type="email" name="EmailAddress" id="EmailAddress" class="form-control margtop20" placeholder="Email Address">
+		    <textarea name="CAT_Custom_869" id="CAT_Custom_869" rows="4" placeholder="Comments or Questions" class="form-control margtop20"></textarea>
+		    @*<!--the textbox-->{module_ccsecurity}
+		    <!--the image--><p>{module_recaptcha}</p>*@
+
+		    <p><input class="btn greenbtn" type="submit" value="Submit" id="catwebformbutton" /></p>
+	
+		    @*<script type="text/javascript" src="/CatalystScripts/ValidationFunctions.js"></script>
+	        <script type="text/javascript">
+	        //<![CDATA[
+	        var submitcount11247 = 0;
+            function checkWholeForm11247(theForm){
+                var why = "";
+                if (theForm.FirstName) why += isEmpty(theForm.FirstName.value, "First Name"); 
+                if (theForm.LastName) why += isEmpty(theForm.LastName.value, "Last Name"); 
+                if (theForm.HomePhone) why += isEmpty(theForm.HomePhone.value, "Home Phone Number"); 
+                if (theForm.EmailAddress) why += checkEmail(theForm.EmailAddress.value); 
+                if (theForm.CaptchaV2) why += captchaIsInvalid(theForm, "Enter Word Verification in box below", "Please enter the correct Word Verification as seen in the image");
+                if(why != ""){alert(why);return false;}
+                if(submitcount11247 == 0){submitcount11247++;theForm.submit();return false;}else{alert("Form submission is in progress.");return false;}}
+	        //]]>
+	        </script>*@
+	    </form>
+</div>
+
+
+<!-- InstanceEndEditable -->@*
+			
+		    </div>
+		    <!-- /MAIN Content -->
+		
+		    <!-- Sidebar Content -->
+		    <div class="col-md-4 sidebar">
+		
+			    <!-- Contact -->	
+			    <!--{module_contentholder, name="_Sidebar - Contact"}-->
+                @RenderPage("~/_System/ContentHolders/_Sidebar - Contact.cshtml")
+			    <!-- /Contact -->
+			
+			    <!-- Deals -->	
+			    <!--{module_contentholder, name="_Sidebar - Deals"}-->
+                @RenderPage("~/_System/ContentHolders/_Sidebar - Deals.cshtml")
+			    <!-- /Deals -->
+			
+			    <!-- Help -->	
+			    <!--{module_contentholder, name="_Sidebar - Help"}-->
+                @RenderPage("~/_System/ContentHolders/Sidebar - Help.cshtml")
+			    <!-- /Help -->
+			
+		    </div>
+		    <!-- /Sidebar Content -->
+			
+	    </div>
+	    <!-- /Content -->
+				
+	    <!-- FOOTER -->
+	    <!--{module_contentholder, name="_Template - Footer"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer.cshtml")
+	    <!-- /FOOTER -->
+			
+	    <!--{module_contentholder, name="_Template - Footer Scripts"}-->
+        @RenderPage("~/_System/ContentHolders/_Template - Footer Scripts.cshtml")
+	
+    </body>
+<!-- InstanceEnd --></html>*@
+
+@section HeadCSS{
+		<!-- Font-Awesome --
+		<link rel="stylesheet" type="text/css" href="~/_assets/css/font-awesome.css" media="screen" />
+		<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="~/_assets/css/font-awesome-ie7.css" media="screen" /><![endif]-->
+}
