@@ -46,6 +46,9 @@
     @RenderPage("~/Layouts/Forum/forum.cshtml")
 }else if(UrlData.Count == 1){
     @RenderPage("~/Layouts/Forum/topics_page.cshtml")
+	@section HeadCSS{
+        <link rel="stylesheet" href="/_assets/datatables/jquery.dataTables.min.css"/>
+	}
 	@section FooterJS{
         <script src="/_assets/datatables/jquery.dataTables.min.js"></script>
         <script src="/_assets/datatables/dataTables.bootstrap.js"></script>
@@ -53,7 +56,13 @@
 
         <script type="text/javascript">
             $(document).ready(function() {
-                $('#datatable').dataTable();
+                var table = $('.datatable').dataTable({
+					"pagingType": "full_numbers",
+					"columnDefs": [{
+						"defaultContent": "-",
+						"targets": "_all"
+					}]
+				});
             } );
         </script>
 	}

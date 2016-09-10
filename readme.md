@@ -20,8 +20,8 @@ I don't mind critiques or corrections to any of the codes or documents you've ac
 
 ## History
 
-Last Update Summery:
-__0.0.4__ - Removed stacking jquery, corrected issue #2, and replaced intended design with an `iframe`. Relocated URL link to "/Contacts/index"
+Last Update Summery:    
+__0.0.5__ - Fixed issue #4 by replacing __empty/null__ values with [_default_ value](http://stackoverflow.com/a/33639519)
 
 Full History and [Changelog](https://github.com/herbertmilhomme/HerbertMilhomme/wiki/Changelog)
 
@@ -32,13 +32,13 @@ __Design Inspiration:__
 * Audentio (I love their forum layout)
 * Facebook (I wanted a better mail system, and less cluttery chat system)
 * Google (Business concept, and simple/clean UI elements)
-* Mumu.io (No longer exist, but the chat server was amazing. Wanted to create an alternative, with better/more features)
+* [Mumu.io](http://www.mumuplayer.com/) (No longer exist, but the chat server was amazing. Wanted to create an alternative, with better/more features)
 * Discord (I discovered discord had a similar visual theme to velonics, and it couples nicely with the chat system i had intentions for)
 
 __HTML Templates:__
 * [The New Boston](https://github.com/buckyroberts/Social-Network) (His GitHub Supports PHP/Apache Frameworks)
-* [Adobe Business Catalyst]() (Great CMS Design; Better than wordpress IMO)
-* [Velonic]() by [CoderTheme]()
+* [Adobe Business Catalyst](http://businesscatalyst.com/) (Great CMS Design; Better than wordpress IMO)
+* [Velonic](http://coderthemes.com/velonic/) by [CoderThemes](http://coderthemes.com/)
 * Uguru by [BC Gurus](http://www.bcgurus.com/templates)
 * [Tribevita](http://www.tribevita.com/adobe-business-catalyst-templates)
 * [Probity](http://www.probityweb.com.au/website-design/templates)
@@ -48,11 +48,11 @@ __HTML Templates:__
 __Tutorials:__
 * [The New Boston](https://github.com/buckyroberts/Social-Network) (Great general tutorials, with beginner to advance guides; Strong forum community)
 * [Mike Brind](http://www.mikesdotnetting.com/) (Web-development with .NET framework)
-* [Dot Net Perl]() (C# References, tips, and breakdown)
-* [Microsoft]() (Library References of Classes)
-* [W3Schools]() (Basic tutorials, guides, and references)
-* [Mozilla]() (Web-development guides, tutorials, and references)
-* [Official W3]() (Rules of web-development, references, and guides)
+* [Dot Net Perl](www.dotnetperls.com) (C# References, tips, and breakdown)
+* [Microsoft](https://msdn.microsoft.com/en-us/) (Library References of Classes)
+* [W3Schools](www.w3schools.com) (Basic tutorials, guides, and references)
+* [Mozilla](https://developer.mozilla.org/en-US/) (Web-development guides, tutorials, and references)
+* [Official W3](https://www.w3.org/) (Rules of web-development, references, and guides)
 * [BC Gurus](http://www.bcgurus.com/tutorials) (Great entrepreneur tutorials; how to establish a web-design business)
 
 __Nugets, SDKs, & Javascript Snippets__
@@ -62,7 +62,7 @@ __Nugets, SDKs, & Javascript Snippets__
 * [SignalR]() (Microsoft's ASP.NET SignalR)
   * -- Also Used for Communicating between clients and the server (pinging, connections, and keeping traffic between the two active)
 * [KnockoutJS]() 
-* [Modernizer]
+* [Modernizer]()
 * [Bootstrap]() (Twitter's Responsive CSS Design layout)
   * -- Alternative to [Foundation](http://foundation.zurb.com/)
 * [Owin]()
@@ -79,14 +79,15 @@ __Nugets, SDKs, & Javascript Snippets__
 * [Facebook]() (Facebook's API kit)
   * -- Authenticate Log-in system
 * [AWS]() (Amazon's API kit)
-* [Microsoft]() (Microsoft's API kit)
+* [Microsoft](https://apps.dev.microsoft.com/?mkt=en-us#/appList) (Microsoft's API kit)
   * -- Authenticate Log-in system
 * x3dom
+* [jQuery UI](https://jqueryui.com/)
 
 
 ## License
 
-Mozilla Public License Version 2.0    
+__Mozilla Public License Version 2.0__    
 Generic no plagiarizing without making it your own, or crediting and referencing. This IS an exhibition portfolio, to present my abilities, and work. If there's anything i made myself, i'd prefer to be involved somewhere in the communication process, between copying or modifications. But it's not an obligation.
 
 I need to re-read licensing info, and which one this project falls under.

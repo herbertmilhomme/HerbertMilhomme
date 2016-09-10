@@ -53,7 +53,7 @@
 }
 <div id="catformoutput">
 @for(int i = tag_counter; i < threads.Count(); i++){
-<table class="topic" cellspacing="0">  
+<table class="datatable topic" cellspacing="0">  
 	@foreach(var topic in threads){//if sub-forum: make new table //make a new-column: sub-form=bit
 	int replies = (int)db.QueryValue("SELECT count(*) FROM website_forumpost WHERE threadid=@0", topic.threadid)-1;
 	//var lastpost = db.QuerySingle("SELECT *, Max(LastEdit AND PostDate) AS MaxDate FROM website_forumpost WHERE threadID=@0 ORDER BY date desc", topic.threadid);//(SELECT Max(v) FROM (VALUES (LastEdit), (PostDate)) AS value(v)) as [MaxDate]
@@ -71,8 +71,8 @@
             <time datetime="@lastpost.MostRecent">@lastpost.MostRecent</time>@*{tag_topiclastpostdate}*@<br />
             @lastpost.userid@*referral link to user's profile page*@
         </td>  
-    </tr> i++;if(i == (numperpg+tag_counter)){break;}}
-</table>  }</div>
+    </tr> //i++;if(i == (numperpg+tag_counter)){break;}
+}</table>  }</div>
 @*
 <td class="alt2">
     <div class="smallfont" align="left">
